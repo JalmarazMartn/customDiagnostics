@@ -31,7 +31,7 @@ function createDiagnostic(doc, lineOfText, lineIndex) {
     // create range that represents, where in the document the word is
     const range = new vscode.Range(lineIndex, index, lineIndex, index);
     const diagnostic = new vscode.Diagnostic(range, customDiagnosticData.message, 
-        customDiagnosticData.severity);
+        GetSeverityFromString(customDiagnosticData.severity));
     diagnostic.code = customDiagnosticData.code;
     return diagnostic;
 }
@@ -70,7 +70,20 @@ function getCustomDiagnosticData() {
     const fs = require('fs');
     const path = require('path');
     let CustomDiagnosticData = JSON.parse(fs.readFileSync(path.join(__dirname, 'customDiagnostic.json'), 'utf8'));
-    CustomDiagnosticData.severity = vscode.DiagnosticSeverity[CustomDiagnosticData.severity];
     CustomDiagnosticData.searchExpresion = new RegExp(CustomDiagnosticData.searchExpresion,'i');    
     return CustomDiagnosticData;
+}
+function GetSeverityFromString(severity) {
+    switch (severity) {        
+        case 'error':
+            return vscode.DiagnosticSeverity.Error;
+        case 'warning':
+            return vscode.DiagnosticSeverity.Warning;
+        case 'information':
+            return vscode.DiagnosticSeverity.Information;
+        case 'hint':
+            return vscode.DiagnosticSeverity.Hint;
+        default:
+            return vscode.DiagnosticSeverity.Error;
+    }
 }

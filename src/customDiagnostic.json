@@ -2,5 +2,6 @@
     "code": "T000001",
     "message": "Avoid using transferfields",
     "searchExpresion": "transferfields",
-    "severity": "vscode.DiagnosticSeverity.Information"
+    "regexp": "/transferfields/g",
+    "severity": "hint"
 }
