@@ -1,4 +1,7 @@
 const vscode = require('vscode');
+//setup file
+//regular expresion 
+//language
 
 /**
  * @param {vscode.ExtensionContext} context

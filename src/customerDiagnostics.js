@@ -1,22 +1,21 @@
 const vscode = require('vscode');
-class customDiagnosticsClass
-{
-	constructor()
-	{
-		this.provideCodeActions = function (document,range,context,token) {
-            let customDiagnosticData = getCustomDiagnosticData();
+class customDiagnosticsClass {
+    constructor() {
+        this.provideCodeActions = function (document, range, context, token) {
+            return;//quitar esta linea para que funcione
+/*             let customDiagnosticData = getCustomDiagnosticData();
 			return context.diagnostics
 			.filter(diagnostic => diagnostic.code === customDiagnosticData.code)
 			.map(diagnostic => this.createCommandCodeAction(diagnostic));
-		}
-	}
-	createCommandCodeAction(diagnostic) {
-		const action = new vscode.CodeAction('Break down fields', vscode.CodeActionKind.QuickFix);
-		//action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
-		action.diagnostics = [diagnostic];
-		action.isPreferred = true;
-		return action;
-	}
+ */		}
+    }
+    createCommandCodeAction(diagnostic) {
+        const action = new vscode.CodeAction('Break down fields', vscode.CodeActionKind.QuickFix);
+        //action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
+        action.diagnostics = [diagnostic];
+        action.isPreferred = true;
+        return action;
+    }
 };
 module.exports = {
     customDiagnosticsClass: customDiagnosticsClass,
@@ -24,15 +23,13 @@ module.exports = {
     refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) }
 }
 
-function createDiagnostic(doc, lineOfText, lineIndex) {
-    // find where in the line of thet the 'emoji' is mentioned
-    let customDiagnosticData = getCustomDiagnosticData();
-    const index = lineOfText.text.search(customDiagnosticData.searchExpresion);
+function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
+    const index = lineOfText.text.search(customRule.searchExpresion);
     // create range that represents, where in the document the word is
     const range = new vscode.Range(lineIndex, index, lineIndex, index);
-    const diagnostic = new vscode.Diagnostic(range, customDiagnosticData.message, 
-        GetSeverityFromString(customDiagnosticData.severity));
-    diagnostic.code = customDiagnosticData.code;
+    const diagnostic = new vscode.Diagnostic(range, customRule.message,
+        GetSeverityFromString(customRule.severity));
+    diagnostic.code = customRule.code;
     return diagnostic;
 }
 function subscribeToDocumentChanges(context, customDiagnostic) {
@@ -58,23 +55,31 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
     let customDiagnosticData = getCustomDiagnosticData();
-    for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
-        const lineOfText = doc.lineAt(lineIndex);
-        if (lineOfText.text.search(customDiagnosticData.searchExpresion) !== -1) {
-            diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex));
+    for (let i = 0; i < customDiagnosticData[0].rules.length; i++) {
+        let customRule = customDiagnosticData[0].rules[i];
+
+        for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
+            const lineOfText = doc.lineAt(lineIndex);
+            if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
+                diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex,customRule));
+            }
         }
     }
     customDiagnostic.set(doc.uri, diagnostics);
 }
 function getCustomDiagnosticData() {
-    const fs = require('fs');
-    const path = require('path');
-    let CustomDiagnosticData = JSON.parse(fs.readFileSync(path.join(__dirname, 'customDiagnostic.json'), 'utf8'));
-    CustomDiagnosticData.searchExpresion = new RegExp(CustomDiagnosticData.searchExpresion,'i');    
+    const getRules = require('./getRules.js');
+    let CustomDiagnosticData = getRules.getRules();
+    if (!CustomDiagnosticData) {
+        return;
+    }
+    for (let i = 0; i < CustomDiagnosticData[0].rules.length; i++) {
+        CustomDiagnosticData[0].rules[i].searchExpresion = new RegExp(CustomDiagnosticData[0].rules[i].searchExpresion, 'i');
+    }
     return CustomDiagnosticData;
 }
 function GetSeverityFromString(severity) {
-    switch (severity) {        
+    switch (severity) {
         case 'error':
             return vscode.DiagnosticSeverity.Error;
         case 'warning':

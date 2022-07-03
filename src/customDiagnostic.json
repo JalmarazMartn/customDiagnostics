@@ -1,7 +1,25 @@
-{
-    "code": "T000001",
-    "message": "Avoid using transferfields",
-    "searchExpresion": "transferfields",
-    "regexp": "/transferfields/g",
-    "severity": "hint"
-}
+[
+    {
+        "rules": [
+            {
+                "code": "T000001",
+                "message": "Avoid using transferfields",
+                "searchExpresion": "transferfields",
+                "replaceExpression": "/transferfields/g",
+                "severity": "error"
+            }
+        ]
+    },
+    {"rulesets":
+        [
+            {
+                "name": "T000001",
+                "rules": [
+                    {
+                        "code": "T000001"
+                    }
+                ]
+            }
+        ]
+    }
+]
