@@ -15,6 +15,11 @@ function activate(context) {
 	customerDiagnostics.subscribeToDocumentChanges(context, customDiagnostics);
 
 	context.subscriptions.push(vscode.languages.registerCodeActionsProvider('al',new customerDiagnostics.customDiagnosticsClass));
+	let disposableChangeRulesInAllDocs = vscode.commands.registerCommand('JAMCustomRuls.replaceAllRulesInAllDocuments', function () {
+		const rename = require('./src/replace.js');
+		rename.replaceAllRulesInAllDocuments();
+	});
+	context.subscriptions.push(disposableChangeRulesInAllDocs);
 }
 
 // this method is called when your extension is deactivated

@@ -2,12 +2,11 @@ const vscode = require('vscode');
 class customDiagnosticsClass {
     constructor() {
         this.provideCodeActions = function (document, range, context, token) {
-            return;//quitar esta linea para que funcione
-/*             let customDiagnosticData = getCustomDiagnosticData();
+            let customDiagnosticData = getCustomDiagnosticData();
 			return context.diagnostics
-			.filter(diagnostic => diagnostic.code === customDiagnosticData.code)
+			//.filter(diagnostic => diagnostic.code === customDiagnosticData.code)
 			.map(diagnostic => this.createCommandCodeAction(diagnostic));
- */		}
+		}
     }
     createCommandCodeAction(diagnostic) {
         const action = new vscode.CodeAction('Break down fields', vscode.CodeActionKind.QuickFix);
@@ -55,13 +54,18 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
     let customDiagnosticData = getCustomDiagnosticData();
-    for (let i = 0; i < customDiagnosticData[0].rules.length; i++) {
-        let customRule = customDiagnosticData[0].rules[i];
+    if (!customDiagnosticData) {
+        return;
+    }
 
-        for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
-            const lineOfText = doc.lineAt(lineIndex);
-            if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
-                diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex,customRule));
+    for (let i = 0; i < customDiagnosticData.length; i++) {
+        let customRule = customDiagnosticData[i];
+        if (doc.getText().search(customRule.searchExpresion) > -1) {
+            for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
+                const lineOfText = doc.lineAt(lineIndex);
+                if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
+                    diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
+                }
             }
         }
     }
@@ -73,8 +77,8 @@ function getCustomDiagnosticData() {
     if (!CustomDiagnosticData) {
         return;
     }
-    for (let i = 0; i < CustomDiagnosticData[0].rules.length; i++) {
-        CustomDiagnosticData[0].rules[i].searchExpresion = new RegExp(CustomDiagnosticData[0].rules[i].searchExpresion, 'i');
+    for (let i = 0; i < CustomDiagnosticData.length; i++) {
+        CustomDiagnosticData[i].searchExpresion = new RegExp(CustomDiagnosticData[i].searchExpresion, 'i');
     }
     return CustomDiagnosticData;
 }

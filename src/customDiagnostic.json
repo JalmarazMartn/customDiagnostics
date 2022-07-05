@@ -4,8 +4,8 @@
             {
                 "code": "T000001",
                 "message": "Avoid using transferfields",
-                "searchExpresion": "transferfields",
-                "replaceExpression": "/transferfields/g",
+                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
+                "replaceExpression": "$1 := $2",
                 "severity": "error"
             }
         ]

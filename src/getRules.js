@@ -1,19 +1,22 @@
 module.exports = {
-	  getRules: function () {
-		  return (GetJSONRulesFromFile());
+	  getSetupJSON: function () {
+		  return (GetAllSetupJSON());
+		},
+		getRules: function () {
+			return (getRules());
 		}
 }
 const vscode = require('vscode');
-function GetJSONRulesFromFile()
+function GetAllSetupJSON()
 {
-	var JSONRules = [];
+	var JSONSetup = [];
 	const fs = require('fs');
 	const JSONFileURI = GetFullPathFileJSONS();
 	if (fs.existsSync(JSONFileURI.fsPath)) {
 		var oldJSON = fs.readFileSync(JSONFileURI.fsPath, "utf-8");
-		JSONRules = JSON.parse(oldJSON);
+		JSONSetup = JSON.parse(oldJSON);
 	}
-	return (JSONRules);
+	return (JSONSetup);
 }
 function GetFullPathFileJSONS() {
 	var returnedName = '';
@@ -22,4 +25,13 @@ function GetFullPathFileJSONS() {
 		returnedName = ExtConf.get('JAMDiagnosticsFile');
 	}
 	return (vscode.Uri.file(returnedName));
+}
+function getRules()
+{
+	var rules = [];
+	var setupJSON = GetAllSetupJSON();
+	if (setupJSON) {
+		rules = setupJSON[0].rules;
+	}
+	return (rules);
 }

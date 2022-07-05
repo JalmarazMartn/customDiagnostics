@@ -11,11 +11,17 @@
 	],
 	"activationEvents": [
 		"onLanguage:al",
-		"onLanguage:javascript"
+		"onLanguage:javascript",
+		"onCommand:JAMCustomRuls.replaceAllRulesInAllDocuments"
 	],
 	"main": "./extension.js",
 	"contributes": {
-		"commands": [],
+		"commands": [
+			{
+				"command": "JAMCustomRuls.replaceAllRulesInAllDocuments",
+				"title": "JAM: Custom Rules. Change all rules in all documents"
+			}		
+		],
 		"configuration": {
 			"title": "JAm diagnostics and replacement",
 			"properties": {
