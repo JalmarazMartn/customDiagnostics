@@ -4,6 +4,12 @@ module.exports = {
 		},
 		getRules: function () {
 			return (getRules());
+		},
+		getRuleSets: function () {
+			return (getRuleSets());
+		},
+		getRulesFromRuleSetName: function (ruleSetName) {
+			return (getRulesFromRuleSetName(ruleSetName));
 		}
 }
 const vscode = require('vscode');
@@ -32,6 +38,29 @@ function getRules()
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
 		rules = setupJSON[0].rules;
+	}
+	return (rules);
+}
+function getRuleSets()
+{
+	var ruleSets = [];
+	var setupJSON = GetAllSetupJSON();
+	if (setupJSON) {
+		ruleSets = setupJSON[1].rulesets;
+	}
+	return (ruleSets);
+}
+function getRulesFromRuleSetName(ruleSetName)
+{
+	var rules = [];
+	var allRules = getRules();
+	var ruleSets = getRuleSets();
+	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
+	for (let i = 0; i < ruleSet.rules.length; i++) {
+		let rule = allRules.find(x => x.code === ruleSet.rules[i]);
+		if (rule) {
+			rules.push(rule);
+		}
 	}
 	return (rules);
 }

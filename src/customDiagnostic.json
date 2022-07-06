@@ -2,22 +2,44 @@
     {
         "rules": [
             {
-                "code": "T000001",
+                "code": "JAM0001",
                 "message": "Avoid using transferfields",
                 "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
                 "replaceExpression": "$1 := $2",
-                "severity": "error"
+                "severity": "error",
+                "language": "al"
+            },
+            {
+                "code": "JAM0002",
+                "message": "Remove Scope Internal",
+                "searchExpresion": "\\[Scope\\('Internal'\\)]",
+                "replaceExpression": "",
+                "severity": "error",
+                "language": "al"
+            },
+            {
+                "code": "JAM0003",
+                "message": "Empty rule",
+                "searchExpresion": "Cant find this imposbile rule",
+                "replaceExpression": "Cant find this imposbile rule",
+                "severity": "error",
+                "language": "al"
             }
         ]
     },
-    {"rulesets":
-        [
+    {
+        "rulesets": [
             {
-                "name": "T000001",
+                "name": "Initial replacement rules from al",                
                 "rules": [
-                    {
-                        "code": "T000001"
-                    }
+                    "JAM0001",
+                    "JAM0002"
+                ]
+            },
+            {
+                "name": "Empty rules to test",
+                "rules": [
+                    "JAM0003"
                 ]
             }
         ]

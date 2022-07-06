@@ -1,25 +1,44 @@
 const vscode = require('vscode');
 module.exports = {
-    replaceAllRulesInAllDocuments: function () {
-        replaceAllRulesInAllDocuments()
+    replaceRulesInAllDocuments: function () {
+        //replaceAllRulesInAllDocuments()
+        pickAndExcuteRuleset();
     }
 }
-async function replaceAllRulesInAllDocuments() {
-    const getRules = require('./getRules.js');
-    let CustomDiagnosticData = getRules.getRules();
-    if (!CustomDiagnosticData) {
+
+async function replaceRulesInAllDocuments(rules) {
+    //const getRules = require('./getRules.js');
+    //let rules = getRules.getRules();
+    if (!rules) {
         return;
     }
-    for (let i = 0; i < CustomDiagnosticData.length; i++) {
-        let customRule = CustomDiagnosticData[i];
-        const documents = await vscode.workspace.findFiles('**/*.al');
+    for (let i = 0; i < rules.length; i++) {
+        let customRule = rules[i];
+        const documents = await vscode.workspace.findFiles('**/*.*');
         for (let j = 0; j < documents.length; j++) {
-            let document = await vscode.workspace.openTextDocument(documents[j]);
-            await replaceRuleInDocument(customRule, document);
+            try
+            {
+                let document = await vscode.workspace.openTextDocument(documents[j]);
+                await replaceRuleInDocument(customRule, document);
+            }
+            catch (error) {
+                if (error.message.search(/binary/i) < 0) {
+                    console.log(error);
+                }
+            }
         }
     }
 }
 async function replaceRuleInDocument(customRule, document) {
+    if (!customRule) {
+        return;
+    }
+    if (customRule.language)
+    {
+        if (document.languageId !== customRule.language) {
+            return;
+        }
+    }
     for (let i = 0; i < document.lineCount; i++) {
         let lineText = document.lineAt(i).text;
         const regex = new RegExp(customRule.searchExpresion, 'i');
@@ -31,4 +50,23 @@ async function replaceRuleInDocument(customRule, document) {
         }
 
     }
+}
+function pickAndExcuteRuleset() {
+    const getRules = require('./getRules.js');
+    let ruleSets = getRules.getRuleSets();
+    if (!ruleSets) {
+        return;
+    }
+    let ruleSetNames = [];
+    for (let i = 0; i < ruleSets.length; i++) {
+        ruleSetNames.push(ruleSets[i].name);
+    }
+    //show vscode code picker with the ruleSetNames        
+	vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
+		if (value) {
+            let rules = getRules.getRulesFromRuleSetName(value);
+            await replaceRulesInAllDocuments(rules);
+        }
+    }
+    );
 }
