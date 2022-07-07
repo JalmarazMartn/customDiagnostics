@@ -10,6 +10,9 @@ module.exports = {
 		},
 		getRulesFromRuleSetName: function (ruleSetName) {
 			return (getRulesFromRuleSetName(ruleSetName));
+		},
+		getDefaultDiagnosticRules: function () {
+			return (getDefaultDiagnosticRules());
 		}
 }
 const vscode = require('vscode');
@@ -63,4 +66,21 @@ function getRulesFromRuleSetName(ruleSetName)
 		}
 	}
 	return (rules);
+}
+function getDefaultDiagnosticRules()
+{
+	let defaultDiagnosticRulesetNames = [];
+	let rulesFromRuleSetName = [];
+	let defaultDiagnosticRules = [];
+	const ExtConf = vscode.workspace.getConfiguration('');
+	if (ExtConf) {
+		defaultDiagnosticRulesetNames = ExtConf.get('DefaultDiagnosticRuleset');
+		for (let indexRuleset = 0; indexRuleset < defaultDiagnosticRulesetNames.length; indexRuleset++) {
+			rulesFromRuleSetName = getRulesFromRuleSetName(defaultDiagnosticRulesetNames[indexRuleset]);
+			for (let indexRule = 0; indexRule < rulesFromRuleSetName.length; indexRule++) {
+				defaultDiagnosticRules.push(rulesFromRuleSetName[indexRule]);
+			}
+		}
+	}
+	return (defaultDiagnosticRules);
 }

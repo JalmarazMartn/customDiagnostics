@@ -73,14 +73,14 @@ function refreshDiagnostics(doc, customDiagnostic) {
 }
 function getCustomDiagnosticData() {
     const getRules = require('./getRules.js');
-    let CustomDiagnosticData = getRules.getRules();
-    if (!CustomDiagnosticData) {
+    let defaultDiagnosticRules = getRules.getDefaultDiagnosticRules();
+    if (!defaultDiagnosticRules) {
         return;
     }
-    for (let i = 0; i < CustomDiagnosticData.length; i++) {
-        CustomDiagnosticData[i].searchExpresion = new RegExp(CustomDiagnosticData[i].searchExpresion, 'i');
+    for (let i = 0; i < defaultDiagnosticRules.length; i++) {
+        defaultDiagnosticRules[i].searchExpresion = new RegExp(defaultDiagnosticRules[i].searchExpresion, 'i');
     }
-    return CustomDiagnosticData;
+    return defaultDiagnosticRules;
 }
 function GetSeverityFromString(severity) {
     switch (severity) {

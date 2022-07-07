@@ -29,6 +29,11 @@
 					"type": "string",
 					"default": "JAMRules.json",
 					"description": "Rules json file name"
+				},
+				"DefaultDiagnosticRuleset": {
+					"type": "array",
+					"default": [],
+					"description": "Rulesets that will be used as diagnostics in Problems Panel"
 				}
 			}
 		}
