@@ -1,65 +1,68 @@
 # customdiagnostics README
 
-This is the README for your extension "customdiagnostics". After writing up a brief description, we recommend including the following sections.
+Custom dainostics allows to define your own diagnostics to show then in problems panel. These diagnostics also can be used as bulk replacements rules.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+You can configure a rule .json file to define your own diagnostics and replacements.
 
-For example if there is an image subfolder under your extension project workspace:
+Then you set the file path in extension settings, in property "JAMDiagnosticsFile".
 
-\!\[feature X\]\(images/feature-x.png\)
+You can set rules and rulesets this way:
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+[
+    {
+        "rules": [
+            {
+                "code": "JAM0001",
+                "message": "Avoid using transferfields",
+                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
+                "replaceExpression": "$1 := $2",
+                "severity": "error",
+                "language": "al"
+            },
+            {
+                "code": "JAM0002",
+                "message": "Remove Scope Internal",
+                "searchExpresion": "\\[Scope\\('Internal'\\)]",
+                "replaceExpression": "",
+                "severity": "error",
+                "language": "al"
+            }
+        ]
+    },
+    {
+        "rulesets": [
+            {
+                "name": "Initial replacement rules from al",                
+                "rules": [
+                    "JAM0001",
+                    "JAM0002"
+                ]
+            }
+        ]
+    }
+]
+
+
+With command "JAM Custom Rules. Change all rules in all documents" we can pick a ruleset from the list and replace all occurrences in all documents.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
+vscode
 ## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `JAMRules.json`: Absolute path of rules json file name
+* `JAMDiagnostics.DefaultDiagnosticRuleset`: Rulesets that will be used as diagnostics in problems Panel
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
 
 ## Release Notes
-
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+The beta with replacement rules and diagnostics when you open the document.
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Image creative common icon image from: https://uxwing.com/find-and-replace-icon/ 

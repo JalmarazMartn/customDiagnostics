@@ -1,14 +1,20 @@
 {
 	"name": "customdiagnostics",
-	"displayName": "customDiagnostics",
-	"description": "Configure your own diagnostics",
+	"displayName": "Custom diagnostics and replacements",
+	"description": "Configure your own diagnostics and replacements",
+	"publisher": "JessAlmarazMartin",
+	"icon": "images/FindAndReplace.png",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.62.0"
+		"vscode": "^1.63.0"
 	},
 	"categories": [
 		"Other"
 	],
+	"author": {
+		"name": "Jesús Almaraz Martín",
+		"email": "JalmarazMartn@gmail.com"
+	},	
 	"activationEvents": [
 		"onLanguage:al",
 		"onLanguage:javascript",
@@ -19,21 +25,21 @@
 		"commands": [
 			{
 				"command": "JAMCustomRuls.replaceAllRulesInAllDocuments",
-				"title": "JAM: Custom Rules. Change all rules in all documents"
+				"title": "JAM Custom Rules. Change all rules in all documents"
 			}		
 		],
 		"configuration": {
-			"title": "JAm diagnostics and replacement",
+			"title": "JAM diagnostics and replacement",
 			"properties": {
-				"JAMDiagnosticsFile": {
+				"JAMDiagnostics.FilePath": {
 					"type": "string",
 					"default": "JAMRules.json",
-					"description": "Rules json file name"
+					"description": "Absolute path of rules json file name"
 				},
-				"DefaultDiagnosticRuleset": {
+				"JAMDiagnostics.DefaultDiagnosticRuleset": {
 					"type": "array",
 					"default": [],
-					"description": "Rulesets that will be used as diagnostics in Problems Panel"
+					"description": "Rulesets that will be used as diagnostics in problems Panel"
 				}
 			}
 		}
