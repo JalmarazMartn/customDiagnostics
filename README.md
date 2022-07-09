@@ -46,8 +46,7 @@ You can set rules and rulesets this way:
 
 With command "JAM Custom Rules. Change all rules in all documents" we can pick a ruleset from the list and replace all occurrences in all documents.
 
-![alt text](https://github.com/JalmarazMartn/customDiagnostics/blob/master/images/bulkReplace.gif?raw=true)
-
+![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/bulkReplace.gif?raw=true)
 ## Requirements
 
 vscode
