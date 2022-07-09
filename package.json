@@ -28,6 +28,12 @@
 				"title": "JAM Custom Rules. Change all rules in all documents"
 			}		
 		],
+		"snippets": [
+			{
+				"language": "json",
+				"path": "./src/snippets.json"
+			}
+		],
 		"configuration": {
 			"title": "JAM diagnostics and replacement",
 			"properties": {

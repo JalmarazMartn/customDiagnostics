@@ -40,7 +40,7 @@ function getRules()
 	var rules = [];
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
-		rules = setupJSON[0].rules;
+		rules = setupJSON.rules;
 	}
 	return (rules);
 }
@@ -49,7 +49,7 @@ function getRuleSets()
 	var ruleSets = [];
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
-		ruleSets = setupJSON[1].rulesets;
+		ruleSets = setupJSON.rulesets;
 	}
 	return (ruleSets);
 }

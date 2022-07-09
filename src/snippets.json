@@ -1,0 +1,41 @@
+{
+  "Create initial diagnostics file": {
+    "prefix": "tDiagnosticsFile",    "body": [
+      "    {",
+      "        \"rules\": [",
+      "            ${1:rule}",
+      "        ],",
+      "        \"rulesets\": [",
+      "            ${2:ruleset}",
+      "        ]",
+      "    }"
+    ],
+    "description": "Basic scafolding of diagnostics file. You can add rules and rulesets with tDiagnostic other snippets"
+  },  
+    "Create diagnostic and replace rule": {
+      "prefix": "tDiagnosticsRule",
+      "body": [
+        "            {",
+        "                \"code\": \"${1:code}\",",
+        "                \"message\": \"${2:message}\",",
+        "                \"searchExpresion\": \"${3:regularExpr}\",",
+        "                \"replaceExpression\": \"${4:JavascriptExpr}\",",
+        "                \"severity\": ${5|\"error\",\"warning\",\"information\",\"hint\"|},",
+        "                \"language\": \"${6:languageCode}\"",
+        "            }"
+      ],
+      "description": "New snippet to add rules"
+    },
+    "Create diagnostic and replace ruleset": {
+      "prefix": "tDiagnosticsRuleset",
+      "body": [
+        "            {",
+        "                \"name\": \"${1:RulesetName}\",",
+        "                \"rules\": [",
+        "                    \"${2:ruleCode}\",",
+        "                ]",
+        "            },"
+      ],
+      "description": "Snippet to create ruleset. You musta add the code rules in rules array"
+    }
+  }
