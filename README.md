@@ -10,7 +10,7 @@ Then you set the file path in extension settings, in property "JAMDiagnosticsFil
 
 You can set rules and rulesets this way:
 
-[
+
     {
         "rules": [
             {
@@ -42,10 +42,11 @@ You can set rules and rulesets this way:
             }
         ]
     }
-]
 
 
 With command "JAM Custom Rules. Change all rules in all documents" we can pick a ruleset from the list and replace all occurrences in all documents.
+
+![alt text](https://github.com/JalmarazMartn/customDiagnostics/blob/master/images/bulkReplace.gif?raw=true)
 
 ## Requirements
 
