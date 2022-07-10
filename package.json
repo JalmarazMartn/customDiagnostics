@@ -25,7 +25,7 @@
 		"commands": [
 			{
 				"command": "JAMCustomRuls.replaceAllRulesInAllDocuments",
-				"title": "JAM Custom Rules. Pick and apply a ruleset in all workspace documents"
+				"title": "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents"
 			}		
 		],
 		"snippets": [
