@@ -46,7 +46,7 @@ For helping you to make rules and rulesets, you can use the following snippets:
 * `tDiagnosticsRule`. Template to write a rule.
 * `tDiagnosticsRuleset`. Template to write a ruleset.
 
-With command "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents" we can pick a ruleset from the list and replace all occurrences in all documents.
+**_With command "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents" we can pick a ruleset from the list and replace all occurrences in all documents._**
 
 ![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/bulkReplace.gif?raw=true)
 
@@ -56,9 +56,9 @@ The properties of a rule have the following meaning:
 
 * "code": "JAM0002",`code of the diagnostic to show in problems panel`
 * "message": "Remove Scope Internal",`message of the diagnostic to show in problems panel`
-* "searchExpresion": "\\[Scope\\('Internal'\\)]",`pattern to search and replace in bulk replacement. This pattern can a regular expression, and also can raise the diganostic in the problems panel`
-* "replaceExpression": "",`replace expression to substitute the previous pattern`
-* "severity": "error",`severity of the diagnostic in problems panel`
+* "searchExpresion": "\\[Scope\\('Internal'\\)]",`pattern to search and replace in bulk replacement. This pattern can be a regular expression, and also can raise the diganostic in the problems panel`
+* "replaceExpression": "",`Here you can set the replace expression to substitute the previous pattern`
+* "severity": "error",`severity of the diagnostic in problems panel: error, warning, information, hint`
 * "language": "al"`language to apply the rule for replacing and diagnostic`
 
 ## Requirements
