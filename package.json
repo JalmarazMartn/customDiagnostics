@@ -1,10 +1,10 @@
 {
 	"name": "customdiagnostics",
-	"displayName": "Custom diagnostics and replacements",
-	"description": "Configure your own diagnostics and replacements",
+	"displayName": "Custom diagnostics and bulk replacements",
+	"description": "Configure your own rules for diagnostics and bulk replacements",
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
