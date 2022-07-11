@@ -31,7 +31,7 @@ function GetFullPathFileJSONS() {
 	var returnedName = '';
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
-		returnedName = ExtConf.get('JAMDiagnosticsFile');
+		returnedName = ExtConf.get('JAMDiagnostics.FilePath');
 	}
 	return (vscode.Uri.file(returnedName));
 }
@@ -74,7 +74,7 @@ function getDefaultDiagnosticRules()
 	let defaultDiagnosticRules = [];
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
-		defaultDiagnosticRulesetNames = ExtConf.get('DefaultDiagnosticRuleset');
+		defaultDiagnosticRulesetNames = ExtConf.get('JAMDiagnostics.DefaultDiagnosticRuleset');
 		for (let indexRuleset = 0; indexRuleset < defaultDiagnosticRulesetNames.length; indexRuleset++) {
 			rulesFromRuleSetName = getRulesFromRuleSetName(defaultDiagnosticRulesetNames[indexRuleset]);
 			for (let indexRule = 0; indexRule < rulesFromRuleSetName.length; indexRule++) {

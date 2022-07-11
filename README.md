@@ -76,8 +76,16 @@ This extension contributes the following settings:
 Only shows custom diagnostics in problems panel, if you open the text document in your editor. I am thinking to do or not other way due performanece issues. So not sure this will be an issue or not.
 
 ## Release Notes
-### 1.0.0
+### 0.0.1
 
 The beta with replacement rules and diagnostics when you open the document.
 
 Image creative common icon image from: https://uxwing.com/find-and-replace-icon/ 
+
+### 0.0.2
+
+Change description of the extension.
+
+### 0.0.3
+
+Issue reading settings, can not execute replacing.
