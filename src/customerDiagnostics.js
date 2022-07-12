@@ -73,7 +73,7 @@ function refreshDiagnostics(doc, customDiagnostic) {
 }
 function getCustomDiagnosticData() {
     const getRules = require('./getRules.js');
-    let defaultDiagnosticRules = getRules.getDefaultDiagnosticRules();
+    let defaultDiagnosticRules = getRules.getDefaultDiagnostics();
     if (!defaultDiagnosticRules) {
         return;
     }

@@ -1,10 +1,36 @@
     {
         "rules": [
             {
+                "name": "Avoid using transferfields",
+                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
+                "replaceExpression": "$1 := $2"
+            },
+            {
+                "name": "Remove Scope Internal",
+                "searchExpresion": "\\[Scope\\('Internal'\\)]",
+                "replaceExpression": ""
+            }
+        ],
+        "rulesets": [
+            {
+                "name": "Initial replacement rules from al",
+                "rules": [
+                    "Avoid using transferfields",
+                    "Remove Scope Internal"
+                ]
+            },
+            {
+                "name": "Empty rules to test",
+                "rules": [
+                    ""
+                ]
+            }
+        ],
+        "diagnostics": [
+            {
                 "code": "JAM0001",
                 "message": "Avoid using transferfields",
                 "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
-                "replaceExpression": "$1 := $2",
                 "severity": "error",
                 "language": "al"
             },
@@ -12,7 +38,6 @@
                 "code": "JAM0002",
                 "message": "Remove Scope Internal",
                 "searchExpresion": "\\[Scope\\('Internal'\\)]",
-                "replaceExpression": "",
                 "severity": "error",
                 "language": "al"
             },
@@ -20,24 +45,39 @@
                 "code": "JAM0003",
                 "message": "Empty rule",
                 "searchExpresion": "Cant find this imposbile rule",
-                "replaceExpression": "Cant find this imposbile rule",
                 "severity": "error",
                 "language": "al"
             }
         ],
-        "rulesets": [
+        "dianosticsets": [
             {
                 "name": "Initial replacement rules from al",
-                "rules": [
+                "diagnostics": [
                     "JAM0001",
                     "JAM0002"
                 ]
             },
             {
                 "name": "Empty rules to test",
-                "rules": [
+                "diagnostics": [
                     "JAM0003"
                 ]
             }
-        ]
+        ],
+        "fixes": [
+            {
+                "name":"Remove unnecesary decimals places",
+                "code": "AL0223",
+                "searchExpresion": ".*",
+                "replaceExpression": ""
+            }
+        ],
+        "fixsets": [
+            {
+                "name": "Set of basics fixes of al",
+                "fixes": [
+                    "Remove unnecesary decimals places"
+                ]
+            }
+        ]        
     }

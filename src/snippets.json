@@ -3,31 +3,59 @@
     "prefix": "tDiagnosticsFile",    "body": [
       "    {",
       "        \"rules\": [",
-      "            ${1:rule}",
+      "            (apply snippet tReplaceRule)",
       "        ],",
       "        \"rulesets\": [",
-      "            ${2:ruleset}",
+      "            (apply snippet tReplaceRuleset)",
+      "        ],",
+      "        \"diagnostics\": [",
+      "            (apply snippet tDiagnostic)",
+      "        ],",
+      "        \"diagnosticsets\": [",
+      "            (apply snippet tDiagnosticset)",
       "        ]",
       "    }"
     ],
     "description": "Basic scafolding of diagnostics file. You can add rules and rulesets with tDiagnostic other snippets"
   },  
-    "Create diagnostic and replace rule": {
-      "prefix": "tDiagnosticsRule",
+    "Create replace rule": {
+      "prefix": "tReplaceRule",
+      "body": [
+        "            {",
+        "                \"name\": \"${1:name}\",",
+        "                \"searchExpresion\": \"${2:regularExpr}\",",
+        "                \"replaceExpression\": \"${3:JavascriptExpr}\"",
+        "            }"
+      ],
+      "description": "New snippet to add rules"
+    },
+    "Create replace ruleset": {
+      "prefix": "tReplaceRuleset",
+      "body": [
+        "            {",
+        "                \"name\": \"${1:RulesetName}\",",
+        "                \"rules\": [",
+        "                    \"${2:ruleName}\",",
+        "                ]",
+        "            },"
+      ],
+      "description": "Snippet to create ruleset. You must add the code rules in rules array"
+    },
+    "Create diagnostic": {
+      "prefix": "tDiagnostic",
       "body": [
         "            {",
         "                \"code\": \"${1:code}\",",
         "                \"message\": \"${2:message}\",",
         "                \"searchExpresion\": \"${3:regularExpr}\",",
-        "                \"replaceExpression\": \"${4:JavascriptExpr}\",",
-        "                \"severity\": ${5|\"error\",\"warning\",\"information\",\"hint\"|},",
-        "                \"language\": \"${6:languageCode}\"",
+        "                \"severity\": ${4|\"error\",\"warning\",\"information\",\"hint\"|},",
+        "                \"language\": \"${5:languageCode}\"",
         "            }"
       ],
       "description": "New snippet to add rules"
     },
-    "Create diagnostic and replace ruleset": {
-      "prefix": "tDiagnosticsRuleset",
+    "Create diagnostic set": {
+      "prefix": "tDiagnosticset",
       "body": [
         "            {",
         "                \"name\": \"${1:RulesetName}\",",
