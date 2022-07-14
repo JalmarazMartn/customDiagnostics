@@ -130,3 +130,7 @@ Fixing replace rules
 ### 0.0.6
 
 fileExtension property in ruleset
+
+### 0.0.7
+
+Optimization and progress bar
