@@ -22,7 +22,10 @@ module.exports = {
 		},
 		getDiagnosticsFromDiagnosticSetName: function (diagnosticSetName) {
 			return (getDiagnosticsFromDiagnosticSetName(diagnosticSetName));
-		}
+		},
+		getFileExtensionFormRuleSetName: function (ruleSetName) {
+			return (getFileExtensionFormRuleSetName(ruleSetName));
+		}		
 }
 const vscode = require('vscode');
 function GetAllSetupJSON()
@@ -69,7 +72,7 @@ function getRulesFromRuleSetName(ruleSetName)
 	var ruleSets = getRuleSets();
 	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
 	for (let i = 0; i < ruleSet.rules.length; i++) {
-		let rule = allRules.find(x => x.code === ruleSet.rules[i]);
+		let rule = allRules.find(x => x.name === ruleSet.rules[i]);
 		if (rule) {
 			rules.push(rule);
 		}
@@ -156,4 +159,17 @@ function getFixes()
 		fixes = setupJSON.fixes;
 	}
 	return (fixes);
+}
+function getFileExtensionFormRuleSetName(ruleSetName)
+{
+	var fileExtension = '';
+	var ruleSets = getRuleSets();
+	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
+	if (ruleSet) {
+		fileExtension = ruleSet.fileExtension;
+		if (!fileExtension) {
+			vscode.window.showErrorMessage('No file extension mandatory property defined for ruleset ' + ruleSetName);
+		}
+	}
+	return (fileExtension);
 }

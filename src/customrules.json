@@ -1,0 +1,47 @@
+{
+    "rules": [
+        {
+            "name": "Remove Scope Internal",
+            "searchExpresion": "\\[Scope\\('Internal'\\)]",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Replace Item Cross References",
+            "searchExpresion": "\"Item Cross Reference\"",
+            "replaceExpression": "\"Item Reference\""
+        },
+        {
+            "name": "Replace Item Cross References Fields",
+            "searchExpresion": "\"Cross-Reference",
+            "replaceExpression": "\"Reference"
+        },
+        {
+            "name": "Language Record to Codeunit",
+            "searchExpresion": ".s*Record.S*Language.s*;",
+            "replaceExpression": " Codeunit Language;"
+        },            
+        {
+            "name": "Language GetUserLanguage to GetUserLanguageCode",
+            "searchExpresion": "Language\\.GetUserLanguage[^C]",
+            "replaceExpression": "Language.GetUserLanguageCode"
+        },
+        {
+            "name": "ChangeStatusOnProdOrder to ",
+            "searchExpresion" : "ChangeStatusOnProdOrder",
+            "replaceExpression": "ChangeProdOrderStatus"
+        }
+    ],
+    "rulesets": [
+        {
+            "name": "Initial replacement rules from al",
+            "fileExtension": "al",
+            "rules": [
+                "Remove Scope Internal",
+                "Replace Item Cross References",
+                "Replace Item Cross References Fields",
+                "Language Record to Codeunit",
+                "Language GetUserLanguage to GetUserLanguageCode"
+            ]
+        }
+    ]
+}

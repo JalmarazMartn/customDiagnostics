@@ -34,8 +34,9 @@
       "body": [
         "            {",
         "                \"name\": \"${1:RulesetName}\",",
+    "                    \"fileExtension\": \"${2:fileExtension}\",",
         "                \"rules\": [",
-        "                    \"${2:ruleName}\",",
+        "                    \"${3:ruleName}\",",
         "                ]",
         "            },"
       ],

@@ -6,7 +6,7 @@ module.exports = {
     }
 }
 
-async function replaceRulesInAllDocuments(rules) {
+async function replaceRulesInAllDocuments(rules,fileExtension) {
     //const getRules = require('./getRules.js');
     //let rules = getRules.getRules();
     if (!rules) {
@@ -14,7 +14,7 @@ async function replaceRulesInAllDocuments(rules) {
     }
     for (let i = 0; i < rules.length; i++) {
         let customRule = rules[i];
-        const documents = await vscode.workspace.findFiles('**/*.*');
+        const documents = await vscode.workspace.findFiles('**/*.'+fileExtension);
         for (let j = 0; j < documents.length; j++) {
             try
             {
@@ -65,7 +65,8 @@ function pickAndExcuteRuleset() {
 	vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
 		if (value) {
             let rules = getRules.getRulesFromRuleSetName(value);
-            await replaceRulesInAllDocuments(rules);
+            const fileExtension = getRules.getFileExtensionFormRuleSetName(value);
+            await replaceRulesInAllDocuments(rules,fileExtension);
         }
     }
     );

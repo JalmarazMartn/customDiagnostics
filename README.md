@@ -24,6 +24,7 @@ You can set in this file with replacing rules and rulesets this way:
         "rulesets": [
             {
                 "name": "Initial replacement rules from al",
+                "fileExtension": "al",
                 "rules": [
                     "Avoid using transferfields",
                     "Remove Scope Internal"
@@ -121,3 +122,11 @@ Issue reading settings, can not execute replacing.
 ### 0.0.4
 
 Separate replace rules and rulesets from diagnostics.
+
+### 0.0.5
+
+Fixing replace rules
+
+### 0.0.6
+
+fileExtension property in ruleset

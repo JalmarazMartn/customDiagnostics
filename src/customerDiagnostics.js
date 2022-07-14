@@ -9,6 +9,7 @@ class customDiagnosticsClass {
 		}
     }
     createCommandCodeAction(diagnostic) {
+        return;
         const action = new vscode.CodeAction('Break down fields', vscode.CodeActionKind.QuickFix);
         //action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
         action.diagnostics = [diagnostic];
