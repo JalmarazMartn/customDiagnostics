@@ -14,6 +14,7 @@
         "rulesets": [
             {
                 "name": "Initial replacement rules from al",
+                "fileExtension": "al",
                 "rules": [
                     "Avoid using transferfields",
                     "Remove Scope Internal"
