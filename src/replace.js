@@ -36,9 +36,7 @@ async function replaceRulesInAllDocuments(rules, fileExtension) {
             }
         }
     }            
-})
-
-    vscode.window.showInformationMessage("Replacing process ended.");
+})    
 }
 async function replaceRuleInDocument(replaceRule, document) {
     if (!replaceRule) {
