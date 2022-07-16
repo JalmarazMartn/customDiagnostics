@@ -9,7 +9,13 @@
                 "name": "Remove Scope Internal",
                 "searchExpresion": "\\[Scope\\('Internal'\\)]",
                 "replaceExpression": ""
+            },
+            {
+                "name": "Replace parameters in Create Reservation for",
+                "searchExpresion": "(CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
+                "replaceExpression": "$1$2,ReservationEntry);"
             }
+            
         ],
         "rulesets": [
             {
@@ -24,6 +30,13 @@
                 "name": "Empty rules to test",
                 "rules": [
                     ""
+                ]
+            },
+            {
+                "name": "Replace parameters in Create Reservation for",
+                "fileExtension": "al",
+                "rules": [
+                    "Replace parameters in Create Reservation for"
                 ]
             }
         ],

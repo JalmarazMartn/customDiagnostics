@@ -42,10 +42,20 @@ async function replaceRuleInDocument(replaceRule, document) {
     if (!replaceRule) {
         return;
     }
-    if (document.getText().search(replaceRule.searchExpresion) < 0) {
+    const regex = new RegExp(replaceRule.searchExpresion, 'mgi');
+    if (document.getText().search(regex) < 0) {
         return;
     }
-    for (let i = 0; i < document.lineCount; i++) {
+    let replaceText = document.getText();
+    replaceText = replaceText.replace(regex, replaceRule.replaceExpression);
+    if (replaceText === document.getText()) {
+        return;
+    }
+    let edit = new vscode.WorkspaceEdit();
+    edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), replaceText);
+    await vscode.workspace.applyEdit(edit);
+
+/*     for (let i = 0; i < document.lineCount; i++) {
         let lineText = document.lineAt(i).text;
         const regex = new RegExp(replaceRule.searchExpresion, 'gi');
         let replaceText = lineText.replace(regex, replaceRule.replaceExpression);
@@ -54,8 +64,7 @@ async function replaceRuleInDocument(replaceRule, document) {
             edit.replace(document.uri, new vscode.Range(i, 0, i, lineText.length), replaceText);
             await vscode.workspace.applyEdit(edit);
         }
-
-    }
+    } */
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
