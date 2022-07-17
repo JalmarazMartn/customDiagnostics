@@ -134,3 +134,7 @@ fileExtension property in ruleset
 ### 0.0.7
 
 Optimization and progress bar
+
+### 0.0.8
+
+Multi-line search and replacement

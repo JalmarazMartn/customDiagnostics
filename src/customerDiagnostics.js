@@ -3,13 +3,13 @@ class customDiagnosticsClass {
     constructor() {
         this.provideCodeActions = function (document, range, context, token) {
             let customDiagnosticData = getCustomDiagnosticData();
-			return context.diagnostics
-			//.filter(diagnostic => diagnostic.code === customDiagnosticData.code)
+			return context.diagnostics            
+			.filter(diagnostic => diagnostic.code === 'JAM0001')//customDiagnosticData.code);
 			.map(diagnostic => this.createCommandCodeAction(diagnostic));
+
 		}
     }
     createCommandCodeAction(diagnostic) {
-        return;
         const action = new vscode.CodeAction('Break down fields', vscode.CodeActionKind.QuickFix);
         //action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
         action.diagnostics = [diagnostic];

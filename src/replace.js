@@ -18,25 +18,25 @@ async function replaceRulesInAllDocuments(rules, fileExtension) {
         cancellable: true,
         location: vscode.ProgressLocation.Notification,
         title: 'Replacing rules in documents',
-      }, async (progress) => {        
-    const documents = await vscode.workspace.findFiles('**/*.' + fileExtension);
-    for (let j = 0; j < documents.length; j++) {        
-        try {
-            let document = await vscode.workspace.openTextDocument(documents[j]);
-            progress.report({ message: 'Replacing rules in document ' + document.fileName });
-            for (let i = 0; i < rules.length; i++) {
-                let customRule = rules[i];
+    }, async (progress) => {
+        const documents = await vscode.workspace.findFiles('**/*.' + fileExtension);
+        for (let j = 0; j < documents.length; j++) {
+            try {
+                let document = await vscode.workspace.openTextDocument(documents[j]);
+                progress.report({ message: 'Replacing rules in document ' + document.fileName });
+                for (let i = 0; i < rules.length; i++) {
+                    let customRule = rules[i];
 
-                await replaceRuleInDocument(customRule, document);
+                    await replaceRuleInDocument(customRule, document);
+                }
+            }
+            catch (error) {
+                if (error.message.search(/binary/i) < 0) {
+                    console.log(error);
+                }
             }
         }
-        catch (error) {
-            if (error.message.search(/binary/i) < 0) {
-                console.log(error);
-            }
-        }
-    }            
-})    
+    })
 }
 async function replaceRuleInDocument(replaceRule, document) {
     if (!replaceRule) {
@@ -55,16 +55,16 @@ async function replaceRuleInDocument(replaceRule, document) {
     edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), replaceText);
     await vscode.workspace.applyEdit(edit);
 
-/*     for (let i = 0; i < document.lineCount; i++) {
-        let lineText = document.lineAt(i).text;
-        const regex = new RegExp(replaceRule.searchExpresion, 'gi');
-        let replaceText = lineText.replace(regex, replaceRule.replaceExpression);
-        if (replaceText != lineText) {
-            let edit = new vscode.WorkspaceEdit();
-            edit.replace(document.uri, new vscode.Range(i, 0, i, lineText.length), replaceText);
-            await vscode.workspace.applyEdit(edit);
-        }
-    } */
+    /*     for (let i = 0; i < document.lineCount; i++) {
+            let lineText = document.lineAt(i).text;
+            const regex = new RegExp(replaceRule.searchExpresion, 'gi');
+            let replaceText = lineText.replace(regex, replaceRule.replaceExpression);
+            if (replaceText != lineText) {
+                let edit = new vscode.WorkspaceEdit();
+                edit.replace(document.uri, new vscode.Range(i, 0, i, lineText.length), replaceText);
+                await vscode.workspace.applyEdit(edit);
+            }
+        } */
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
