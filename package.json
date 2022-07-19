@@ -1,10 +1,10 @@
 {
 	"name": "customdiagnostics",
-	"displayName": "Custom diagnostics and bulk replacements",
-	"description": "Configure your own rules for diagnostics and bulk replacements",
+	"displayName": "Custom diagnostics, bulk replacements and configurable fixes",
+	"description": "Configure your own rules for diagnostics, bulk replacements and fixes",
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
@@ -18,7 +18,8 @@
 	"activationEvents": [
 		"onLanguage:al",
 		"onLanguage:javascript",
-		"onCommand:JAMCustomRuls.replaceAllRulesInAllDocuments"
+		"onCommand:JAMCustomRuls.replaceAllRulesInAllDocuments",
+		"onCommand:JAMCustomRuls.pickAndApllyAfixSetName"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -26,7 +27,11 @@
 			{
 				"command": "JAMCustomRuls.replaceAllRulesInAllDocuments",
 				"title": "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents"
-			}		
+			},
+			{
+				"command": "JAMCustomRuls.pickAndApllyAfixSetName",
+				"title": "JAM Fixes. Pick a fixset and apply fixes in all workspace documents diagnostics"
+			}
 		],
 		"snippets": [
 			{

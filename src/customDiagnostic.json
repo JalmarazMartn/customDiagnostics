@@ -82,7 +82,7 @@
             {
                 "name":"Remove unnecesary decimals places",
                 "code": "AL0223",
-                "searchExpresion": ".*",
+                "searchExpresion": ".*DecimalPlaces.*",
                 "replaceExpression": ""
             }
         ],

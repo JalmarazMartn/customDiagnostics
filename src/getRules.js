@@ -143,8 +143,8 @@ function getFixesFromFixSetName(fixSetName)
 	var allFixes = getFixes();
 	var fixSets = getFixSets();
 	let fixSet = fixSets.find(x => x.name === fixSetName);
-	for (let i = 0; i < fixSet.rules.length; i++) {
-		let fix = allFixes.find(x => x.code === fixSet.rules[i]);
+	for (let i = 0; i < fixSet.fixes.length; i++) {
+		let fix = allFixes.find(x => x.name === fixSet.fixes[i]);
 		if (fix) {
 			fixes.push(fix);
 		}

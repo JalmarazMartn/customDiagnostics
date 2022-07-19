@@ -53,6 +53,30 @@ For helping you to make rules and rulesets, you can use the following snippets:
 
 ![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/bulkReplace.gif?raw=true)
 
+### Fixes
+
+Fixes is a subtle way to do replacements. The replacement will be done only if the line has a problem, with an error code. You can set a fix this way:
+
+        "fixes": [
+            {
+                "name":"Remove unnecesary decimals places",
+                "code": "AL0223",
+                "searchExpresion": ".*DecimalPlaces.*",
+                "replaceExpression": ""
+            }
+        ],
+        "fixsets": [
+            {
+                "name": "Set of basics fixes of al",
+                "fixes": [
+                    "Remove unnecesary decimals places"
+                ]
+            }
+        ]
+The meaning: the replacing will be applied only if the line has a problem with code "AL0223", in problems panel.
+
+**_Bellow you can configure a set of fixes and aplly them in all workspace documents with the command "JAM Fixes. Pick a fixset and apply fixes in all workspace documents diagnostics"._** Then you choose a fixset if you are more than one, and will apply all fixes in all documents.
+
 ### Diagnostics
 
 In the same file we set the replacing rules we can set a digsnotics to find and show in problems panel.
@@ -138,3 +162,7 @@ Optimization and progress bar
 ### 0.0.8
 
 Multi-line search and replacement
+
+### 0.0.9
+
+Apply fixes.

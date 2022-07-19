@@ -25,7 +25,7 @@ async function applyAllFixes(fixSetName) {
     const AppUri = vscode.workspace.workspaceFile;
     const getRuls = require('./getRules.js');
     const fixes = getRuls.getFixesFromFixSetName(fixSetName);
-    const AppDiagnostics = vscode.languages.getDiagnostics(AppUri);
+    const AppDiagnostics = GetDiagnostics();
     for (let i = 0; i < AppDiagnostics.length; i++) {
         let diagnostic = AppDiagnostics[i];
         let fix = fixes.find(fix => fix.code === diagnostic.code);
@@ -36,14 +36,38 @@ async function applyAllFixes(fixSetName) {
 }
 
 async function applyFixToDiagnostic(diagnostic, fix) {
+    if (diagnostic.code !== 'AL0223') {
+        return;
+    }
+    let document = await vscode.workspace.openTextDocument(diagnostic.uri);    
     let edit = new vscode.WorkspaceEdit();
-    let document = await vscode.workspace.openTextDocument(diagnostic.uri);
-    let range = new vscode.Range(diagnostic.range.start.line, diagnostic.range.start.character, diagnostic.range.end.line, diagnostic.range.end.character);
+    let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line+1, 0);
     const RegEx = new RegExp(fix.searchExpresion, 'gi');
     const newLineText = document.lineAt(diagnostic.range.start.line).text.replace(RegEx,fix.replaceExpression);
     if (newLineText === document.lineAt(diagnostic.range.start.line).text) {
         return;
     }
-    edit.replace(diagnostic.uri, range, newLineText);
+    edit.replace(document.uri, range, newLineText);
     await vscode.workspace.applyEdit(edit);
+}
+function GetDiagnostics()
+{
+    const AppUri = vscode.workspace.workspaceFile;
+    const AppDiagnostics = vscode.languages.getDiagnostics(AppUri);
+    let Problems = [];
+    for (let i = 0; i < AppDiagnostics.length; i++) {
+        for (let j = 0; j < AppDiagnostics[i][1].length; j++) {
+          let Problem = AppDiagnostics[i][1][j];
+          let ProblemRange = Problem.range;
+            Problems.push(
+                {
+                  uri: AppDiagnostics[i][0].path,
+                  range: ProblemRange,
+                  code: Problem.code.value,
+                  message: Problem.message,
+                  severity: Problem.severity
+                          })
+        }
+    }
+  return Problems;
 }
