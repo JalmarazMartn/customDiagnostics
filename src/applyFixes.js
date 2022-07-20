@@ -2,6 +2,9 @@ const vscode = require('vscode');
 module.exports = {
     pickAndApllyAfixSetName: async function () {
         pickAndApllyAfixSetName();
+    },
+    GetDiagnostics: function () {
+        return GetDiagnostics();
     }
 }
 

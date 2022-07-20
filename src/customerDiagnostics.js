@@ -2,18 +2,33 @@ const vscode = require('vscode');
 class customDiagnosticsClass {
     constructor() {
         this.provideCodeActions = function (document, range, context, token) {
-            let customDiagnosticData = getCustomDiagnosticData();
-			return context.diagnostics            
-			.filter(diagnostic => diagnostic.code === 'JAM0001')//customDiagnosticData.code);
-			.map(diagnostic => this.createCommandCodeAction(diagnostic));
-
+            const getRules = require('./getRules.js');
+            let currFixes = [];
+            let diagnostics = context.diagnostics;
+            if (diagnostics.length === 0) {
+                return [];
+            }
+            for (let i = 0; i < diagnostics.length; i++) {
+                let diagnostic = diagnostics[i];
+                const allFixes = getRules.getFixes();
+                allFixes
+                .filter(fix => fix.code === diagnostic.code.value)
+                .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic,fix)));
+            }
+            return currFixes;
 		}
     }
-    createCommandCodeAction(diagnostic) {
-        const action = new vscode.CodeAction('Break down fields', vscode.CodeActionKind.QuickFix);
+    createCommandCodeAction(diagnostic,fix,document) {
+        const action = new vscode.CodeAction(fix.name, vscode.CodeActionKind.QuickFix);        
         //action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
         action.diagnostics = [diagnostic];
         action.isPreferred = true;
+        action.edit = new vscode.WorkspaceEdit();
+        if (!document)
+        { document = vscode.window.activeTextEditor.document; }
+        const searchRegex = new RegExp(fix.searchExpresion,'gi');
+        const newText = document.lineAt(diagnostic.range.start.line-1).text.replace(searchRegex,fix.replaceExpression);
+		action.edit.replace(document.uri, new vscode.Range(diagnostic.range.start.line-1,0,diagnostic.range.start.line,0), newText);        
         return action;
     }
 };

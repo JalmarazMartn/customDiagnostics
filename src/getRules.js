@@ -20,6 +20,9 @@ module.exports = {
 		getFixesFromFixSetName: function (fixSetName) {
 			return (getFixesFromFixSetName(fixSetName));
 		},
+		getFixes: function () {
+			return (getFixes());
+		},
 		getDiagnosticsFromDiagnosticSetName: function (diagnosticSetName) {
 			return (getDiagnosticsFromDiagnosticSetName(diagnosticSetName));
 		},
