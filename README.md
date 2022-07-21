@@ -166,3 +166,7 @@ Multi-line search and replacement
 ### 0.0.9
 
 Apply fixes.
+
+### 0.0.10
+
+Showing fixes in quick fix.

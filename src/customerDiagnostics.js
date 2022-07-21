@@ -19,16 +19,20 @@ class customDiagnosticsClass {
 		}
     }
     createCommandCodeAction(diagnostic,fix,document) {
+        if (!document)
+        { document = vscode.window.activeTextEditor.document; }
+        const searchRegex = new RegExp(fix.searchExpresion,'gi');        
+        const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
+        if (newText === document.lineAt(diagnostic.range.start.line).text) {
+            return;
+        }
         const action = new vscode.CodeAction(fix.name, vscode.CodeActionKind.QuickFix);        
         //action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
         action.diagnostics = [diagnostic];
         action.isPreferred = true;
-        action.edit = new vscode.WorkspaceEdit();
-        if (!document)
-        { document = vscode.window.activeTextEditor.document; }
-        const searchRegex = new RegExp(fix.searchExpresion,'gi');
-        const newText = document.lineAt(diagnostic.range.start.line-1).text.replace(searchRegex,fix.replaceExpression);
-		action.edit.replace(document.uri, new vscode.Range(diagnostic.range.start.line-1,0,diagnostic.range.start.line,0), newText);        
+        action.edit = new vscode.WorkspaceEdit();        
+        let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line+1, 0);        
+		action.edit.replace(document.uri, range, newText);        
         return action;
     }
 };
