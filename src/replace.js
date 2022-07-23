@@ -81,17 +81,19 @@ function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFi
     const regex = new RegExp(searchExpresion, 'mgi');
     if (jsModuleFilePath) {        
         if (jsFunctionName) {
-            var fn = new Function();
-            const jsModule = require(jsModuleFilePath);
-            fn = jsModule[jsFunctionName];
-            newText = originalText.replace(regex,fn);
+            try {
+                var fn = new Function();
+                const jsModule = require(jsModuleFilePath);
+                fn = jsModule[jsFunctionName];
+                newText = originalText.replace(regex,fn);
+                }
+            catch (error) {
+                vscode.window.showErrorMessage('Error: ' + error.message);
+            }
         }
     }
     if (replaceExpression) {
         newText = originalText.replace(regex, replaceExpression);
     }    
     return newText;
-    //var fn = new Function();
-    //eval('fn = '+replaceRule.replaceExpression);    
-    //replaceText = replaceText.replace(regex, fn);        
 }

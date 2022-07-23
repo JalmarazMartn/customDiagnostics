@@ -11,9 +11,15 @@
                 "replaceExpression": ""
             },
             {
-                "name": "Replace parameters in Create Reservation for",
+                "name": "Old Replace parameters in Create Reservation for",
                 "searchExpresion": "(CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
                 "replaceExpression": "$1$2,ReservationEntry);"
+            },
+            {
+                "name": "Replace parameters in Create Reservation for",
+                "searchExpresion": "[A-Za-z]+\\.CreateReservEntryFor\\(([^;]|\r|\n)*;",
+                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\src\\replaceExample.js",
+                "jsFunctionName": "CreateReservEntryFor"
             },
             {
                 "name": "Try function",
