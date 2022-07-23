@@ -170,3 +170,7 @@ Apply fixes.
 ### 0.0.10
 
 Showing fixes in quick fix.
+
+### 0.0.11
+
+Appliying javascript modules in replacements.

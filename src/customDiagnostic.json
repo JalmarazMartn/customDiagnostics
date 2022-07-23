@@ -18,13 +18,13 @@
             {
                 "name": "Replace parameters in Create Reservation for",
                 "searchExpresion": "[A-Za-z]+\\.CreateReservEntryFor\\(([^;]|\r|\n)*;",
-                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\src\\replaceExample.js",
+                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",
                 "jsFunctionName": "CreateReservEntryFor"
             },
             {
                 "name": "Try function",
                 "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
-                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\src\\replaceExample.js",
+                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",
                 "jsFunctionName": "replaceToUppercase"
             }                        
         ],
