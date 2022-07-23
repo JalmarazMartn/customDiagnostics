@@ -46,25 +46,15 @@ async function replaceRuleInDocument(replaceRule, document) {
     if (document.getText().search(regex) < 0) {
         return;
     }
-    let replaceText = document.getText();
-    replaceText = replaceText.replace(regex, replaceRule.replaceExpression);
+    const replaceText = getNewText(document.getText(), replaceRule.searchExpresion, replaceRule.replaceExpression,
+        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName);
+
     if (replaceText === document.getText()) {
         return;
     }
     let edit = new vscode.WorkspaceEdit();
     edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), replaceText);
     await vscode.workspace.applyEdit(edit);
-
-    /*     for (let i = 0; i < document.lineCount; i++) {
-            let lineText = document.lineAt(i).text;
-            const regex = new RegExp(replaceRule.searchExpresion, 'gi');
-            let replaceText = lineText.replace(regex, replaceRule.replaceExpression);
-            if (replaceText != lineText) {
-                let edit = new vscode.WorkspaceEdit();
-                edit.replace(document.uri, new vscode.Range(i, 0, i, lineText.length), replaceText);
-                await vscode.workspace.applyEdit(edit);
-            }
-        } */
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
@@ -85,4 +75,23 @@ function pickAndExcuteRuleset() {
         }
     }
     );
+}
+function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName) {
+    let newText = originalText;
+    const regex = new RegExp(searchExpresion, 'mgi');
+    if (jsModuleFilePath) {        
+        if (jsFunctionName) {
+            var fn = new Function();
+            const jsModule = require(jsModuleFilePath);
+            fn = jsModule[jsFunctionName];
+            newText = originalText.replace(regex,fn);
+        }
+    }
+    if (replaceExpression) {
+        newText = originalText.replace(regex, replaceExpression);
+    }    
+    return newText;
+    //var fn = new Function();
+    //eval('fn = '+replaceRule.replaceExpression);    
+    //replaceText = replaceText.replace(regex, fn);        
 }

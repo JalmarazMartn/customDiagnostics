@@ -14,8 +14,13 @@
                 "name": "Replace parameters in Create Reservation for",
                 "searchExpresion": "(CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
                 "replaceExpression": "$1$2,ReservationEntry);"
-            }
-            
+            },
+            {
+                "name": "Try function",
+                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
+                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\src\\replaceExample.js",
+                "jsFunctionName": "replaceToUppercase"
+            }                        
         ],
         "rulesets": [
             {
@@ -37,6 +42,13 @@
                 "fileExtension": "al",
                 "rules": [
                     "Replace parameters in Create Reservation for"
+                ]
+            },
+            {
+                "name": "Try function",
+                "fileExtension": "al",
+                "rules": [
+                    "Try function"
                 ]
             }
         ],
