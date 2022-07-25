@@ -38,12 +38,33 @@ You can set in this file with replacing rules and rulesets this way:
             }
         ]
 
+The properties of a replacing rule have the following meaning:
 
+* "name": "Remove Scope Internal",`name of the replacing rule`
+* "searchExpresion": "\\[Scope\\('Internal'\\)]",`pattern to search and replace in bulk replacement. This pattern can be a regular expression`
+* "replaceExpression": "",`target string for substitution`
+
+
+There is another powerful but complex way to set a replacing rule: instead of replaceExpression parameter, you can set a javascript function in a module. You can set the rule this way:
+
+                "name": "Replace parameters in Create Reservation for",
+                "searchExpresion": "[A-Za-z]+\\.CreateReservEntryFor\\(([^;]|\r|\n)*;",
+                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",
+                "jsFunctionName": "CreateReservEntryFor"
+
+instead of replaceExpression parameter, you can set a javascript function in a module. You can set the rule this way:
+
+* "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",`path to the module file`
+* "jsFunctionName": "CreateReservEntryFor",`name of the function that implemnets the replacing rule`
+
+
+The example of the module is in the folder "jsReplaceExampleModules". For further information about how to make a function to replace a regular expression match, you can chech this link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
 
 For helping you to make rules and rulesets, you can use the following snippets:
 
 * `tDiagnosticsFile`. Template for general scafolding of file.
 * `tReplaceRule`. Template to write a replacing rule.
+* `tReplaceWithFunctionRule`. Template to write a rule with a replacing function instead an string expression.
 * `tReplaceRuleset`. Template to write a replacing  ruleset.
 * `tDiagnostic`. Template to write a diagnostic rule.
 * `tDiagnosticset`. Template to write a diagnostic ruleset.
@@ -174,3 +195,7 @@ Showing fixes in quick fix.
 ### 0.0.11
 
 Appliying javascript modules in replacements.
+
+### 0.0.12
+
+Fixing issues with replacing by empty string.

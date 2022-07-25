@@ -47,7 +47,7 @@ async function replaceRuleInDocument(replaceRule, document) {
         return;
     }
     const replaceText = getNewText(document.getText(), replaceRule.searchExpresion, replaceRule.replaceExpression,
-        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName);
+        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName,replaceRule.replaceExpression !== undefined);
 
     if (replaceText === document.getText()) {
         return;
@@ -76,7 +76,7 @@ function pickAndExcuteRuleset() {
     }
     );
 }
-function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName) {
+function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,existsReplaceExpr=false) {
     let newText = originalText;
     const regex = new RegExp(searchExpresion, 'mgi');
     if (jsModuleFilePath) {        
@@ -92,7 +92,7 @@ function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFi
             }
         }
     }
-    if (replaceExpression) {
+    if (existsReplaceExpr) {
         newText = originalText.replace(regex, replaceExpression);
     }    
     return newText;
