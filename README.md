@@ -199,3 +199,7 @@ Appliying javascript modules in replacements.
 ### 0.0.12
 
 Fixing issues with replacing by empty string.
+
+### 0.0.13
+
+Activation events for language json.
