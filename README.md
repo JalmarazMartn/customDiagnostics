@@ -203,3 +203,7 @@ Fixing issues with replacing by empty string.
 ### 0.0.13
 
 Activation events for language json.
+
+### 0.0.14
+
+Issue with search with negative clauses

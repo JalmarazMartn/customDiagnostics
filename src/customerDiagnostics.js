@@ -1,4 +1,11 @@
 const vscode = require('vscode');
+module.exports = {
+    isNegativeClause: function (Rexgexp) {
+        //replaceAllRulesInAllDocuments()
+        return isNegativeClause(Rexgexp)
+    }
+}
+
 class customDiagnosticsClass {
     constructor() {
         this.provideCodeActions = function (document, range, context, token) {
@@ -80,7 +87,12 @@ function refreshDiagnostics(doc, customDiagnostic) {
 
     for (let i = 0; i < customDiagnosticData.length; i++) {
         let customRule = customDiagnosticData[i];
-        if (doc.getText().search(customRule.searchExpresion) > -1) {
+        let findMatchByLine = isNegativeClause(customRule.searchExpresion);
+        if (!findMatchByLine)
+        {
+            findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
+        }
+        if (findMatchByLine) {
             for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
                 const lineOfText = doc.lineAt(lineIndex);
                 if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
@@ -115,4 +127,8 @@ function GetSeverityFromString(severity) {
         default:
             return vscode.DiagnosticSeverity.Error;
     }
+}
+function isNegativeClause(RegExp)
+{
+    return (String(RegExp).indexOf('^') > -1)
 }

@@ -4,7 +4,7 @@
                 "name": "Avoid using transferfields",
                 "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
                 "replaceExpression": "$1 := $2"
-            },
+            },            
             {
                 "name": "Remove Scope Internal",
                 "searchExpresion": "\\[Scope\\('Internal'\\)]",
@@ -79,14 +79,22 @@
                 "searchExpresion": "Cant find this imposbile rule",
                 "severity": "error",
                 "language": "al"
-            }
+            },
+            {
+                "code": "F4N0-01",
+                "message": "Control json Context URL",                
+                "searchExpresion": "^(?!.*YourUrl.*).*contextSensitiveHelpUrl.*$",
+                "severity": "error",
+                "language": "json"
+            }            
         ],
         "dianosticsets": [
             {
                 "name": "Initial replacement rules from al",
                 "diagnostics": [
                     "JAM0001",
-                    "JAM0002"
+                    "JAM0002",
+                    "F4N0-01"
                 ]
             },
             {
