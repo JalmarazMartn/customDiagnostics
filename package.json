@@ -44,9 +44,9 @@
 			"title": "JAM diagnostics and replacement",
 			"properties": {
 				"JAMDiagnostics.FilePath": {
-					"type": "string",
-					"default": "JAMRules.json",
-					"description": "Absolute path of rules json file name"
+					"type": "array",
+					"default": ["JAMRules.json"],
+					"description": "Set of absolute path of rules json file names"
 				},
 				"JAMDiagnostics.DefaultDiagnosticRuleset": {
 					"type": "array",

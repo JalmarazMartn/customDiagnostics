@@ -1,7 +1,7 @@
 module.exports = {
-	  getSetupJSON: function () {
+	  /*getSetupJSON: function () {
 		  return (GetAllSetupJSON());
-		},
+		},*/
 		getRules: function () {
 			return (getRules());
 		},
@@ -35,27 +35,40 @@ function GetAllSetupJSON()
 {
 	var JSONSetup = [];
 	const fs = require('fs');
-	const JSONFileURI = GetFullPathFileJSONS();
-	if (fs.existsSync(JSONFileURI.fsPath)) {
-		var oldJSON = fs.readFileSync(JSONFileURI.fsPath, "utf-8");
-		JSONSetup = JSON.parse(oldJSON);
-	}
+	const JSONFileURIs = GetFullPathFileJSONS();
+	for (let i = 0; i < JSONFileURIs.length; i++) {
+		if (fs.existsSync(JSONFileURIs[i].fsPath)) {
+			var oldJSON = fs.readFileSync(JSONFileURIs[i].fsPath, "utf-8");
+			JSONSetup.push(JSON.parse(oldJSON));
+		}	
+	}	
 	return (JSONSetup);
 }
 function GetFullPathFileJSONS() {
-	var returnedName = '';
+	var returnedNames = [];
+	var FullPathFileJSONS = [];
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
-		returnedName = ExtConf.get('JAMDiagnostics.FilePath');
+		returnedNames = ExtConf.get('JAMDiagnostics.FilePath');
+		if (!Array.isArray(returnedNames))
+		{
+			vscode.window.showErrorMessage('JAMDiagnostics: Change in extension setup FilePath parameter from string to array.');
+			return [];
+		}
+		for (let i = 0; i < returnedNames.length; i++) {
+			FullPathFileJSONS.push(vscode.Uri.file(returnedNames[i]));
+		}	
 	}
-	return (vscode.Uri.file(returnedName));
+	return (FullPathFileJSONS);
 }
 function getRules()
 {
 	var rules = [];
-	var setupJSON = GetAllSetupJSON();
+	var setupJSON = GetAllSetupJSON();	
 	if (setupJSON) {
-		rules = setupJSON.rules;
+		for (let i = 0; i < setupJSON.length; i++) {
+			pushObjectElementsToObject(setupJSON[i].rules,rules);
+		}				
 	}
 	return (rules);
 }
@@ -64,7 +77,9 @@ function getRuleSets()
 	var ruleSets = [];
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
-		ruleSets = setupJSON.rulesets;
+		for (let i = 0; i < setupJSON.length; i++) {			
+			pushObjectElementsToObject(setupJSON[i].rulesets,ruleSets);
+		}				
 	}
 	return (ruleSets);
 }
@@ -101,12 +116,12 @@ function getDefaultDiagnostics()
 }
 function getFixSets()
 {
-	var ruleSets = [];
+	var fixSets = [];
 	var setupJSON = GetAllSetupJSON();
-	if (setupJSON) {
-		ruleSets = setupJSON.fixsets;
-	}
-	return (ruleSets);
+	for (let i = 0; i < setupJSON.length; i++) {			
+		pushObjectElementsToObject(setupJSON[i].fixsets,fixSets);
+	}				
+	return (fixSets);
 }
 function getDiagnosticsFromDiagnosticSetName(diagnosticSetName)
 {
@@ -126,18 +141,20 @@ function getDiagnostics()
 {
 	var diagnostics = [];
 	var setupJSON = GetAllSetupJSON();
-	if (setupJSON) {
-		diagnostics = setupJSON.diagnostics;
-	}
+	for (let i = 0; i < setupJSON.length; i++) {			
+		pushObjectElementsToObject(setupJSON[i].diagnostics,diagnostics);
+	}				
+
 	return (diagnostics);
 }
 function getDiagnosticSets()
 {
 	var diagnosticSets = [];
 	var setupJSON = GetAllSetupJSON();
-	if (setupJSON) {
-		diagnosticSets = setupJSON.dianosticsets;
-	}
+	for (let i = 0; i < setupJSON.length; i++) {			
+		pushObjectElementsToObject(setupJSON[i].dianosticsets,diagnosticSets);
+	}				
+
 	return (diagnosticSets);
 }
 function getFixesFromFixSetName(fixSetName)
@@ -158,9 +175,10 @@ function getFixes()
 {
 	var fixes = [];
 	var setupJSON = GetAllSetupJSON();
-	if (setupJSON) {
-		fixes = setupJSON.fixes;
-	}
+	for (let i = 0; i < setupJSON.length; i++) {			
+		pushObjectElementsToObject(setupJSON[i].fixes,fixes);
+	}				
+
 	return (fixes);
 }
 function getFileExtensionFormRuleSetName(ruleSetName)
@@ -175,4 +193,11 @@ function getFileExtensionFormRuleSetName(ruleSetName)
 		}
 	}
 	return (fileExtension);
+}
+function pushObjectElementsToObject(source,target)
+{
+	for (let i = 0; i < source.length; i++) {
+		target.push(source[i]);
+		}	
+
 }
