@@ -1,38 +1,37 @@
 module.exports = {
-	  /*getSetupJSON: function () {
-		  return (GetAllSetupJSON());
-		},*/
-		getRules: function () {
-			return (getRules());
-		},
-		getRuleSets: function () {
-			return (getRuleSets());
-		},
-		getRulesFromRuleSetName: function (ruleSetName) {
-			return (getRulesFromRuleSetName(ruleSetName));
-		},
-		getDefaultDiagnostics: function () {
-			return (getDefaultDiagnostics());
-		},
-		getFixSets: function () {
-			return (getFixSets());
-		},
-		getFixesFromFixSetName: function (fixSetName) {
-			return (getFixesFromFixSetName(fixSetName));
-		},
-		getFixes: function () {
-			return (getFixes());
-		},
-		getDiagnosticsFromDiagnosticSetName: function (diagnosticSetName) {
-			return (getDiagnosticsFromDiagnosticSetName(diagnosticSetName));
-		},
-		getFileExtensionFormRuleSetName: function (ruleSetName) {
-			return (getFileExtensionFormRuleSetName(ruleSetName));
-		}		
+	/*getSetupJSON: function () {
+		return (GetAllSetupJSON());
+	  },*/
+	getRules: function () {
+		return (getRules());
+	},
+	getRuleSets: function () {
+		return (getRuleSets());
+	},
+	getRulesFromRuleSetName: function (ruleSetName) {
+		return (getRulesFromRuleSetName(ruleSetName));
+	},
+	getDefaultDiagnostics: function () {
+		return (getDefaultDiagnostics());
+	},
+	getFixSets: function () {
+		return (getFixSets());
+	},
+	getFixesFromFixSetName: function (fixSetName) {
+		return (getFixesFromFixSetName(fixSetName));
+	},
+	getFixes: function () {
+		return (getFixes());
+	},
+	getDiagnosticsFromDiagnosticSetName: function (diagnosticSetName) {
+		return (getDiagnosticsFromDiagnosticSetName(diagnosticSetName));
+	},
+	getFileExtensionFormRuleSetName: function (ruleSetName) {
+		return (getFileExtensionFormRuleSetName(ruleSetName));
+	}
 }
 const vscode = require('vscode');
-function GetAllSetupJSON()
-{
+function GetAllSetupJSON() {
 	var JSONSetup = [];
 	const fs = require('fs');
 	const JSONFileURIs = GetFullPathFileJSONS();
@@ -40,8 +39,8 @@ function GetAllSetupJSON()
 		if (fs.existsSync(JSONFileURIs[i].fsPath)) {
 			var oldJSON = fs.readFileSync(JSONFileURIs[i].fsPath, "utf-8");
 			JSONSetup.push(JSON.parse(oldJSON));
-		}	
-	}	
+		}
+	}
 	return (JSONSetup);
 }
 function GetFullPathFileJSONS() {
@@ -49,42 +48,40 @@ function GetFullPathFileJSONS() {
 	var FullPathFileJSONS = [];
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
-		returnedNames = ExtConf.get('JAMDiagnostics.FilePath');
-		if (!Array.isArray(returnedNames))
-		{
-			vscode.window.showErrorMessage('JAMDiagnostics: Change in extension setup FilePath parameter from string to array.');
-			return [];
+		const mainFile = ExtConf.get('JAMDiagnostics.FilePath');
+		if (mainFile) {
+			FullPathFileJSONS.push(vscode.Uri.file(mainFile));
 		}
-		for (let i = 0; i < returnedNames.length; i++) {
-			FullPathFileJSONS.push(vscode.Uri.file(returnedNames[i]));
-		}	
+		returnedNames = ExtConf.get('JAMDiagnostics.AdditionalFilePaths');
+		if (returnedNames) {
+			for (let i = 0; i < returnedNames.length; i++) {
+				FullPathFileJSONS.push(vscode.Uri.file(returnedNames[i]));
+			}
+		}
 	}
 	return (FullPathFileJSONS);
 }
-function getRules()
-{
+function getRules() {
 	var rules = [];
-	var setupJSON = GetAllSetupJSON();	
+	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
 		for (let i = 0; i < setupJSON.length; i++) {
-			pushObjectElementsToObject(setupJSON[i].rules,rules);
-		}				
+			pushObjectElementsToObject(setupJSON[i].rules, rules);
+		}
 	}
 	return (rules);
 }
-function getRuleSets()
-{
+function getRuleSets() {
 	var ruleSets = [];
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
-		for (let i = 0; i < setupJSON.length; i++) {			
-			pushObjectElementsToObject(setupJSON[i].rulesets,ruleSets);
-		}				
+		for (let i = 0; i < setupJSON.length; i++) {
+			pushObjectElementsToObject(setupJSON[i].rulesets, ruleSets);
+		}
 	}
 	return (ruleSets);
 }
-function getRulesFromRuleSetName(ruleSetName)
-{
+function getRulesFromRuleSetName(ruleSetName) {
 	var rules = [];
 	var allRules = getRules();
 	var ruleSets = getRuleSets();
@@ -97,8 +94,7 @@ function getRulesFromRuleSetName(ruleSetName)
 	}
 	return (rules);
 }
-function getDefaultDiagnostics()
-{
+function getDefaultDiagnostics() {
 	let defaultDiagnosticRulesetNames = [];
 	let rulesFromRuleSetName = [];
 	let defaultDiagnosticRules = [];
@@ -114,17 +110,15 @@ function getDefaultDiagnostics()
 	}
 	return (defaultDiagnosticRules);
 }
-function getFixSets()
-{
+function getFixSets() {
 	var fixSets = [];
 	var setupJSON = GetAllSetupJSON();
-	for (let i = 0; i < setupJSON.length; i++) {			
-		pushObjectElementsToObject(setupJSON[i].fixsets,fixSets);
-	}				
+	for (let i = 0; i < setupJSON.length; i++) {
+		pushObjectElementsToObject(setupJSON[i].fixsets, fixSets);
+	}
 	return (fixSets);
 }
-function getDiagnosticsFromDiagnosticSetName(diagnosticSetName)
-{
+function getDiagnosticsFromDiagnosticSetName(diagnosticSetName) {
 	var diagnostics = [];
 	var allDiagnostics = getDiagnostics();
 	var diagnosticSets = getDiagnosticSets();
@@ -137,28 +131,25 @@ function getDiagnosticsFromDiagnosticSetName(diagnosticSetName)
 	}
 	return (diagnostics);
 }
-function getDiagnostics()
-{
+function getDiagnostics() {
 	var diagnostics = [];
 	var setupJSON = GetAllSetupJSON();
-	for (let i = 0; i < setupJSON.length; i++) {			
-		pushObjectElementsToObject(setupJSON[i].diagnostics,diagnostics);
-	}				
+	for (let i = 0; i < setupJSON.length; i++) {
+		pushObjectElementsToObject(setupJSON[i].diagnostics, diagnostics);
+	}
 
 	return (diagnostics);
 }
-function getDiagnosticSets()
-{
+function getDiagnosticSets() {
 	var diagnosticSets = [];
 	var setupJSON = GetAllSetupJSON();
-	for (let i = 0; i < setupJSON.length; i++) {			
-		pushObjectElementsToObject(setupJSON[i].dianosticsets,diagnosticSets);
-	}				
+	for (let i = 0; i < setupJSON.length; i++) {
+		pushObjectElementsToObject(setupJSON[i].dianosticsets, diagnosticSets);
+	}
 
 	return (diagnosticSets);
 }
-function getFixesFromFixSetName(fixSetName)
-{
+function getFixesFromFixSetName(fixSetName) {
 	var fixes = [];
 	var allFixes = getFixes();
 	var fixSets = getFixSets();
@@ -171,18 +162,16 @@ function getFixesFromFixSetName(fixSetName)
 	}
 	return (fixes);
 }
-function getFixes()
-{
+function getFixes() {
 	var fixes = [];
 	var setupJSON = GetAllSetupJSON();
-	for (let i = 0; i < setupJSON.length; i++) {			
-		pushObjectElementsToObject(setupJSON[i].fixes,fixes);
-	}				
+	for (let i = 0; i < setupJSON.length; i++) {
+		pushObjectElementsToObject(setupJSON[i].fixes, fixes);
+	}
 
 	return (fixes);
 }
-function getFileExtensionFormRuleSetName(ruleSetName)
-{
+function getFileExtensionFormRuleSetName(ruleSetName) {
 	var fileExtension = '';
 	var ruleSets = getRuleSets();
 	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
@@ -194,10 +183,9 @@ function getFileExtensionFormRuleSetName(ruleSetName)
 	}
 	return (fileExtension);
 }
-function pushObjectElementsToObject(source,target)
-{
+function pushObjectElementsToObject(source, target) {
 	for (let i = 0; i < source.length; i++) {
 		target.push(source[i]);
-		}	
+	}
 
 }
