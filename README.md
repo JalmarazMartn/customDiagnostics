@@ -207,3 +207,7 @@ Activation events for language json.
 ### 0.0.14
 
 Issue with search with negative clauses
+
+### 0.0.15
+
+Able to set one or more aditional rule files with settings property "JAMDiagnostics.AdditionalFilePaths". This setting will load as rules, diagnostics and fixes as you need been able to separate files to ease the configuration.

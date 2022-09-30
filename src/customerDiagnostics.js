@@ -12,7 +12,7 @@ class customDiagnosticsClass {
             const getRules = require('./getRules.js');
             let currFixes = [];
             let diagnostics = context.diagnostics;
-            if (diagnostics.length === 0) {
+            if (!diagnostics) {
                 return [];
             }
             for (let i = 0; i < diagnostics.length; i++) {
@@ -83,8 +83,7 @@ function refreshDiagnostics(doc, customDiagnostic) {
     let customDiagnosticData = getCustomDiagnosticData();
     if (!customDiagnosticData) {
         return;
-    }
-
+    }    
     for (let i = 0; i < customDiagnosticData.length; i++) {
         let customRule = customDiagnosticData[i];
         let findMatchByLine = isNegativeClause(customRule.searchExpresion);
@@ -107,9 +106,9 @@ function getCustomDiagnosticData() {
     const getRules = require('./getRules.js');
     let defaultDiagnosticRules = getRules.getDefaultDiagnostics();
     if (!defaultDiagnosticRules) {
-        return;
-    }
-    for (let i = 0; i < defaultDiagnosticRules.length; i++) {
+        return[];
+    }    
+    for (let i = 0; i < defaultDiagnosticRules.length; i++) {        
         defaultDiagnosticRules[i].searchExpresion = new RegExp(defaultDiagnosticRules[i].searchExpresion, 'i');
     }
     return defaultDiagnosticRules;

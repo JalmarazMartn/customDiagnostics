@@ -35,6 +35,10 @@ function GetAllSetupJSON() {
 	var JSONSetup = [];
 	const fs = require('fs');
 	const JSONFileURIs = GetFullPathFileJSONS();
+	if (!JSONFileURIs)
+	{
+		return[];
+	}	
 	for (let i = 0; i < JSONFileURIs.length; i++) {
 		if (fs.existsSync(JSONFileURIs[i].fsPath)) {
 			var oldJSON = fs.readFileSync(JSONFileURIs[i].fsPath, "utf-8");
@@ -53,10 +57,10 @@ function GetFullPathFileJSONS() {
 			FullPathFileJSONS.push(vscode.Uri.file(mainFile));
 		}
 		returnedNames = ExtConf.get('JAMDiagnostics.AdditionalFilePaths');
-		if (returnedNames) {
+		if (returnedNames) {			
 			for (let i = 0; i < returnedNames.length; i++) {
 				FullPathFileJSONS.push(vscode.Uri.file(returnedNames[i]));
-			}
+			}			
 		}
 	}
 	return (FullPathFileJSONS);
@@ -64,10 +68,10 @@ function GetFullPathFileJSONS() {
 function getRules() {
 	var rules = [];
 	var setupJSON = GetAllSetupJSON();
-	if (setupJSON) {
+	if (setupJSON) {		
 		for (let i = 0; i < setupJSON.length; i++) {
 			pushObjectElementsToObject(setupJSON[i].rules, rules);
-		}
+		}		
 	}
 	return (rules);
 }
@@ -86,12 +90,16 @@ function getRulesFromRuleSetName(ruleSetName) {
 	var allRules = getRules();
 	var ruleSets = getRuleSets();
 	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
+	if (!ruleSet.rules)
+	{
+		return[];
+	}	
 	for (let i = 0; i < ruleSet.rules.length; i++) {
 		let rule = allRules.find(x => x.name === ruleSet.rules[i]);
 		if (rule) {
 			rules.push(rule);
 		}
-	}
+	}	
 	return (rules);
 }
 function getDefaultDiagnostics() {
@@ -101,21 +109,25 @@ function getDefaultDiagnostics() {
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
 		defaultDiagnosticRulesetNames = ExtConf.get('JAMDiagnostics.DefaultDiagnosticRuleset');
+		if (!defaultDiagnosticRulesetNames)
+		{
+			return[];
+		}
 		for (let indexRuleset = 0; indexRuleset < defaultDiagnosticRulesetNames.length; indexRuleset++) {
-			rulesFromRuleSetName = getDiagnosticsFromDiagnosticSetName(defaultDiagnosticRulesetNames[indexRuleset]);
+			rulesFromRuleSetName = getDiagnosticsFromDiagnosticSetName(defaultDiagnosticRulesetNames[indexRuleset]);						
 			for (let indexRule = 0; indexRule < rulesFromRuleSetName.length; indexRule++) {
 				defaultDiagnosticRules.push(rulesFromRuleSetName[indexRule]);
-			}
+			}			
 		}
 	}
 	return (defaultDiagnosticRules);
 }
 function getFixSets() {
 	var fixSets = [];
-	var setupJSON = GetAllSetupJSON();
+	var setupJSON = GetAllSetupJSON();	
 	for (let i = 0; i < setupJSON.length; i++) {
 		pushObjectElementsToObject(setupJSON[i].fixsets, fixSets);
-	}
+	}	
 	return (fixSets);
 }
 function getDiagnosticsFromDiagnosticSetName(diagnosticSetName) {
@@ -137,7 +149,6 @@ function getDiagnostics() {
 	for (let i = 0; i < setupJSON.length; i++) {
 		pushObjectElementsToObject(setupJSON[i].diagnostics, diagnostics);
 	}
-
 	return (diagnostics);
 }
 function getDiagnosticSets() {
@@ -146,7 +157,6 @@ function getDiagnosticSets() {
 	for (let i = 0; i < setupJSON.length; i++) {
 		pushObjectElementsToObject(setupJSON[i].dianosticsets, diagnosticSets);
 	}
-
 	return (diagnosticSets);
 }
 function getFixesFromFixSetName(fixSetName) {
@@ -168,7 +178,6 @@ function getFixes() {
 	for (let i = 0; i < setupJSON.length; i++) {
 		pushObjectElementsToObject(setupJSON[i].fixes, fixes);
 	}
-
 	return (fixes);
 }
 function getFileExtensionFormRuleSetName(ruleSetName) {
@@ -184,8 +193,11 @@ function getFileExtensionFormRuleSetName(ruleSetName) {
 	return (fileExtension);
 }
 function pushObjectElementsToObject(source, target) {
+	if (!source)
+	{
+		return;
+	}
 	for (let i = 0; i < source.length; i++) {
 		target.push(source[i]);
 	}
-
 }

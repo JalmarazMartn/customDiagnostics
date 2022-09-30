@@ -12,6 +12,10 @@ function pickAndApllyAfixSetName() {
     const getRuls = require('./getRules.js');    
     const fixSets = getRuls.getFixSets();
     let fixSetNames = [];
+    if (!fixSets)
+    {
+        return;
+    }
     for (let i = 0; i < fixSets.length; i++) {
         fixSetNames.push(fixSets[i].name);
     }
@@ -29,6 +33,10 @@ async function applyAllFixes(fixSetName) {
     const getRuls = require('./getRules.js');
     const fixes = getRuls.getFixesFromFixSetName(fixSetName);
     const AppDiagnostics = GetDiagnostics();
+    if (!AppDiagnostics)
+    {
+        return;
+    }
     for (let i = 0; i < AppDiagnostics.length; i++) {
         let diagnostic = AppDiagnostics[i];
         let fix = fixes.find(fix => fix.code === diagnostic.code);
@@ -58,6 +66,10 @@ function GetDiagnostics()
     const AppUri = vscode.workspace.workspaceFile;
     const AppDiagnostics = vscode.languages.getDiagnostics(AppUri);
     let Problems = [];
+    if (!AppDiagnostics)
+    {
+        return[];
+    }
     for (let i = 0; i < AppDiagnostics.length; i++) {
         for (let j = 0; j < AppDiagnostics[i][1].length; j++) {
           let Problem = AppDiagnostics[i][1][j];
