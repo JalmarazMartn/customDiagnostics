@@ -118,7 +118,7 @@ In the same file we set the replacing rules we can set a digsnotics to find and 
                 "language": "al"
             }
         ],
-        "dianosticsets": [
+        "diagnosticsets": [
             {
                 "name": "Initial replacement rules from al",
                 "diagnostics": [
@@ -216,3 +216,7 @@ Able to set one or more aditional rule files with settings property "JAMDiagnost
 
 Error fixed:
 Command 'JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents' resulted in an error (command 'JAMCustomRuls.replaceAllRulesInAllDocuments' not found)
+
+### 0.0.17
+
+Some errors in snippets, dianostics instead diagnostics.

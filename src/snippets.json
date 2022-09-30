@@ -73,8 +73,8 @@
     "body": [
       "            {",
       "                \"name\": \"${1:RulesetName}\",",
-      "                \"rules\": [",
-      "                    \"${2:ruleCode}\",",
+      "                \"diagnostics\": [",
+      "                    \"${2:diagnosticCode}\",",
       "                ]",
       "            },"
     ],
