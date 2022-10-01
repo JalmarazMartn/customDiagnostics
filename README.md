@@ -219,4 +219,4 @@ Command 'JAM Custom Rules. Pick a ruleset and apply replacements in all workspac
 
 ### 0.0.17
 
-Some errors in snippets, dianostics instead diagnostics.
+Some errors in snippets, dianostics instead diagnostics. More control of diagnostics errors.

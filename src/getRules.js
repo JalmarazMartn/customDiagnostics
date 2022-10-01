@@ -102,7 +102,7 @@ function getRulesFromRuleSetName(ruleSetName) {
 }
 function getDefaultDiagnostics() {
 	let defaultDiagnosticRulesetNames = [];
-	let rulesFromRuleSetName = [];
+	let diagnosticsFromDiagnosticSetName = [];
 	let defaultDiagnosticRules = [];
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
@@ -111,9 +111,9 @@ function getDefaultDiagnostics() {
 			return [];
 		}
 		for (let indexRuleset = 0; indexRuleset < defaultDiagnosticRulesetNames.length; indexRuleset++) {
-			rulesFromRuleSetName = getDiagnosticsFromDiagnosticSetName(defaultDiagnosticRulesetNames[indexRuleset]);
-			for (let indexRule = 0; indexRule < rulesFromRuleSetName.length; indexRule++) {
-				defaultDiagnosticRules.push(rulesFromRuleSetName[indexRule]);
+			diagnosticsFromDiagnosticSetName = getDiagnosticsFromDiagnosticSetName(defaultDiagnosticRulesetNames[indexRuleset]);
+			for (let indexRule = 0; indexRule < diagnosticsFromDiagnosticSetName.length; indexRule++) {
+				defaultDiagnosticRules.push(diagnosticsFromDiagnosticSetName[indexRule]);
 			}
 		}
 	}
@@ -129,9 +129,18 @@ function getFixSets() {
 }
 function getDiagnosticsFromDiagnosticSetName(diagnosticSetName) {
 	var diagnostics = [];
+	if (diagnosticSetName == '')
+	{
+		return diagnostics;
+	}
 	var allDiagnostics = getDiagnostics();
 	var diagnosticSets = getDiagnosticSets();
 	let diagnosticSet = diagnosticSets.find(x => x.name === diagnosticSetName);
+	if (!diagnosticSet)
+	{
+		vscode.window.showErrorMessage(diagnosticSetName + ' is not configured. Go to settings to create the diagnosticSet.');
+		return diagnostics;
+	}
 	if (diagnosticSet.diagnostics) {
 		for (let i = 0; i < diagnosticSet.diagnostics.length; i++) {
 			let diagnostic = allDiagnostics.find(x => x.code === diagnosticSet.diagnostics[i]);
