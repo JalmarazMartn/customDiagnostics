@@ -1,123 +1,159 @@
-    {
-        "rules": [
-            {
-                "name": "Avoid using transferfields",
-                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
-                "replaceExpression": "$1 := $2"
-            },            
-            {
-                "name": "Remove Scope Internal",
-                "searchExpresion": "\\[Scope\\('Internal'\\)]",
-                "replaceExpression": ""
-            },
-            {
-                "name": "Old Replace parameters in Create Reservation for",
-                "searchExpresion": "(CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
-                "replaceExpression": "$1$2,ReservationEntry);"
-            },
-            {
-                "name": "Replace parameters in Create Reservation for",
-                "searchExpresion": "[A-Za-z]+\\.CreateReservEntryFor\\(([^;]|\r|\n)*;",
-                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",
-                "jsFunctionName": "CreateReservEntryFor"
-            },
-            {
-                "name": "Try function",
-                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
-                "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",
-                "jsFunctionName": "replaceToUppercase"
-            }                        
-        ],
-        "rulesets": [
-            {
-                "name": "Initial replacement rules from al",
-                "fileExtension": "al",
-                "rules": [
-                    "Avoid using transferfields",
-                    "Remove Scope Internal"
-                ]
-            },
-            {
-                "name": "Empty rules to test",
-                "rules": [
-                    ""
-                ]
-            },
-            {
-                "name": "Replace parameters in Create Reservation for",
-                "fileExtension": "al",
-                "rules": [
-                    "Replace parameters in Create Reservation for"
-                ]
-            },
-            {
-                "name": "Try function",
-                "fileExtension": "al",
-                "rules": [
-                    "Try function"
-                ]
-            }
-        ],
-        "diagnostics": [
-            {
-                "code": "JAM0001",
-                "message": "Avoid using transferfields",
-                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
-                "severity": "error",
-                "language": "al"
-            },
-            {
-                "code": "JAM0002",
-                "message": "Remove Scope Internal",
-                "searchExpresion": "\\[Scope\\('Internal'\\)]",
-                "severity": "error",
-                "language": "al"
-            },
-            {
-                "code": "JAM0003",
-                "message": "Empty rule",
-                "searchExpresion": "Cant find this imposbile rule",
-                "severity": "error",
-                "language": "al"
-            },
-            {
-                "code": "F4N0-01",
-                "message": "Control json Context URL",                
-                "searchExpresion": "^(?!.*YourUrl.*).*contextSensitiveHelpUrl.*$",
-                "severity": "error",
-                "language": "json"
-            }            
-        ],
-        "dianosticsets": [
-            {
-                "name": "Initial replacement rules from al",
-                "diagnostics": [
-                    "JAM0001",
-                    "JAM0002",
-                    "F4N0-01"
-                ]
-            },
-            {
-                "name": "Empty rules to test",
-                "diagnostics": [
-                    "JAM0003"
-                ]
-            }
-        ],
-        "fixes": [
-            {
-                "name":"Remove unnecesary decimals places",
-                "code": "AL0223",
-                "searchExpresion": ".*DecimalPlaces.*",
-                "replaceExpression": ""
-            }
-        ],
-        "fixsets": [
-            {
-                "name": "Set of basics fixes of al",
-                "fixes": [
-                    "Remove unnecesary decimals places"
-                ]
-            }
-        ]        
-    }
+{
+    "rules": [
+        {
+            "name": "Remove Scope Internal",
+            "searchExpresion": "\\[Scope\\('Internal'\\)]",
+            "replaceExpression": ""
+        },
+        {
+            "name": "BuildInvLineBuffer2 en prepmt",
+            "searchExpresion": "BuildInvLineBuffer2",
+            "replaceExpression": "BuildInvLineBuffer"
+        },
+        {
+            "name": "ShowItemTrackingForMasterData",
+            "searchExpresion": "ShowItemTrackingForMasterData\\((.*)\\)",
+            "replaceExpression": "ShowItemTrackingForEntity($1,EmptyItemTrackingSetup)"
+        },
+        {
+            "name": "Replace Item Cross References",
+            "searchExpresion": "\"Item Cross Reference\"",
+            "replaceExpression": "\"Item Reference\""
+        },
+        {
+            "name": "Replace Item Cross-Reference in subsciptions",
+            "searchExpresion": "ObjectType::Table, 5717",
+            "replaceExpression": "ObjectType::Table, Database::\"Item Reference\""
+        },
+        {
+            "name": "Replace Item Cross References Fields",
+            "searchExpresion": "\"Cross-Reference",
+            "replaceExpression": "\"Reference"
+        },
+        {
+            "name": "Replace Item Cross Reference Entries",
+            "searchExpresion": "Item Cross Reference Entries",
+            "replaceExpression": "Item References"
+        },
+        {
+            "name": "Language Record to Codeunit",
+            "searchExpresion": "\\s*Record\\s*Language\\s*",
+            "replaceExpression": " Codeunit Language;"
+        },
+        {
+            "name": "Language GetUserLanguage to GetUserLanguageCode",
+            "searchExpresion": "Language\\.GetUserLanguage([^C])",
+            "replaceExpression": "Language.GetUserLanguageCode$1"
+        },
+        {
+            "name": "ChangeStatusOnProdOrder to ChangeProdOrderStatus",
+            "searchExpresion": "ChangeStatusOnProdOrder",
+            "replaceExpression": "ChangeProdOrderStatus"
+        },
+        {
+            "name": "Replace Codeunits FilterReservFor",
+            "searchExpresion": ".*(.FilterReservFor)\\((.*),(.*)\\);",
+            "replaceExpression": "$3.SetReservationFilters($2);"
+        },
+        {
+            "name": "Replace parameters in Create Reservation for",
+            "searchExpresion": "(CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
+            "replaceExpression": "$1$2,ReservationEntry);"
+        },
+        {
+            "name": "Layout destination NewObjs",
+            "searchExpresion": "Layout\\s*=\\s*'.\/(.*)'",
+            "replaceExpression": "Layout = '.\/NewObjs\/$1'"
+        },
+        {
+            "name": "Sell-to Customer Templ. Code",
+            "searchExpresion": "Sell-to Customer Template Code",
+            "replaceExpression": "Sell-to Customer Templ. Code"
+        },
+        {
+            "name": "Layout destination report/layout",
+            "searchExpresion": "Layout\\s*=\\s*'.\/(.*)'",
+            "replaceExpression": "Layout = '.\/src\/report\/layout\/$1'"
+        }
+    ],
+    "rulesets": [
+        {
+            "name": "Initial replacement rules from Txt2al",
+            "fileExtension": "al",
+            "rules": [
+                "Remove Scope Internal",
+                "ChangeStatusOnProdOrder to ChangeProdOrderStatus",
+                "BuildInvLineBuffer2 en prepmt",
+                "Replace Codeunits FilterReservFor",
+                "ShowItemTrackingForMasterData",
+                "Sell-to Customer Templ. Code"
+            ]
+        },
+        {
+            "name": "Cross References",
+            "fileExtension": "al",
+            "rules": [
+                "Replace Item Cross References",
+                "Replace Item Cross References Fields",
+                "Replace Item Cross-Reference in subsciptions",
+                "Replace Item Cross Reference Entries"
+            ]
+        },
+        {
+            "name": "Language issues in report",
+            "fileExtension": "al",
+            "rules": [
+                "Language Record to Codeunit",
+                "Language GetUserLanguage to GetUserLanguageCode"
+            ]
+        },
+        {
+            "name": "Layout destination report/layout",
+            "fileExtension": "al",
+            "rules": [
+                "Layout destination report/layout"
+            ]
+        },
+        {
+            "name": "Layout destination NewObjs",
+            "fileExtension": "al",
+            "rules": [
+                "Layout destination NewObjs"
+            ]
+        }
+    ],
+    "diagnostics":[
+                {
+                    "code": "JAMMIG001",
+                    "message": "Review SQlDateType Variant",
+                    "searchExpresion": "SQLDataType.*Variant",
+                    "severity": "error",
+                    "language": "al"
+                }
+    ],
+    "diagnosticsets":
+    [
+                {
+                    "name": "Cloud Migration Errors",
+                    "diagnostics": [
+                        "JAMMIG001"
+                    ]
+                }
+            ],
+    "fixes": [
+        {
+            "name": "Remove unnecesary decimals places in report columns",
+            "code": "AL0223",
+            "searchExpresion": ".*DecimalPlaces.*",
+            "replaceExpression": ""
+        }
+    ],
+    "fixsets": [
+        {
+            "name": "Set of basics fixes of al",
+            "fixes": [
+                "Remove unnecesary decimals places in report columns"
+            ]
+        }
+    ]
+}

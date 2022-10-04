@@ -73,9 +73,13 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
     context.subscriptions.push(
         vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, customDiagnostic))
     );
-    context.subscriptions.push(
+    /*context.subscriptions.push(
         vscode.workspace.onDidCloseTextDocument(doc => customDiagnostic.delete(doc.uri))
-    );
+    );*/
+    context.subscriptions.push(
+        vscode.workspace.onDidCloseTextDocument (()=>
+    vscode.workspace.textDocuments.forEach(doc => refreshDiagnostics(doc,customDiagnostic))
+        ));
 }
 
 function refreshDiagnostics(doc, customDiagnostic) {
@@ -85,22 +89,33 @@ function refreshDiagnostics(doc, customDiagnostic) {
         return;
     }    
     for (let i = 0; i < customDiagnosticData.length; i++) {
-        let customRule = customDiagnosticData[i];
-        let findMatchByLine = isNegativeClause(customRule.searchExpresion);
-        if (!findMatchByLine)
+        findDiagnosticInDocument(customDiagnosticData[i],doc,diagnostics)
+    }
+    customDiagnostic.set(doc.uri, diagnostics);
+}
+function findDiagnosticInDocument(customRule,doc,diagnostics)
+{
+    if (customRule.language) 
+    {
+        if (customRule.language !== doc.languageId)
         {
-            findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
+            return;
         }
-        if (findMatchByLine) {
-            for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
-                const lineOfText = doc.lineAt(lineIndex);
-                if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
-                    diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
-                }
+    }
+    let findMatchByLine = isNegativeClause(customRule.searchExpresion);
+    if (!findMatchByLine)
+    {
+        findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
+    }
+    if (findMatchByLine) {
+        for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
+            const lineOfText = doc.lineAt(lineIndex);
+            if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
+                diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
             }
         }
     }
-    customDiagnostic.set(doc.uri, diagnostics);
+
 }
 function getCustomDiagnosticData() {
     const getRules = require('./getRules.js');
