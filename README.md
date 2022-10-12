@@ -135,6 +135,8 @@ The properties of a rule have the following meaning:
 * "severity": "error",`severity of the diagnostic in problems panel: error, warning, information, hint`
 * "language": "al"`language to apply the rule for replacing and diagnostic`
 
+Note: You only will see custom diagnostics out of the document edition setting the extension parameter `JAMDiagnostics.ScanCustomDiagnosticsInAllWS` to true.
+
 ## Requirements
 
 vscode
@@ -144,6 +146,8 @@ This extension contributes the following settings:
 
 * `JAMRules.json`: Absolute path of rules json file name
 * `JAMDiagnostics.DefaultDiagnosticRuleset`: Rulesets that will be used as diagnostics in problems Panel
+* `JAMDiagnostics.AdditionalFilePaths`: Paths of aditional files to load rules and diagnostics.
+* `JAMDiagnostics.ScanCustomDiagnosticsInAllWS`: Custom diagnostics for a doc are not enabled out of doc edition. If you want to keep seeing diagnostics outside the document edition you must set true this property. Is recommended to disable this property in big workspaces to avoid performance issues.
 
 ## Known Issues
 

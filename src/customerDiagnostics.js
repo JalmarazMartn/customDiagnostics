@@ -73,13 +73,16 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
     context.subscriptions.push(
         vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, customDiagnostic))
     );
-    /*context.subscriptions.push(
-        vscode.workspace.onDidCloseTextDocument(doc => customDiagnostic.delete(doc.uri))
-    );*/
     context.subscriptions.push(
-        vscode.workspace.onDidCloseTextDocument (()=>
-    vscode.workspace.textDocuments.forEach(doc => refreshDiagnostics(doc,customDiagnostic))
-        ));
+        vscode.workspace.onDidCloseTextDocument(doc => customDiagnostic.delete(doc.uri))
+        //vscode.workspace.onDidCloseTextDocument(doc => refreshDiagnostics(doc, customDiagnostic))
+
+    );
+    //context.subscriptions.push(
+    //    vscode.workspace.onDidCloseTextDocument (()=>
+    //vscode.workspace.textDocuments.forEach(doc => refreshDiagnostics(doc,customDiagnostic))
+        //));
+    parseAllDocs(customDiagnostic);
 }
 
 function refreshDiagnostics(doc, customDiagnostic) {
@@ -145,4 +148,36 @@ function GetSeverityFromString(severity) {
 function isNegativeClause(RegExp)
 {
     return (String(RegExp).indexOf('^') > -1)
+}
+async function parseAllDocs(customDiagnostic) {
+    if (!getEnableWSDiagnostics())
+    {
+        return;
+    }
+    const documents = await vscode.workspace.findFiles('**/*');
+    for (let j = 0; j < documents.length; j++) {
+        try {
+            let document = await vscode.workspace.openTextDocument(documents[j]);
+            refreshDiagnostics(document,customDiagnostic);            
+        }
+        catch (error) {
+            if (error.message.search(/binary/i) < 0) {
+                console.log(error);
+            }
+        }
+    }
+}
+function getEnableWSDiagnostics()
+{    
+    let ScanCustomDiagnosticsInAllWS = false;
+	const ExtConf = vscode.workspace.getConfiguration('');
+	if (!ExtConf) {
+        return ScanCustomDiagnosticsInAllWS
+    }
+    ScanCustomDiagnosticsInAllWS = ExtConf.get('JAMDiagnostics.ScanCustomDiagnosticsInAllWS');
+    if (!ScanCustomDiagnosticsInAllWS) {			
+        return false;
+    }
+    return ScanCustomDiagnosticsInAllWS;
+
 }
