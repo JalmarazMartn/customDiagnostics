@@ -36,7 +36,7 @@
       "            {",
       "                \"name\": \"${1:name}\",",
       "                \"searchExpresion\": \"${2:regularExpr}\",",
-      "                \"jsModuleFilePath\": \"${3:jsFilePath}\"",
+      "                \"jsModuleFilePath\": \"${3:jsFilePath}\",",
       "                \"jsFunctionName\": \"${4:function name}\"",        
       "            }"
     ],

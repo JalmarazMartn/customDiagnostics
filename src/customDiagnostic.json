@@ -74,6 +74,12 @@
             "name": "Layout destination report/layout",
             "searchExpresion": "Layout\\s*=\\s*'.\/(.*)'",
             "replaceExpression": "Layout = '.\/src\/report\/layout\/$1'"
+        },
+        {
+            "name": "Add Layout if not exists",
+            "searchExpresion": "Layout\\s*=\\s*'.\/(.*)'",
+            "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",
+            "jsFunctionName": "addLayoutFolderIfNotExists"
         }
     ],
     "rulesets": [
@@ -119,6 +125,13 @@
             "fileExtension": "al",
             "rules": [
                 "Layout destination NewObjs"
+            ]
+        },
+        {
+            "name": "Add Layout if not exists",
+            "fileExtension":"al",
+            "rules":[
+                "Add Layout if not exists"
             ]
         }
     ],
