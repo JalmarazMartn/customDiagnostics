@@ -159,13 +159,20 @@
             "code": "AL0223",
             "searchExpresion": ".*DecimalPlaces.*",
             "replaceExpression": ""
+        },
+        {
+            "name": "Add Rec in field pages",
+            "code": "AL0604",
+            "searchExpresion": "field\\((.+);\\s*(.+)\\)",
+            "replaceExpression": "field($1; Rec.$2)"
         }
     ],
     "fixsets": [
         {
             "name": "Set of basics fixes of al",
             "fixes": [
-                "Remove unnecesary decimals places in report columns"
+                "Remove unnecesary decimals places in report columns",
+                "Add Rec in field pages"
             ]
         }
     ]

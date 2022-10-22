@@ -228,3 +228,11 @@ Some errors in snippets, dianostics instead diagnostics. More control of diagnos
 ### 0.0.18
 
 Only check diagnostics in configured language
+
+### 0.0.19
+
+Fix without traking
+
+### 0.0.20
+
+Apply bulk fixes.

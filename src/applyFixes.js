@@ -47,12 +47,13 @@ async function applyAllFixes(fixSetName) {
 }
 
 async function applyFixToDiagnostic(diagnostic, fix) {
-    if (diagnostic.code !== 'AL0223') {
-        return;
-    }
+    //if (diagnostic.code !== 'AL0223') {
+    //    return;
+    //}
     let document = await vscode.workspace.openTextDocument(diagnostic.uri);    
     let edit = new vscode.WorkspaceEdit();
-    let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line+1, 0);
+    let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line, 
+        document.lineAt(diagnostic.range.start.line).text.length);
     const RegEx = new RegExp(fix.searchExpresion, 'gi');
     const newLineText = document.lineAt(diagnostic.range.start.line).text.replace(RegEx,fix.replaceExpression);
     if (newLineText === document.lineAt(diagnostic.range.start.line).text) {
