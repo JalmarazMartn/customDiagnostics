@@ -15,6 +15,9 @@
       "        \"diagnosticsets\": [",
       "            (apply snippet tDiagnosticset)",
       "        ]",
+      "        \"fixes\": [",
+      "            (apply snippet tFix)",
+      "        ],",            
       "    }"
     ],
     "description": "Basic scafolding of diagnostics file. You can add rules and rulesets with tDiagnostic other snippets"
@@ -79,5 +82,30 @@
       "            },"
     ],
     "description": "Snippet to create ruleset. You musta add the code rules in rules array"
+  },
+  "Create fix": {
+    "prefix": "tFix",
+    "body": [
+      "            {",
+      "                \"name\": \"${1:name}\",",
+      "                \"code\": \"${2:code}\",",        
+      "                \"searchExpresion\": \"${3:regularExpr}\",",
+      "                \"replaceExpression\": \"${4:JavascriptExpr}\"",
+      "            }"
+    ],
+    "description": "New snippet to add fixes"
+  },
+  "Create fix with function": {
+    "prefix": "tFixWithFunction",
+    "body": [
+      "            {",
+      "                \"name\": \"${1:name}\",",
+      "                \"code\": \"${2:code}\",",                
+      "                \"searchExpresion\": \"${3:regularExpr}\",",
+      "                \"jsModuleFilePath\": \"${4:jsFilePath}\",",
+      "                \"jsFunctionName\": \"${5:function name}\"",
+      "            }"
+    ],
+    "description": "New snippet to add rules with a function to fix"
   }
 }

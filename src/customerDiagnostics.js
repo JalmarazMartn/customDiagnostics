@@ -28,8 +28,10 @@ class customDiagnosticsClass {
     createCommandCodeAction(diagnostic,fix,document) {
         if (!document)
         { document = vscode.window.activeTextEditor.document; }
-        const searchRegex = new RegExp(fix.searchExpresion,'gi');        
-        const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
+        const applyFix = require('./applyFixes.js');
+        //const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
+        const newText = applyFix.getNewText(document.lineAt(diagnostic.range.start.line).text,fix.searchExpresion,
+                            fix.replaceExpression,fix.jsModuleFilePath, fix.jsFunctionName);
         if (newText === document.lineAt(diagnostic.range.start.line).text) {
             return;
         }

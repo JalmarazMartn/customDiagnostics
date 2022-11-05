@@ -161,10 +161,17 @@
             "replaceExpression": ""
         },
         {
-            "name": "Add Rec in field pages",
-            "code": "AL0604",
+            "name": "Add Rec in field pages MAL",
+            "code": "AL0604Mal",
             "searchExpresion": "field\\((.+);\\s*(.+)\\)",
             "replaceExpression": "field($1; Rec.$2)"
+        },
+        {
+            "name": "Add Rec in field pages",
+            "code": "AL0604",
+            "searchExpresion": "field\\((.+);\\s*(.+)\\)",            
+            "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\jsReplaceExampleModules\\replaceExample.js",
+            "jsFunctionName": "removeImplicitRec"
         }
     ],
     "fixsets": [

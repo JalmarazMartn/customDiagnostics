@@ -240,3 +240,7 @@ Apply bulk fixes.
 ### 0.0.21
 
 Dependencies minimatch
+
+### 0.0.22
+
+Can use functions in fixes too, not only in replacements.

@@ -7,6 +7,9 @@ module.exports = {
     },
     addLayoutFolderIfNotExists: function (exprMatch) {
         return addLayoutFolderIfNotExists(exprMatch);
+    },
+    removeImplicitRec: function(exprMatch,group1,group2) {
+        return removeImplicitRec(exprMatch,group1,group2);
     }
 }
 function CreateReservEntryFor(exprMatch) {
@@ -36,6 +39,14 @@ function stringAlreadyExists(exprMatch = '', newString = '') {
     if (exprMatch.search(newStringRegExp) >= 0) {
         return true;
     }
-    return false;
+    return false;    
+}
+function removeImplicitRec(exprMatch='',group1='',group2='')
+{
+    console.log(exprMatch);
+    console.log(group1);
+    return 'field('+group1 +'; zRec.'+group2 +')'
+    //"searchExpresion": "field\\((.+);\\s*(.+)\\)",
+    //"replaceExpression": "field($1; Rec.$2)"
 
 }
