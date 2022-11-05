@@ -236,3 +236,7 @@ Fix without traking
 ### 0.0.20
 
 Apply bulk fixes.
+
+### 0.0.21
+
+Dependencies minimatch
