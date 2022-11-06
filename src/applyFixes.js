@@ -5,10 +5,6 @@ module.exports = {
     },
     GetDiagnostics: function () {
         return GetDiagnostics();
-    },
-    getNewText: function(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
-    {
-        return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
     }
 }
 
@@ -54,13 +50,18 @@ async function applyFixToDiagnostic(diagnostic, fix) {
     //if (diagnostic.code !== 'AL0223') {
     //    return;
     //}
+    const replace = require('./replace.js');
+    if (replace.emptySearchexpressionError(fix.searchExpresion,fix.name))
+    {
+        return;
+    }
     let document = await vscode.workspace.openTextDocument(diagnostic.uri);    
     let edit = new vscode.WorkspaceEdit();
     let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line, 
         document.lineAt(diagnostic.range.start.line).text.length);
     //const RegEx = new RegExp(fix.searchExpresion, 'gi');
     //const newLineText = document.lineAt(diagnostic.range.start.line).text.replace(RegEx,fix.replaceExpression);
-    const newLineText = getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
+    const newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
     fix.jsModuleFilePath, fix.jsFunctionName);
 
     if (newLineText === document.lineAt(diagnostic.range.start.line).text) {
@@ -68,28 +69,6 @@ async function applyFixToDiagnostic(diagnostic, fix) {
     }
     edit.replace(document.uri, range, newLineText);
     await vscode.workspace.applyEdit(edit);
-}
-function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName) {
-    let existsReplaceExpr= replaceExpression!== undefined;
-    let newText = originalText;
-    const regex = new RegExp(searchExpresion, 'mgi');
-    if (jsModuleFilePath) {        
-        if (jsFunctionName) {
-            try {
-                var fn = new Function();
-                const jsModule = require(jsModuleFilePath);
-                fn = jsModule[jsFunctionName];
-                newText = originalText.replace(regex,fn);
-                }
-            catch (error) {
-                vscode.window.showErrorMessage('Error: ' + error.message);
-            }
-        }
-    }
-    if (existsReplaceExpr) {
-        newText = originalText.replace(regex, replaceExpression);
-    }    
-    return newText;
 }
 function GetDiagnostics()
 {

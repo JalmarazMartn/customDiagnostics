@@ -3,6 +3,14 @@ module.exports = {
     replaceRulesInAllDocuments: function () {
         //replaceAllRulesInAllDocuments()
         pickAndExcuteRuleset();
+    },
+    getNewText: function(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
+    {
+        return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
+    },
+    emptySearchexpressionError: function(searchExpresion,ruleName)
+    {
+        return emptySearchexpressionError(searchExpresion,ruleName);
     }
 }
 
@@ -42,12 +50,16 @@ async function replaceRuleInDocument(replaceRule, document) {
     if (!replaceRule) {
         return;
     }
+    if (emptySearchexpressionError(replaceRule.searchExpresion,replaceRule.name))
+    {
+        return;
+    }
     const regex = new RegExp(replaceRule.searchExpresion, 'mgi');
     if (document.getText().search(regex) < 0) {
         return;
     }
     const replaceText = getNewText(document.getText(), replaceRule.searchExpresion, replaceRule.replaceExpression,
-        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName,replaceRule.replaceExpression !== undefined);
+        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName);
 
     if (replaceText === document.getText()) {
         return;
@@ -76,7 +88,8 @@ function pickAndExcuteRuleset() {
     }
     );
 }
-function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,existsReplaceExpr=false) {
+function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,) {
+    const existsReplaceExpr=replaceExpression !== undefined;    
     let newText = originalText;
     const regex = new RegExp(searchExpresion, 'mgi');
     if (jsModuleFilePath) {        
@@ -101,4 +114,17 @@ function isNegativeClause(RegExp)
 {
     const customerDiagnostics = require('./customerDiagnostics.js');
     return customerDiagnostics.isNegativeClause(RegExp);
+}
+function emptySearchexpressionError(searchExpression,ruleName)
+{
+    let emptySearchExpression = searchExpression == undefined;
+    if (!emptySearchExpression)
+    {
+        emptySearchExpression = searchExpression == '';
+    }
+    if (emptySearchExpression)
+    {
+        vscode.window.showErrorMessage('You must set a serach expression in rule '+ ruleName);
+    }
+    return emptySearchExpression;
 }

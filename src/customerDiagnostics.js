@@ -28,9 +28,9 @@ class customDiagnosticsClass {
     createCommandCodeAction(diagnostic,fix,document) {
         if (!document)
         { document = vscode.window.activeTextEditor.document; }
-        const applyFix = require('./applyFixes.js');
+        const replace = require('./replace.js');
         //const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
-        const newText = applyFix.getNewText(document.lineAt(diagnostic.range.start.line).text,fix.searchExpresion,
+        const newText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text,fix.searchExpresion,
                             fix.replaceExpression,fix.jsModuleFilePath, fix.jsFunctionName);
         if (newText === document.lineAt(diagnostic.range.start.line).text) {
             return;
