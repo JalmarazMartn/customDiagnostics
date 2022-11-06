@@ -244,3 +244,7 @@ Dependencies minimatch
 ### 0.0.22
 
 Can use functions in fixes too, not only in replacements.
+
+### 0.0.23
+
+Check searchExpresion is filled.
