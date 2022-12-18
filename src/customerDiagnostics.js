@@ -19,29 +19,28 @@ class customDiagnosticsClass {
                 let diagnostic = diagnostics[i];
                 const allFixes = getRules.getFixes();
                 allFixes
-                .filter(fix => fix.code === diagnostic.code.value)
-                .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic,fix)));
+                    .filter(fix => fix.code === diagnostic.code.value)
+                    .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic, fix)));
             }
             return currFixes;
-		}
+        }
     }
-    createCommandCodeAction(diagnostic,fix,document) {
-        if (!document)
-        { document = vscode.window.activeTextEditor.document; }
+    createCommandCodeAction(diagnostic, fix, document) {
+        if (!document) { document = vscode.window.activeTextEditor.document; }
         const replace = require('./replace.js');
         //const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
-        const newText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text,fix.searchExpresion,
-                            fix.replaceExpression,fix.jsModuleFilePath, fix.jsFunctionName);
+        const newText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion,
+            fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName);
         if (newText === document.lineAt(diagnostic.range.start.line).text) {
             return;
         }
-        const action = new vscode.CodeAction(fix.name, vscode.CodeActionKind.QuickFix);        
+        const action = new vscode.CodeAction(fix.name, vscode.CodeActionKind.QuickFix);
         //action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
         action.diagnostics = [diagnostic];
         action.isPreferred = true;
-        action.edit = new vscode.WorkspaceEdit();        
-        let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line+1, 0);        
-		action.edit.replace(document.uri, range, newText);        
+        action.edit = new vscode.WorkspaceEdit();
+        let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
+        action.edit.replace(document.uri, range, newText);
         return action;
     }
 };
@@ -83,7 +82,7 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
     //context.subscriptions.push(
     //    vscode.workspace.onDidCloseTextDocument (()=>
     //vscode.workspace.textDocuments.forEach(doc => refreshDiagnostics(doc,customDiagnostic))
-        //));
+    //));
     parseAllDocs(customDiagnostic);
 }
 
@@ -92,31 +91,29 @@ function refreshDiagnostics(doc, customDiagnostic) {
     let customDiagnosticData = getCustomDiagnosticData();
     if (!customDiagnosticData) {
         return;
-    }    
+    }
     for (let i = 0; i < customDiagnosticData.length; i++) {
-        findDiagnosticInDocument(customDiagnosticData[i],doc,diagnostics)
+        findDiagnosticInDocument(customDiagnosticData[i], doc, diagnostics)
     }
     customDiagnostic.set(doc.uri, diagnostics);
 }
-function findDiagnosticInDocument(customRule,doc,diagnostics)
-{
-    if (customRule.language) 
-    {
-        if (customRule.language !== doc.languageId)
-        {
+function findDiagnosticInDocument(customRule, doc, diagnostics) {
+    if (customRule.language) {
+        if (customRule.language !== doc.languageId) {
             return;
         }
     }
     let findMatchByLine = isNegativeClause(customRule.searchExpresion);
-    if (!findMatchByLine)
-    {
+    if (!findMatchByLine) {
         findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
     }
     if (findMatchByLine) {
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
             if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
-                diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
+                if (!skipFromSearch(lineOfText.text, customRule.skipFromSearchIfMatch)) {
+                    diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
+                }
             }
         }
     }
@@ -126,9 +123,9 @@ function getCustomDiagnosticData() {
     const getRules = require('./getRules.js');
     let defaultDiagnosticRules = getRules.getDefaultDiagnostics();
     if (!defaultDiagnosticRules) {
-        return[];
-    }    
-    for (let i = 0; i < defaultDiagnosticRules.length; i++) {        
+        return [];
+    }
+    for (let i = 0; i < defaultDiagnosticRules.length; i++) {
         defaultDiagnosticRules[i].searchExpresion = new RegExp(defaultDiagnosticRules[i].searchExpresion, 'i');
     }
     return defaultDiagnosticRules;
@@ -147,20 +144,18 @@ function GetSeverityFromString(severity) {
             return vscode.DiagnosticSeverity.Error;
     }
 }
-function isNegativeClause(RegExp)
-{
+function isNegativeClause(RegExp) {
     return (String(RegExp).indexOf('^') > -1)
 }
 async function parseAllDocs(customDiagnostic) {
-    if (!getEnableWSDiagnostics())
-    {
+    if (!getEnableWSDiagnostics()) {
         return;
     }
     const documents = await vscode.workspace.findFiles('**/*');
     for (let j = 0; j < documents.length; j++) {
         try {
             let document = await vscode.workspace.openTextDocument(documents[j]);
-            refreshDiagnostics(document,customDiagnostic);            
+            refreshDiagnostics(document, customDiagnostic);
         }
         catch (error) {
             if (error.message.search(/binary/i) < 0) {
@@ -169,17 +164,25 @@ async function parseAllDocs(customDiagnostic) {
         }
     }
 }
-function getEnableWSDiagnostics()
-{    
+function getEnableWSDiagnostics() {
     let ScanCustomDiagnosticsInAllWS = false;
-	const ExtConf = vscode.workspace.getConfiguration('');
-	if (!ExtConf) {
+    const ExtConf = vscode.workspace.getConfiguration('');
+    if (!ExtConf) {
         return ScanCustomDiagnosticsInAllWS
     }
     ScanCustomDiagnosticsInAllWS = ExtConf.get('JAMDiagnostics.ScanCustomDiagnosticsInAllWS');
-    if (!ScanCustomDiagnosticsInAllWS) {			
+    if (!ScanCustomDiagnosticsInAllWS) {
         return false;
     }
     return ScanCustomDiagnosticsInAllWS;
-
+}
+function skipFromSearch(lineOfText = '', skipFromSearchIfMatch) {
+    if (skipFromSearchIfMatch == undefined) { return false }
+    if (!skipFromSearchIfMatch) { return false }
+    if (skipFromSearchIfMatch == '') { return false }
+    const regex = new RegExp(skipFromSearchIfMatch, 'mgi');
+    if (lineOfText.search(regex) !== -1) {
+        return true
+    }
+    return false;
 }

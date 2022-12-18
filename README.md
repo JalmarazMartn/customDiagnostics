@@ -113,7 +113,7 @@ In the same file we set the replacing rules we can set a digsnotics to find and 
             {
                 "code": "JAM0002",
                 "message": "Remove Scope Internal",
-                "searchExpresion": "\\[Scope\\('Internal'\\)]",
+                "searchExpresion": "\\[Scope\\('Internal'\\)]",                
                 "severity": "error",
                 "language": "al"
             }
@@ -132,6 +132,7 @@ The properties of a rule have the following meaning:
 * "code": "JAM0002",`code of the diagnostic to show in problems panel`
 * "message": "Remove Scope Internal",`message of the diagnostic to show in problems panel`
 * "searchExpresion": "\\[Scope\\('Internal'\\)]",`pattern to search and replace in bulk replacement. This pattern can be a regular expression, and also can raise the diganostic in the problems panel`
+* "skipFromSearchIfMatch":"",`optional property to set a pattern to exclude from diagnostic the match`
 * "severity": "error",`severity of the diagnostic in problems panel: error, warning, information, hint`
 * "language": "al"`language to apply the rule for replacing and diagnostic`
 
@@ -248,3 +249,7 @@ Can use functions in fixes too, not only in replacements.
 ### 0.0.23
 
 Check searchExpresion is filled.
+
+### 0.0.24
+
+New property in diagnostics skipFromSearchIfMatch. You can fill a regex in this property, to set an exclusion from the diagnostic. This way you can avoid complex negative clauses to set these exclusions.

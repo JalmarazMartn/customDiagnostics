@@ -110,11 +110,6 @@ function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFi
     }    
     return newText;
 }
-function isNegativeClause(RegExp)
-{
-    const customerDiagnostics = require('./customerDiagnostics.js');
-    return customerDiagnostics.isNegativeClause(RegExp);
-}
 function emptySearchexpressionError(searchExpression,ruleName)
 {
     let emptySearchExpression = searchExpression == undefined;
