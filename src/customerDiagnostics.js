@@ -75,8 +75,11 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
         vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, customDiagnostic))
     );
     context.subscriptions.push(
-        vscode.workspace.onDidCloseTextDocument(doc => customDiagnostic.delete(doc.uri))
-        //vscode.workspace.onDidCloseTextDocument(doc => refreshDiagnostics(doc, customDiagnostic))
+        vscode.workspace.onDidCloseTextDocument(doc => {
+            if (getEnableWSDiagnostics) { refreshDiagnostics(doc, customDiagnostic) }
+            else {customDiagnostic.delete(doc.uri)}
+        })
+        //vscode.workspace.onDidCloseTextDocument(doc => customDiagnostic.delete(doc.uri))
 
     );
     //context.subscriptions.push(

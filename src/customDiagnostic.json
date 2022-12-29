@@ -154,14 +154,32 @@
                     "searchExpresion": "SQLDataType.*Variant",
                     "severity": "error",
                     "language": "al"
-                }
+                },
+                {
+                    "code": "JAMMIG002",
+                    "message": "Review path layout",
+                    "searchExpresion": "RDLCLayout = '",
+                    "skipFromSearchIfMatch": "/Layout/",
+                    "severity": "error",
+                    "language": "al"
+                },
+                {
+                    "code": "JAMMIG003",
+                    "message": "Test with scape Cahrs",
+                    "searchExpresion": "\\./App",
+                    "skipFromSearchIfMatch": "",
+                    "severity": "error",
+                    "language": "al"
+                }                
     ],
     "diagnosticsets":
     [
                 {
                     "name": "Cloud Migration Errors",
                     "diagnostics": [
-                        "JAMMIG001"
+                        "JAMMIG001",
+                        "JAMMIG002",
+                        "JAMMIG003"
                     ]
                 }
             ],

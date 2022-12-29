@@ -253,3 +253,7 @@ Check searchExpresion is filled.
 ### 0.0.24
 
 New property in diagnostics skipFromSearchIfMatch. You can fill a regex in this property, to set an exclusion from the diagnostic. This way you can avoid complex negative clauses to set these exclusions.
+
+### 0.0.25
+
+Error in diagnostics in all workspace: errors quit the output panel when you close the document.
