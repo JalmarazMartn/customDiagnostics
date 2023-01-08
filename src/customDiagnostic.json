@@ -157,7 +157,7 @@
                 },
                 {
                     "code": "JAMMIG002",
-                    "message": "Review path layout",
+                    "message": "Review layout path",
                     "searchExpresion": "RDLCLayout = '",
                     "skipFromSearchIfMatch": "/Layout/",
                     "severity": "error",
@@ -170,7 +170,15 @@
                     "skipFromSearchIfMatch": "",
                     "severity": "error",
                     "language": "al"
-                }                
+                },
+                {
+                    "code": "JAMMIG004",
+                    "message": "Review Code field No. lenght: could be more than 10",
+                    "searchExpresion": "field\\(\\d+;.+ No.\"; Code\\[10\\]",
+                    "skipFromSearchIfMatch": "",
+                    "severity": "warning",
+                    "language": "al"
+                }              
     ],
     "diagnosticsets":
     [
@@ -179,7 +187,8 @@
                     "diagnostics": [
                         "JAMMIG001",
                         "JAMMIG002",
-                        "JAMMIG003"
+                        "JAMMIG003",
+                        "JAMMIG004"
                     ]
                 }
             ],

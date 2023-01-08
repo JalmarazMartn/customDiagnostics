@@ -103,27 +103,28 @@ The meaning: the replacing will be applied only if the line has a problem with c
 In the same file we set the replacing rules we can set a digsnotics to find and show in problems panel.
 
         "diagnostics": [
-            {
-                "code": "JAM0001",
-                "message": "Avoid using transferfields",
-                "searchExpresion": "(.+)\\.TransferFields\\((.+)\\)",
-                "severity": "error",
-                "language": "al"
-            },
-            {
-                "code": "JAM0002",
-                "message": "Remove Scope Internal",
-                "searchExpresion": "\\[Scope\\('Internal'\\)]",                
-                "severity": "error",
-                "language": "al"
-            }
-        ],
+                {
+                    "code": "JAMMIG001",
+                    "message": "Review SQlDateType Variant",
+                    "searchExpresion": "SQLDataType.*Variant",
+                    "severity": "error",
+                    "language": "al"
+                },
+                {
+                    "code": "JAMMIG002",
+                    "message": "Review layout path",
+                    "searchExpresion": "RDLCLayout = '",
+                    "skipFromSearchIfMatch": "/Layout/",
+                    "severity": "error",
+                    "language": "al"
+                }
+                        ],
         "diagnosticsets": [
             {
-                "name": "Initial replacement rules from al",
+                "name": "Cloud Migration Errors",
                 "diagnostics": [
-                    "JAM0001",
-                    "JAM0002"
+                    "JAMMIG001",
+                    "JAMMIG002"
                 ]
 
 
@@ -137,6 +138,12 @@ The properties of a rule have the following meaning:
 * "language": "al"`language to apply the rule for replacing and diagnostic`
 
 Note: You only will see custom diagnostics out of the document edition setting the extension parameter `JAMDiagnostics.ScanCustomDiagnosticsInAllWS` to true.
+
+#### Steps to set the diagnostics
+- Open json settings.
+- Set all diagnostics you can need.
+- Create diagnostic sets in json, with diagnostics created in the previous step.
+- In extension settings configure this diagnostic set in `JAMDiagnostics.DefaultDiagnosticRuleset`.
 
 ## Requirements
 
