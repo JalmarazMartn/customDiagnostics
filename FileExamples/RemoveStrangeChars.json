@@ -1,0 +1,102 @@
+{
+    "rules": [
+        {
+            "name": "Acento o",
+            "searchExpresion": "รณ",
+            "replaceExpression": "ó"
+        },
+        {
+            "name": "Acento a",
+            "searchExpresion": "รก",
+            "replaceExpression": "á"
+        },
+        {
+            "name": "ñ min",
+            "searchExpresion": "รฑ",
+            "replaceExpression": "ñ"
+        },
+        {
+            "name": "Acento i",
+            "searchExpresion": "รญ",
+            "replaceExpression": "í"
+        },
+        {
+            "name": "Acento o May",
+            "searchExpresion": "ร�",
+            "replaceExpression": "Ó"
+        },
+        {
+            "name": "Acento u",
+            "searchExpresion": "รบ",
+            "replaceExpression": "ú"
+        },
+        {
+            "name": "ñ may",
+            "searchExpresion": "ร�",
+            "replaceExpression": "Ñ"
+        },
+        {
+            "name": "Acento a may",
+            "searchExpresion": "ร�",
+            "replaceExpression": "Á"
+        },
+        {
+            "name": "Acento i may",
+            "searchExpresion": "ร�",
+            "replaceExpression": "Í"
+        },
+        {
+            "name": "Acento e",
+            "searchExpresion": "รฉ",
+            "replaceExpression": "é"
+        },
+        {
+            "name": "Interrogante caracteres extraños",
+            "searchExpresion": "ยฟ",
+            "replaceExpression": "¿"
+        },
+        {
+            "name": "º con caracter raro",
+            "searchExpresion": "ยบ",
+            "replaceExpression": "º"
+        }
+    ],
+    "rulesets": [
+        {
+            "name": "Acentos xlf y caracteres extraños",
+            "fileExtension": "xlf",
+            "rules": [
+                "Acento o",
+                "Acento a",
+                "ñ min",
+                "Acento i",
+                "Acento o May",
+                "Acento u",
+                "ñ may",
+                "Acento a may",
+                "Acento i may",
+                "Acento e",
+                "Interrogante caracteres extraños",
+                "º con caracter raro"
+            ]
+        },
+        {
+            "name": "Acentos AL y caracteres extraños",
+            "fileExtension": "al",
+            "rules": [
+                "Acento o",
+                "Acento a",
+                "ñ min",
+                "Acento i",
+                "Acento o May",
+                "Acento u",
+                "ñ may",
+                "Acento a may",
+                "Acento i may",
+                "Acento e",
+                "Interrogante caracteres extraños",
+                "º con caracter raro"
+            ]
+        }
+    ]
+}

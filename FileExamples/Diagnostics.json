@@ -1,0 +1,19 @@
+{
+    "diagnostics": [
+        {
+            "code": "JAMMIG001",
+            "message": "Review SQlDateType Variant",
+            "searchExpresion": "SQLDataType.*Variant",
+            "severity": "error",
+            "language": "al"
+        }
+    ],
+    "dianosticsets": [
+        {
+            "name": "Cloud Migration Errors",
+            "diagnostics": [
+                "JAMMIG001"
+            ]
+        }
+    ]
+}

@@ -150,14 +150,14 @@
     "diagnostics":[
                 {
                     "code": "JAMMIG001",
-                    "message": "Review SQlDateType Variant",
+                    "message": "Remove SQlDateType Variant",
                     "searchExpresion": "SQLDataType.*Variant",
                     "severity": "error",
                     "language": "al"
                 },
                 {
                     "code": "JAMMIG002",
-                    "message": "Review layout path",
+                    "message": "Review layout path. Must be set in src/report/layout",
                     "searchExpresion": "RDLCLayout = '",
                     "skipFromSearchIfMatch": "/Layout/",
                     "severity": "error",

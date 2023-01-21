@@ -1,0 +1,59 @@
+{
+    "rules": [
+        {
+            "name": "Language Record to Codeunit",
+            "searchExpresion": "\\s*Record\\s*Language\\s*",
+            "replaceExpression": " Codeunit Language;"
+        },
+        {
+            "name": "Language GetUserLanguage to GetUserLanguageCode",
+            "searchExpresion": "Language\\.GetUserLanguage([^C])",
+            "replaceExpression": "Language.GetUserLanguageCode$1"
+        },
+        {
+            "name": "Replace parameters in Create Reservation for",
+            "searchExpresion": "(CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
+            "replaceExpression": "$1$2,ReservationEntry);"
+        },
+        {
+            "name": "Layout destination NewObjs",
+            "searchExpresion": "Layout\\s*=\\s*'.\/(.*)'",
+            "replaceExpression": "Layout = '.\/NewObjs\/$1'"
+        },
+        {
+            "name": "Add Layout if not exists",
+            "searchExpresion": "Layout\\s*=\\s*'.\/(.*)'",
+            "jsModuleFilePath": "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/ComplexReplaces.js",
+            "jsFunctionName": "addLayoutFolderIfNotExists"
+        },
+        {
+            "name": "Remove PageNo",
+            "searchExpresion": "CurrReport.PageNo.*",
+            "replaceExpression": ""
+        }
+    ],
+    "rulesets": [
+        {
+            "name": "Language issues in report",
+            "fileExtension": "al",
+            "rules": [
+                "Language Record to Codeunit",
+                "Language GetUserLanguage to GetUserLanguageCode"
+            ]
+        },
+        {
+            "name": "Add Layout if not exists",
+            "fileExtension": "al",
+            "rules": [
+                "Add Layout if not exists"
+            ]
+        },
+        {
+            "name": "Layout destination NewObjs",
+            "fileExtension": "al",
+            "rules": [
+                "Layout destination NewObjs"
+            ]
+        }
+    ]
+}
