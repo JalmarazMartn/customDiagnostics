@@ -28,6 +28,10 @@ module.exports = {
 	},
 	getFileExtensionFormRuleSetName: function (ruleSetName) {
 		return (getFileExtensionFormRuleSetName(ruleSetName));
+	},
+	pushObjectElementsToObject: function(source, target)
+	{
+		pushObjectElementsToObject(source, target);
 	}
 }
 const vscode = require('vscode');

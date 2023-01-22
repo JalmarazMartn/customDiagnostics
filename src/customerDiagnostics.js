@@ -3,6 +3,11 @@ module.exports = {
     isNegativeClause: function (Rexgexp) {
         //replaceAllRulesInAllDocuments()
         return isNegativeClause(Rexgexp)
+    },
+    GetSeverityFromString: function(severity){
+        return GetSeverityFromString(severity) },
+    createDiagnostic: function(doc, lineOfText, lineIndex, customRule){
+        return createDiagnostic(doc, lineOfText, lineIndex, customRule);
     }
 }
 

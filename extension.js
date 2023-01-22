@@ -13,7 +13,6 @@ function activate(context) {
 	context.subscriptions.push(customDiagnostics);
 	const customerDiagnostics = require('./src/customerDiagnostics.js');
 	customerDiagnostics.subscribeToDocumentChanges(context, customDiagnostics);
-
 	context.subscriptions.push(vscode.languages.registerCodeActionsProvider('al',new customerDiagnostics.customDiagnosticsClass));
 
 	let disposableChangeRulesInAllDocs = vscode.commands.registerCommand('JAMCustomRuls.replaceAllRulesInAllDocuments', function () {
@@ -27,6 +26,13 @@ function activate(context) {
 		rename.pickAndApllyAfixSetName();
 	});
 	context.subscriptions.push(disposablePickAndApllyAfixSetName);
+
+	const subsCheckRulesEdition = vscode.languages.createDiagnosticCollection("customDiagnostics");
+	context.subscriptions.push(customDiagnostics);
+	const checkRulesEdition = require('./src/checkRulesEdition.js');
+	checkRulesEdition.subscribeToDocumentChanges(context, subsCheckRulesEdition);
+	context.subscriptions.push(vscode.languages.registerCodeActionsProvider('al',new checkRulesEdition.rulesEditionCheckingClass));
+
 }
 
 // this method is called when your extension is deactivated
