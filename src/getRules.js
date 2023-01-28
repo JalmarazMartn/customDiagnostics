@@ -32,7 +32,19 @@ module.exports = {
 	pushObjectElementsToObject: function(source, target)
 	{
 		pushObjectElementsToObject(source, target);
-	}
+	},
+	getRulesFromRuleSetNameFromJSON: function(ruleSetName,setupJSON)
+	{
+		return getRulesFromRuleSetNameFromJSON(ruleSetName,setupJSON)
+	},
+	getRulesFromJSON: function(setupJSON)
+	{
+		return getRulesFromJSON(setupJSON)
+	},
+	getRuleSetsFromJSON: function(setupJSON)
+	{
+		return getRuleSetsFromJSON(setupJSON)
+	}	
 }
 const vscode = require('vscode');
 function GetAllSetupJSON() {
@@ -69,31 +81,48 @@ function GetFullPathFileJSONS() {
 	return (FullPathFileJSONS);
 }
 function getRules() {
-	var rules = [];
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
+		return getRulesFromJSON(setupJSON);
+	}
+	return ([]);
+}
+function getRulesFromJSON(setupJSON=[]) {
+	var rules = [];
 		for (let i = 0; i < setupJSON.length; i++) {
 			pushObjectElementsToObject(setupJSON[i].rules, rules);
-		}
-	}
+		}	
 	return (rules);
 }
 function getRuleSets() {
-	var ruleSets = [];
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
+		return(getRuleSetsFromJSON(setupJSON))
+	}
+	return [];
+}
+function getRuleSetsFromJSON(setupJSON=[]) {
+	var ruleSets = [];
 		for (let i = 0; i < setupJSON.length; i++) {
 			pushObjectElementsToObject(setupJSON[i].rulesets, ruleSets);
 		}
-	}
-	return (ruleSets);
+	
+	return ruleSets;
 }
 function getRulesFromRuleSetName(ruleSetName) {
+	var setupJSON = GetAllSetupJSON();
+	if (!setupJSON)
+	{
+		return [];
+	}
+	return getRulesFromRuleSetNameFromJSON(ruleSetName,setupJSON);
+}
+function getRulesFromRuleSetNameFromJSON(ruleSetName,setupJSON) {
 	var rules = [];
-	var allRules = getRules();
-	var ruleSets = getRuleSets();
+	var allRules = getRulesFromJSON(setupJSON);
+	var ruleSets = getRuleSetsFromJSON(setupJSON);
 	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
-	if (!ruleSet.rules) {
+	if (!ruleSet) {
 		return [];
 	}
 	for (let i = 0; i < ruleSet.rules.length; i++) {
@@ -104,6 +133,7 @@ function getRulesFromRuleSetName(ruleSetName) {
 	}
 	return (rules);
 }
+
 function getDefaultDiagnostics() {
 	let defaultDiagnosticRulesetNames = [];
 	let diagnosticsFromDiagnosticSetName = [];

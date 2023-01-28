@@ -109,11 +109,13 @@ function getRulesNotDefined() {
     let allRules = getRules.getRules;
     //Add curren docs rules.
     getRules.pushObjectElementsToObject(currDocJSON.rules,allRules);    
-    //get current doc rulesets
-    //find in rulset rules not defined rules.
+    const CurrDocRulesInRulesets = getCurrDocRulesInRulesets(currDocJSON);
     return rulesNotDefined;
 }
 function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     const cust = require('./customerDiagnostics.js');
     return cust.createDiagnostic(doc, lineOfText, lineIndex, customRule);
+}
+function getCurrDocRulesInRulesets(currDocJSON)
+{
 }
