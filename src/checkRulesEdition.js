@@ -1,3 +1,4 @@
+const { isConstructSignatureDeclaration } = require('typescript');
 const vscode = require('vscode');
 
 class rulesEditionCheckingClass {
@@ -110,6 +111,17 @@ function getRulesNotDefined() {
     //Add curren docs rules.
     getRules.pushObjectElementsToObject(currDocJSON.rules,allRules);    
     const CurrDocRulesInRulesets = getCurrDocRulesInRulesets(currDocJSON);
+    if (CurrDocRulesInRulesets.length ==0)
+    {
+        return [];
+    }
+    for (let index = 0; index < CurrDocRulesInRulesets.length; index++) {
+		let rule = allRules.find(x => x.name === CurrDocRulesInRulesets[index].rules);
+		if (!rule) {
+			rulesNotDefined.push(CurrDocRulesInRulesets[index]);
+		}
+
+    }
     return rulesNotDefined;
 }
 function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
@@ -118,4 +130,16 @@ function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
 }
 function getCurrDocRulesInRulesets(currDocJSON)
 {
+    let rules = [];
+    const getRules = require('./getRules.js');
+    const ruleSets = getRules.getRuleSetsFromJSON(currDocJSON);
+    if (ruleSets.length ==0)
+    {
+        return [];
+    }
+    for (let index = 0; index < ruleSets.length; index++) {
+        const rulesFromRuleSet = getRules.getRulesFromRuleSetNameFromJSON(ruleSets[index].name,currDocJSON);
+        getRules.pushObjectElementsToObject(rulesFromRuleSet,rules);
+    }
+    return rules;
 }
