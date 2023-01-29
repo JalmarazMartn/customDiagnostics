@@ -116,7 +116,7 @@ function getRulesNotDefined() {
         return [];
     }
     for (let index = 0; index < CurrDocRulesInRulesets.length; index++) {
-		let rule = allRules.find(x => x.name === CurrDocRulesInRulesets[index].rules);
+		let rule = allRules.find(x => x.name === CurrDocRulesInRulesets[index].name);
 		if (!rule) {
 			rulesNotDefined.push(CurrDocRulesInRulesets[index]);
 		}
