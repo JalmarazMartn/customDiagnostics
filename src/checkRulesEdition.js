@@ -75,7 +75,7 @@ function findDiagnosticInDocument(doc, diagnostics) {
     const customRule = {
         "language": "json",
         "severity": "error",
-        "message": "Rule not defined",
+        "message": "",
         "searchExpresion": ""
     };
     if (customRule.language) {
@@ -89,39 +89,46 @@ function findDiagnosticInDocument(doc, diagnostics) {
     }
     for (let indexRule = 0; indexRule < rulesNotDefined.length; indexRule++) {
         customRule.searchExpresion = rulesNotDefined[indexRule];
+        customRule.message = "'" + rulesNotDefined[indexRule] + "' not defined in rules above. Choose an existing one";
+        let isCurrentObjectKeyRules = false;
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
-            if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
-                diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
+            const existsObjectKeyInLine = lineOfText.text.search(/".*"\s*:/) !== -1;//find "ObjectKey":
+            if (existsObjectKeyInLine) {
+                isCurrentObjectKeyRules = lineOfText.text.search(/"rules"\s*:/) !== -1;//find "rules":
+            }
+            if (isCurrentObjectKeyRules) {
+                if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
+                    diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
+                }
             }
         }
     }
 }
 function getRulesNotDefined() {
     let rulesNotDefined = [];
-    let currDocJSON = [];        
+    let currDocJSON = [];
     try {
         currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());
         //currDocJSON.push(JSON.parse(vscode.window.activeTextEditor.document.getText()));
     } catch (error) {
         return rulesNotDefined;
-    }    
+    }
     const getRules = require('./getRules.js')
     let allRules = getRules.getRules();
     //Add curren docs rules.
     let currDocJSONArray = [];
-    getRules.pushObjectElementsToObject(currDocJSON,currDocJSONArray);
-    getRules.pushObjectElementsToObject(currDocJSON.rules,allRules);
+    getRules.pushObjectElementsToObject(currDocJSON, currDocJSONArray);
+    getRules.pushObjectElementsToObject(currDocJSON.rules, allRules);
     const CurrDocRulesNamesInRulesets = getCurrDocRuleNamesInRulesets(currDocJSONArray);
-    if (CurrDocRulesNamesInRulesets.length ==0)
-    {
+    if (CurrDocRulesNamesInRulesets.length == 0) {
         return [];
     }
     for (let index = 0; index < CurrDocRulesNamesInRulesets.length; index++) {
-		let rule = allRules.find(x => x.name === CurrDocRulesNamesInRulesets[index]);
-		if (!rule) {
-			rulesNotDefined.push(CurrDocRulesNamesInRulesets[index]);
-		}
+        let rule = allRules.find(x => x.name === CurrDocRulesNamesInRulesets[index]);
+        if (!rule) {
+            rulesNotDefined.push(CurrDocRulesNamesInRulesets[index]);
+        }
 
     }
     return rulesNotDefined;
@@ -130,19 +137,15 @@ function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     const cust = require('./customerDiagnostics.js');
     return cust.createDiagnostic(doc, lineOfText, lineIndex, customRule);
 }
-function getCurrDocRuleNamesInRulesets(currDocJSON)
-{
+function getCurrDocRuleNamesInRulesets(currDocJSON) {
     let ruleNames = [];
     const getRules = require('./getRules.js');
     const ruleSets = getRules.getRuleSetsFromJSON(currDocJSON);
-    if (ruleSets.length ==0)
-    {
+    if (ruleSets.length == 0) {
         return [];
     }
     for (let index = 0; index < ruleSets.length; index++) {
-        //const rulesFromRuleSet = getRules.getRulesFromRuleSetNameFromJSON(ruleSets[index].name,currDocJSON,false);
-        //getRules.pushObjectElementsToObject(rulesFromRuleSet,rules);
-        for (let index2 = 0; index2 < ruleSets[index].rules.length; index2++) {            
+        for (let index2 = 0; index2 < ruleSets[index].rules.length; index2++) {
             ruleNames.push(ruleSets[index].rules[index2]);
         }
     }
