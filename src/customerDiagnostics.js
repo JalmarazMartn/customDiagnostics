@@ -1,16 +1,4 @@
 const vscode = require('vscode');
-module.exports = {
-    isNegativeClause: function (Rexgexp) {
-        //replaceAllRulesInAllDocuments()
-        return isNegativeClause(Rexgexp)
-    },
-    GetSeverityFromString: function(severity){
-        return GetSeverityFromString(severity) },
-    createDiagnostic: function(doc, lineOfText, lineIndex, customRule){
-        return createDiagnostic(doc, lineOfText, lineIndex, customRule);
-    }
-}
-
 class customDiagnosticsClass {
     constructor() {
         this.provideCodeActions = function (document, range, context, token) {
@@ -52,7 +40,16 @@ class customDiagnosticsClass {
 module.exports = {
     customDiagnosticsClass: customDiagnosticsClass,
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
-    refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) }
+    refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) },
+    isNegativeClause: function (Rexgexp) {
+        //replaceAllRulesInAllDocuments()
+        return isNegativeClause(Rexgexp)
+    },
+    GetSeverityFromString: function(severity){
+        return GetSeverityFromString(severity) },
+    createDiagnostic: function(doc, lineOfText, lineIndex, customRule){
+        return createDiagnostic(doc, lineOfText, lineIndex, customRule);
+    }
 }
 
 function createDiagnostic(doc, lineOfText, lineIndex, customRule) {

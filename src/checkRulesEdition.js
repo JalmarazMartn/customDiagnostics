@@ -1,4 +1,3 @@
-const { isConstructSignatureDeclaration } = require('typescript');
 const vscode = require('vscode');
 
 class rulesEditionCheckingClass {
