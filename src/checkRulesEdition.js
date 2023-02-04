@@ -102,23 +102,26 @@ function getRulesNotDefined() {
     let rulesNotDefined = [];
     let currDocJSON = [];        
     try {
-        currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());    
+        currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());
+        //currDocJSON.push(JSON.parse(vscode.window.activeTextEditor.document.getText()));
     } catch (error) {
         return rulesNotDefined;
     }    
     const getRules = require('./getRules.js')
-    let allRules = getRules.getRules;
+    let allRules = getRules.getRules();
     //Add curren docs rules.
-    getRules.pushObjectElementsToObject(currDocJSON.rules,allRules);    
-    const CurrDocRulesInRulesets = getCurrDocRulesInRulesets(currDocJSON);
-    if (CurrDocRulesInRulesets.length ==0)
+    let currDocJSONArray = [];
+    getRules.pushObjectElementsToObject(currDocJSON,currDocJSONArray);
+    getRules.pushObjectElementsToObject(currDocJSON.rules,allRules);
+    const CurrDocRulesNamesInRulesets = getCurrDocRuleNamesInRulesets(currDocJSONArray);
+    if (CurrDocRulesNamesInRulesets.length ==0)
     {
         return [];
     }
-    for (let index = 0; index < CurrDocRulesInRulesets.length; index++) {
-		let rule = allRules.find(x => x.name === CurrDocRulesInRulesets[index].name);
+    for (let index = 0; index < CurrDocRulesNamesInRulesets.length; index++) {
+		let rule = allRules.find(x => x.name === CurrDocRulesNamesInRulesets[index]);
 		if (!rule) {
-			rulesNotDefined.push(CurrDocRulesInRulesets[index]);
+			rulesNotDefined.push(CurrDocRulesNamesInRulesets[index]);
 		}
 
     }
@@ -128,9 +131,9 @@ function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     const cust = require('./customerDiagnostics.js');
     return cust.createDiagnostic(doc, lineOfText, lineIndex, customRule);
 }
-function getCurrDocRulesInRulesets(currDocJSON)
+function getCurrDocRuleNamesInRulesets(currDocJSON)
 {
-    let rules = [];
+    let ruleNames = [];
     const getRules = require('./getRules.js');
     const ruleSets = getRules.getRuleSetsFromJSON(currDocJSON);
     if (ruleSets.length ==0)
@@ -138,8 +141,11 @@ function getCurrDocRulesInRulesets(currDocJSON)
         return [];
     }
     for (let index = 0; index < ruleSets.length; index++) {
-        const rulesFromRuleSet = getRules.getRulesFromRuleSetNameFromJSON(ruleSets[index].name,currDocJSON);
-        getRules.pushObjectElementsToObject(rulesFromRuleSet,rules);
+        //const rulesFromRuleSet = getRules.getRulesFromRuleSetNameFromJSON(ruleSets[index].name,currDocJSON,false);
+        //getRules.pushObjectElementsToObject(rulesFromRuleSet,rules);
+        for (let index2 = 0; index2 < ruleSets[index].rules.length; index2++) {            
+            ruleNames.push(ruleSets[index].rules[index2]);
+        }
     }
-    return rules;
+    return ruleNames;
 }

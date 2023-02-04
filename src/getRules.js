@@ -29,22 +29,18 @@ module.exports = {
 	getFileExtensionFormRuleSetName: function (ruleSetName) {
 		return (getFileExtensionFormRuleSetName(ruleSetName));
 	},
-	pushObjectElementsToObject: function(source, target)
-	{
+	pushObjectElementsToObject: function (source, target) {
 		pushObjectElementsToObject(source, target);
 	},
-	getRulesFromRuleSetNameFromJSON: function(ruleSetName,setupJSON)
-	{
-		return getRulesFromRuleSetNameFromJSON(ruleSetName,setupJSON)
+	getRulesFromRuleSetNameFromJSON: function (ruleSetName, setupJSON) {
+		return getRulesFromRuleSetNameFromJSON(ruleSetName, setupJSON)
 	},
-	getRulesFromJSON: function(setupJSON)
-	{
+	getRulesFromJSON: function (setupJSON) {
 		return getRulesFromJSON(setupJSON)
 	},
-	getRuleSetsFromJSON: function(setupJSON)
-	{
+	getRuleSetsFromJSON: function (setupJSON) {
 		return getRuleSetsFromJSON(setupJSON)
-	}	
+	}
 }
 const vscode = require('vscode');
 function GetAllSetupJSON() {
@@ -87,37 +83,36 @@ function getRules() {
 	}
 	return ([]);
 }
-function getRulesFromJSON(setupJSON=[]) {
+function getRulesFromJSON(setupJSON = []) {
 	var rules = [];
-		for (let i = 0; i < setupJSON.length; i++) {
-			pushObjectElementsToObject(setupJSON[i].rules, rules);
-		}	
+	for (let i = 0; i < setupJSON.length; i++) {
+		pushObjectElementsToObject(setupJSON[i].rules, rules);
+	}
 	return (rules);
 }
 function getRuleSets() {
 	var setupJSON = GetAllSetupJSON();
 	if (setupJSON) {
-		return(getRuleSetsFromJSON(setupJSON))
+		return (getRuleSetsFromJSON(setupJSON))
 	}
 	return [];
 }
-function getRuleSetsFromJSON(setupJSON=[]) {
+function getRuleSetsFromJSON(setupJSON = []) {
 	var ruleSets = [];
-		for (let i = 0; i < setupJSON.length; i++) {
-			pushObjectElementsToObject(setupJSON[i].rulesets, ruleSets);
-		}
-	
+	for (let i = 0; i < setupJSON.length; i++) {
+		pushObjectElementsToObject(setupJSON[i].rulesets, ruleSets);
+	}
+
 	return ruleSets;
 }
 function getRulesFromRuleSetName(ruleSetName) {
 	var setupJSON = GetAllSetupJSON();
-	if (!setupJSON)
-	{
+	if (!setupJSON) {
 		return [];
 	}
-	return getRulesFromRuleSetNameFromJSON(ruleSetName,setupJSON);
+	return getRulesFromRuleSetNameFromJSON(ruleSetName, setupJSON);
 }
-function getRulesFromRuleSetNameFromJSON(ruleSetName,setupJSON) {
+function getRulesFromRuleSetNameFromJSON(ruleSetName = '', setupJSON = []) {
 	var rules = [];
 	var allRules = getRulesFromJSON(setupJSON);
 	var ruleSets = getRuleSetsFromJSON(setupJSON);
@@ -128,8 +123,9 @@ function getRulesFromRuleSetNameFromJSON(ruleSetName,setupJSON) {
 	for (let i = 0; i < ruleSet.rules.length; i++) {
 		let rule = allRules.find(x => x.name === ruleSet.rules[i]);
 		if (rule) {
-			rules.push(rule);
+			rules.push(ruleSet.rules[i]);
 		}
+
 	}
 	return (rules);
 }
@@ -163,15 +159,13 @@ function getFixSets() {
 }
 function getDiagnosticsFromDiagnosticSetName(diagnosticSetName) {
 	var diagnostics = [];
-	if (diagnosticSetName == '')
-	{
+	if (diagnosticSetName == '') {
 		return diagnostics;
 	}
 	var allDiagnostics = getDiagnostics();
 	var diagnosticSets = getDiagnosticSets();
 	let diagnosticSet = diagnosticSets.find(x => x.name === diagnosticSetName);
-	if (!diagnosticSet)
-	{
+	if (!diagnosticSet) {
 		vscode.window.showErrorMessage(diagnosticSetName + ' is not configured. Go to settings to create the diagnosticSet.');
 		return diagnostics;
 	}
@@ -189,8 +183,7 @@ function getDiagnostics() {
 	var diagnostics = [];
 	var setupJSON = GetAllSetupJSON();
 	for (let i = 0; i < setupJSON.length; i++) {
-		if (setupJSON[i].diagnostics)
-		{
+		if (setupJSON[i].diagnostics) {
 			pushObjectElementsToObject(setupJSON[i].diagnostics, diagnostics);
 		}
 	}
@@ -240,6 +233,10 @@ function getFileExtensionFormRuleSetName(ruleSetName) {
 }
 function pushObjectElementsToObject(source, target) {
 	if (!source) {
+		return;
+	}
+	if (!source.length) {
+		target.push(source);
 		return;
 	}
 	for (let i = 0; i < source.length; i++) {
