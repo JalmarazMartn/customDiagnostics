@@ -33,6 +33,19 @@ function activate(context) {
 	checkRulesEdition.subscribeToDocumentChanges(context, subsCheckRulesEdition);
 	context.subscriptions.push(vscode.languages.registerCodeActionsProvider('al',new checkRulesEdition.rulesEditionCheckingClass));
 
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
+		{ language: 'json', scheme: 'file' },
+
+		{
+			// eslint-disable-next-line no-unused-vars
+			provideCompletionItems(document, position) {
+				const checkRulesEdition = require('./src/checkRulesEdition.js');
+				return checkRulesEdition.selectRuleInRuleSet();
+			}
+		}//,
+		//' ' // trigger
+	));
+
 }
 
 // this method is called when your extension is deactivated

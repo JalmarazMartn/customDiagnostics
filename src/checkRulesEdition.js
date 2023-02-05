@@ -41,7 +41,8 @@ class rulesEditionCheckingClass {
 module.exports = {
     rulesEditionCheckingClass: rulesEditionCheckingClass,
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
-    refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) }
+    refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) },
+    selectRuleInRuleSet: function () { return selectRuleInRuleSet(); }
 }
 
 function subscribeToDocumentChanges(context, customDiagnostic) {
@@ -150,4 +151,66 @@ function getCurrDocRuleNamesInRulesets(currDocJSON) {
         }
     }
     return ruleNames;
+}
+async function selectRuleInRuleSet() {
+    const commandName = 'Get an existing rule';
+    if (!getIsEditingRules()) {
+        return;
+    }
+    const commandCompletion = new vscode.CompletionItem(commandName);
+    commandCompletion.kind = vscode.CompletionItemKind.Snippet;
+    //commandCompletion.filterText = commandName;
+    commandCompletion.label = commandName;
+    //commandCompletion.label = await getSnippetWithRules();
+    commandCompletion.insertText = new vscode.SnippetString(await getSnippetWithRules());
+    commandCompletion.detail = 'Get an existing rule';
+    commandCompletion.documentation = '';    
+    return [commandCompletion];
+}
+function getIsEditingRules() {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const document = editor.document;
+        //get current position line in document
+        const currentlineNumber = editor.selection.start.line;
+
+        for (let i = currentlineNumber; i > 0; i--) {
+            const line = document.lineAt(i - 1);
+            const text = line.text;
+            const regex = /"rules"\s*:/;
+            const match = regex.exec(text);
+            if (match) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+async function getSnippetWithRules() {
+    let SnippetWithRules = '';
+    const getRules = require('./getRules.js');
+    let allRules = getRules.getRules();
+    for (let i = 0; i < allRules.length; i++) {
+
+        if (SnippetWithRules !== '') {
+            SnippetWithRules = SnippetWithRules + ',';
+        }
+        SnippetWithRules += convertElementToSnippetText(allRules[i].name);
+    }
+    SnippetWithRules = '${1|' + SnippetWithRules + '|}';
+    return SnippetWithRules;
+}
+function convertElementToSnippetText(SourceElement = '') {
+    let ConvertedElement = '"' + SourceElement + '"';
+    // @ts-ignore
+    ConvertedElement = ConvertedElement.replaceAll('"', '\"');
+    // @ts-ignore
+    ConvertedElement = ConvertedElement.replaceAll(',', '\\,');
+    // @ts-ignore
+    ConvertedElement = ConvertedElement.replaceAll(')', '');
+    // @ts-ignore	
+    ConvertedElement = ConvertedElement.replaceAll('\\', '/');
+
+    return ConvertedElement;
 }
