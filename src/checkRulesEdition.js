@@ -94,9 +94,10 @@ function findDiagnosticInDocument(doc, diagnostics) {
         let isCurrentObjectKeyRules = false;
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
-            const existsObjectKeyInLine = lineOfText.text.search(/".*"\s*:/) !== -1;//find "ObjectKey":
-            if (existsObjectKeyInLine) {
-                isCurrentObjectKeyRules = lineOfText.text.search(/"rules"\s*:/) !== -1;//find "rules":
+            //const existsObjectKeyInLine = lineOfText.text.search(/".*"\s*:/) !== -1;//find "ObjectKey":
+            if (isObjectKeyInLine(lineOfText.text)) {
+                //isCurrentObjectKeyRules = lineOfText.text.search(/"rules"\s*:/) !== -1;//find "rules":
+                isCurrentObjectKeyRules = isObjectKeyRulesInLine(lineOfText.text);//find "rules":
             }
             if (isCurrentObjectKeyRules) {
                 if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
@@ -176,11 +177,9 @@ function getIsEditingRules() {
 
         for (let i = currentlineNumber; i > 0; i--) {
             const line = document.lineAt(i - 1);
-            const text = line.text;
-            const regex = /"rules"\s*:/;
-            const match = regex.exec(text);
-            if (match) {
-                return true;
+            if (isObjectKeyInLine(line.text))
+            {
+                return isObjectKeyRulesInLine(line.text);
             }
         }
         return false;
@@ -192,7 +191,6 @@ async function getSnippetWithRules() {
     const getRules = require('./getRules.js');
     let allRules = getRules.getRules();
     for (let i = 0; i < allRules.length; i++) {
-
         if (SnippetWithRules !== '') {
             SnippetWithRules = SnippetWithRules + ',';
         }
@@ -213,4 +211,12 @@ function convertElementToSnippetText(SourceElement = '') {
     ConvertedElement = ConvertedElement.replaceAll('\\', '/');
 
     return ConvertedElement;
+}
+function isObjectKeyInLine(lineText='')
+{
+    return (lineText.search(/".*"\s*:/) !== -1)
+}
+function isObjectKeyRulesInLine(lineText='')
+{
+    return lineText.search(/"rules"\s*:/) !== -1
 }

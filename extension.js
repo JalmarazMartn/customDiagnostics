@@ -42,8 +42,8 @@ function activate(context) {
 				const checkRulesEdition = require('./src/checkRulesEdition.js');
 				return checkRulesEdition.selectRuleInRuleSet();
 			}
-		}//,
-		//' ' // trigger
+		},
+		'' // trigger
 	));
 
 }

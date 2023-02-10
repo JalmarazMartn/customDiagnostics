@@ -123,7 +123,7 @@ function getRulesFromRuleSetNameFromJSON(ruleSetName = '', setupJSON = []) {
 	for (let i = 0; i < ruleSet.rules.length; i++) {
 		let rule = allRules.find(x => x.name === ruleSet.rules[i]);
 		if (rule) {
-			rules.push(ruleSet.rules[i]);
+			rules.push(rule);
 		}
 
 	}
