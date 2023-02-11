@@ -4,13 +4,14 @@ module.exports = {
         //replaceAllRulesInAllDocuments()
         pickAndExcuteRuleset();
     },
-    getNewText: function(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
-    {
+    replaceRulesInCurrentDoc: function () {
+        pickAndExcuteRulesetICurrDoc()
+    },
+    getNewText: function (originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName) {
         return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
     },
-    emptySearchexpressionError: function(searchExpresion,ruleName)
-    {
-        return emptySearchexpressionError(searchExpresion,ruleName);
+    emptySearchexpressionError: function (searchExpresion, ruleName) {
+        return emptySearchexpressionError(searchExpresion, ruleName);
     }
 }
 
@@ -50,8 +51,7 @@ async function replaceRuleInDocument(replaceRule, document) {
     if (!replaceRule) {
         return;
     }
-    if (emptySearchexpressionError(replaceRule.searchExpresion,replaceRule.name))
-    {
+    if (emptySearchexpressionError(replaceRule.searchExpresion, replaceRule.name)) {
         return;
     }
     const regex = new RegExp(replaceRule.searchExpresion, 'mgi');
@@ -70,14 +70,7 @@ async function replaceRuleInDocument(replaceRule, document) {
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
-    let ruleSets = getRules.getRuleSets();
-    if (!ruleSets) {
-        return;
-    }
-    let ruleSetNames = [];
-    for (let i = 0; i < ruleSets.length; i++) {
-        ruleSetNames.push(ruleSets[i].name);
-    }
+    const ruleSetNames = getRuleSetNames();
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -89,17 +82,17 @@ function pickAndExcuteRuleset() {
     );
 }
 function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,) {
-    const existsReplaceExpr=replaceExpression !== undefined;    
+    const existsReplaceExpr = replaceExpression !== undefined;
     let newText = originalText;
     const regex = new RegExp(searchExpresion, 'mgi');
-    if (jsModuleFilePath) {        
+    if (jsModuleFilePath) {
         if (jsFunctionName) {
             try {
                 var fn = new Function();
                 const jsModule = require(jsModuleFilePath);
                 fn = jsModule[jsFunctionName];
-                newText = originalText.replace(regex,fn);
-                }
+                newText = originalText.replace(regex, fn);
+            }
             catch (error) {
                 vscode.window.showErrorMessage('Error: ' + error.message);
             }
@@ -107,19 +100,52 @@ function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFi
     }
     if (existsReplaceExpr) {
         newText = originalText.replace(regex, replaceExpression);
-    }    
+    }
     return newText;
 }
-function emptySearchexpressionError(searchExpression,ruleName)
-{
+function emptySearchexpressionError(searchExpression, ruleName) {
     let emptySearchExpression = searchExpression == undefined;
-    if (!emptySearchExpression)
-    {
+    if (!emptySearchExpression) {
         emptySearchExpression = searchExpression == '';
     }
-    if (emptySearchExpression)
-    {
-        vscode.window.showErrorMessage('You must set a serach expression in rule '+ ruleName);
+    if (emptySearchExpression) {
+        vscode.window.showErrorMessage('You must set a serach expression in rule ' + ruleName);
     }
     return emptySearchExpression;
+}
+function pickAndExcuteRulesetICurrDoc() {
+    const getRules = require('./getRules.js');    
+    let ruleSetNames = getRuleSetNames();
+    //show vscode code picker with the ruleSetNames        
+    vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
+        if (value) {
+            let rules = getRules.getRulesFromRuleSetName(value);
+            await replaceRulesInCurrDoc(rules);
+        }
+    }
+    );
+}
+async function replaceRulesInCurrDoc(rules) {
+    if (!rules) {
+        return;
+    }
+    let document = await vscode.window.activeTextEditor.document;
+    for (let i = 0; i < rules.length; i++) {
+        let customRule = rules[i];
+
+        await replaceRuleInDocument(customRule, document);
+    }
+}
+function getRuleSetNames()
+{
+    const getRules = require('./getRules.js');
+    let ruleSets = getRules.getRuleSets();
+    if (!ruleSets) {
+        return[];
+    }
+    let ruleSetNames = [];
+    for (let i = 0; i < ruleSets.length; i++) {
+        ruleSetNames.push(ruleSets[i].name);
+    }
+    return ruleSetNames;
 }

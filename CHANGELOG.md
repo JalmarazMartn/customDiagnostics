@@ -102,3 +102,7 @@ New property in diagnostics skipFromSearchIfMatch. You can fill a regex in this 
 ### 0.0.25
 
 Error in diagnostics in all workspace: errors quit the output panel when you close the document.
+
+### 0.0.26
+
+Apply ruleset in current document. Check rule and ruleset edition. Pick a rule editing ruleset.

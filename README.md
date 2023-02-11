@@ -1,6 +1,10 @@
 # customdiagnostics README
 
 Custom diagnostics allows to define your own diagnostics to show them in problems panel. These diagnostics `also can be used as bulk replacements rules`. A set of rules can be applied with the command "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents".
+Posts about extension.
+https://community.dynamics.com/business/b/jesusalmarazblog/posts/new-bulk-replacing-vscode-extension
+
+https://community.dynamics.com/business/b/jesusalmarazblog/posts/how-to-set-your-own-vscode-diagnostics-replacing-tool-2
 
 ## Features
 
@@ -73,6 +77,8 @@ For helping you to make rules and rulesets, you can use the following snippets:
 **_With command "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents" we can pick a ruleset from the list and replace all occurrences in all documents._**
 
 ![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/bulkReplace.gif?raw=true)
+
+**_If you only want to apply replace in current document you can execute command "JAM Custom Rules. Pick a ruleset and apply replacements in current document"_**
 
 ### Fixes
 
