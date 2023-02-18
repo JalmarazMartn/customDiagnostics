@@ -3,7 +3,7 @@ const vscode = require('vscode');
 module.exports = {    
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
     refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) },
-    selectRuleInRuleSet: function () { return selectRuleInRuleSet(); }
+    selectDiagnosticInSet: function () { return selectDiagnosticInSet(); }
 }
 
 function subscribeToDocumentChanges(context, customDiagnostic) {
@@ -45,20 +45,18 @@ function findDiagnosticInDocument(doc, diagnostics) {
             return;
         }
     }
-    const rulesNotDefined = getRulesNotDefined();
+    const rulesNotDefined = getDiagnosticsNotDefined();
     if (rulesNotDefined.length == 0) {
         return;
     }
     for (let indexRule = 0; indexRule < rulesNotDefined.length; indexRule++) {
         customRule.searchExpresion = rulesNotDefined[indexRule];
-        customRule.message = "'" + rulesNotDefined[indexRule] + "' not defined in rules above. Choose an existing one";
+        customRule.message = "'" + rulesNotDefined[indexRule] + "' not defined in diagnostics above. Choose an existing one";
         let isCurrentObjectKeyRules = false;
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
-            //const existsObjectKeyInLine = lineOfText.text.search(/".*"\s*:/) !== -1;//find "ObjectKey":
             if (isObjectKeyInLine(lineOfText.text)) {
-                //isCurrentObjectKeyRules = lineOfText.text.search(/"rules"\s*:/) !== -1;//find "rules":
-                isCurrentObjectKeyRules = isObjectKeyRulesInLine(lineOfText.text);//find "rules":
+                isCurrentObjectKeyRules = isObjectKeyDiagnosticsInLine(lineOfText.text);//find "rules":
             }
             if (isCurrentObjectKeyRules) {
                 if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
@@ -68,55 +66,56 @@ function findDiagnosticInDocument(doc, diagnostics) {
         }
     }
 }
-function getRulesNotDefined() {
-    let rulesNotDefined = [];
+function getDiagnosticsNotDefined() {
+    let diagnosticsNotDefined = [];
     let currDocJSON = [];
     try {
         currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());
         //currDocJSON.push(JSON.parse(vscode.window.activeTextEditor.document.getText()));
     } catch (error) {
-        return rulesNotDefined;
+        return diagnosticsNotDefined;
     }
     const getRules = require('./getRules.js')
-    let allRules = getRules.getRules();
+    let allDiagnostics = getRules.getDiagnostics();
     //Add curren docs rules.
     let currDocJSONArray = [];
     getRules.pushObjectElementsToObject(currDocJSON, currDocJSONArray);
-    getRules.pushObjectElementsToObject(currDocJSON.rules, allRules);
-    const CurrDocRulesNamesInRulesets = getCurrDocRuleNamesInRulesets(currDocJSONArray);
-    if (CurrDocRulesNamesInRulesets.length == 0) {
+    getRules.pushObjectElementsToObject(currDocJSON.diagnostics, allDiagnostics);
+    const CurrDocDiagnosticCodesInSets = getCurrDocDiagnosticCodesInSets(currDocJSONArray);
+    if (CurrDocDiagnosticCodesInSets.length == 0) {
         return [];
     }
-    for (let index = 0; index < CurrDocRulesNamesInRulesets.length; index++) {
-        let rule = allRules.find(x => x.name === CurrDocRulesNamesInRulesets[index]);
+    for (let index = 0; index < CurrDocDiagnosticCodesInSets.length; index++) {
+        let rule = allDiagnostics.find(x => x.code === CurrDocDiagnosticCodesInSets[index]);
         if (!rule) {
-            rulesNotDefined.push(CurrDocRulesNamesInRulesets[index]);
+            diagnosticsNotDefined.push(CurrDocDiagnosticCodesInSets[index]);
         }
 
     }
-    return rulesNotDefined;
+    return diagnosticsNotDefined;
 }
 function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     const cust = require('./customerDiagnostics.js');
     return cust.createDiagnostic(doc, lineOfText, lineIndex, customRule);
 }
-function getCurrDocRuleNamesInRulesets(currDocJSON) {
-    let ruleNames = [];
+function getCurrDocDiagnosticCodesInSets(currDocJSON) {
+    let diagnosticCodes = [];
     const getRules = require('./getRules.js');
-    const ruleSets = getRules.getRuleSetsFromJSON(currDocJSON);
-    if (ruleSets.length == 0) {
+    const diagnosticSets = getRules.getDiagnosticSetsFromJSON(currDocJSON);
+    if (diagnosticSets.length == 0) {
         return [];
     }
-    for (let index = 0; index < ruleSets.length; index++) {
-        for (let index2 = 0; index2 < ruleSets[index].rules.length; index2++) {
-            ruleNames.push(ruleSets[index].rules[index2]);
+    for (let index = 0; index < diagnosticSets.length; index++) {
+        for (let index2 = 0; index2 < diagnosticSets[index].diagnostics.length; index2++) {
+            diagnosticCodes.push(diagnosticSets[index].diagnostics[index2]);
         }
     }
-    return ruleNames;
+    return diagnosticCodes;
 }
-async function selectRuleInRuleSet() {
-    const commandName = 'Get an existing rule';
-    if (!getIsEditingRules()) {
+
+async function selectDiagnosticInSet() {
+    const commandName = 'Get an existing diagnostic';    
+    if (!getIsEditingDiagnostics()) {
         return;
     }
     const commandCompletion = new vscode.CompletionItem(commandName);
@@ -124,12 +123,12 @@ async function selectRuleInRuleSet() {
     //commandCompletion.filterText = commandName;
     commandCompletion.label = commandName;
     //commandCompletion.label = await getSnippetWithRules();
-    commandCompletion.insertText = new vscode.SnippetString(await getSnippetWithRules());
-    commandCompletion.detail = 'Get an existing rule';
+    commandCompletion.insertText = new vscode.SnippetString(await getSnippetWithDiagnostics());
+    commandCompletion.detail = 'Get an existing diagnostic';
     commandCompletion.documentation = '';    
     return [commandCompletion];
 }
-function getIsEditingRules() {
+function getIsEditingDiagnostics() {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
         const document = editor.document;
@@ -140,25 +139,25 @@ function getIsEditingRules() {
             const line = document.lineAt(i - 1);
             if (isObjectKeyInLine(line.text))
             {
-                return isObjectKeyRulesInLine(line.text);
+                return isObjectKeyDiagnosticsInLine(line.text);
             }
         }
         return false;
     }
 
 }
-async function getSnippetWithRules() {
-    let SnippetWithRules = '';
+async function getSnippetWithDiagnostics() {
+    let SnippetWithDiagnostics = '';
     const getRules = require('./getRules.js');
-    let allRules = getRules.getRules();
-    for (let i = 0; i < allRules.length; i++) {
-        if (SnippetWithRules !== '') {
-            SnippetWithRules = SnippetWithRules + ',';
+    let allDiagnostics = getRules.getDiagnostics();
+    for (let i = 0; i < allDiagnostics.length; i++) {
+        if (SnippetWithDiagnostics !== '') {
+            SnippetWithDiagnostics = SnippetWithDiagnostics + ',';
         }
-        SnippetWithRules += convertElementToSnippetText(allRules[i].name);
+        SnippetWithDiagnostics += convertElementToSnippetText(allDiagnostics[i].code);
     }
-    SnippetWithRules = '${1|' + SnippetWithRules + '|}';
-    return SnippetWithRules;
+    SnippetWithDiagnostics = '${1|' + SnippetWithDiagnostics + '|}';
+    return SnippetWithDiagnostics;
 }
 function convertElementToSnippetText(SourceElement = '') {
     let ConvertedElement = '"' + SourceElement + '"';
@@ -177,7 +176,7 @@ function isObjectKeyInLine(lineText='')
 {
     return (lineText.search(/".*"\s*:/) !== -1)
 }
-function isObjectKeyRulesInLine(lineText='')
+function isObjectKeyDiagnosticsInLine(lineText='')
 {
-    return lineText.search(/"rules"\s*:/) !== -1
+    return lineText.search(/"diagnostics"\s*:/) !== -1
 }

@@ -25,7 +25,7 @@ function activate(context) {
 		const rename = require('./src/replace.js');
 		rename.replaceRulesInCurrentDoc();
 	});
-	context.subscriptions.push(disposableChangeRulesInAllDocs);
+	context.subscriptions.push(disposableChangeRulesInCurrentDoc);
 
 	let disposablePickAndApllyAfixSetName = vscode.commands.registerCommand('JAMCustomRuls.pickAndApllyAfixSetName', function () {
 		const rename = require('./src/applyFixes');
@@ -33,11 +33,20 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposablePickAndApllyAfixSetName);
 
-	const subsCheckRulesEdition = vscode.languages.createDiagnosticCollection("customDiagnostics");
+	const subsCheckRulesEdition = vscode.languages.createDiagnosticCollection("rulesNotDefined");
 	context.subscriptions.push(customDiagnostics);
 	const checkRulesEdition = require('./src/checkRulesEdition.js');
 	checkRulesEdition.subscribeToDocumentChanges(context, subsCheckRulesEdition);
-	context.subscriptions.push(vscode.languages.registerCodeActionsProvider('al',new checkRulesEdition.rulesEditionCheckingClass));
+
+	const subsCheckDiagnosticsEdition = vscode.languages.createDiagnosticCollection("diagnosticsNotDefined");
+	context.subscriptions.push(customDiagnostics);
+	const checkDiagnosticsEdition = require('./src/checkDiagnosticEdition.js');
+	checkDiagnosticsEdition.subscribeToDocumentChanges(context, subsCheckDiagnosticsEdition);
+
+	const subsCheckFixesEdition = vscode.languages.createDiagnosticCollection("fixesNotDefined");
+	context.subscriptions.push(customDiagnostics);
+	const checkFixesEdition = require('./src/checkFixEdition.js');
+	checkFixesEdition.subscribeToDocumentChanges(context, subsCheckFixesEdition);
 
 	context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
 		{ language: 'json', scheme: 'file' },
@@ -47,6 +56,31 @@ function activate(context) {
 			provideCompletionItems(document, position) {
 				const checkRulesEdition = require('./src/checkRulesEdition.js');
 				return checkRulesEdition.selectRuleInRuleSet();
+			}
+		},
+		'' // trigger
+	));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
+		{ language: 'json', scheme: 'file' },
+
+		{
+			// eslint-disable-next-line no-unused-vars
+			provideCompletionItems(document, position) {
+				const checkRulesEdition = require('./src/checkFixEdition.js');
+				return checkRulesEdition.selectFixInFixSet();
+			}
+		},
+		'' // trigger
+	));
+
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
+		{ language: 'json', scheme: 'file' },
+
+		{
+			// eslint-disable-next-line no-unused-vars
+			provideCompletionItems(document, position) {
+				const checkRulesEdition = require('./src/checkDiagnosticEdition.js');
+				return checkRulesEdition.selectDiagnosticInSet();
 			}
 		},
 		'' // trigger

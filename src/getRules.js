@@ -40,6 +40,22 @@ module.exports = {
 	},
 	getRuleSetsFromJSON: function (setupJSON) {
 		return getRuleSetsFromJSON(setupJSON)
+	},
+	getFixesFromJSON: function(setupJSON)
+	{
+		return getFixesFromJSON(setupJSON);
+	},
+	getDiagnostics: function()
+	{
+		return getDiagnostics();
+	},
+	getDiagnosticSetsFromJSON: function (setupJSON )
+	{
+		return getDiagnosticSetsFromJSON(setupJSON);
+	},
+	getFixSetsFromJSON: function (setupJSON) 
+	{
+		return getFixSetsFromJSON(setupJSON);
 	}
 }
 const vscode = require('vscode');
@@ -150,13 +166,17 @@ function getDefaultDiagnostics() {
 	return (defaultDiagnosticRules);
 }
 function getFixSets() {
-	var fixSets = [];
 	var setupJSON = GetAllSetupJSON();
+	return getFixSetsFromJSON(setupJSON);
+}
+function getFixSetsFromJSON(setupJSON = []) {
+	var fixSets = [];
 	for (let i = 0; i < setupJSON.length; i++) {
 		pushObjectElementsToObject(setupJSON[i].fixsets, fixSets);
 	}
 	return (fixSets);
 }
+
 function getDiagnosticsFromDiagnosticSetName(diagnosticSetName) {
 	var diagnostics = [];
 	if (diagnosticSetName == '') {
@@ -189,9 +209,12 @@ function getDiagnostics() {
 	}
 	return (diagnostics);
 }
-function getDiagnosticSets() {
-	var diagnosticSets = [];
+function getDiagnosticSets() {	
 	var setupJSON = GetAllSetupJSON();
+	return (getDiagnosticSetsFromJSON(setupJSON));
+}
+function getDiagnosticSetsFromJSON(setupJSON =[]) {
+	var diagnosticSets = [];
 	for (let i = 0; i < setupJSON.length; i++) {
 		pushObjectElementsToObject(setupJSON[i].dianosticsets, diagnosticSets);//previous suntax error
 		pushObjectElementsToObject(setupJSON[i].diagnosticsets, diagnosticSets);
@@ -212,8 +235,11 @@ function getFixesFromFixSetName(fixSetName) {
 	return (fixes);
 }
 function getFixes() {
+	var fixes = getFixesFromJSON(GetAllSetupJSON());
+	return (fixes);
+}
+function getFixesFromJSON(setupJSON=[]) {
 	var fixes = [];
-	var setupJSON = GetAllSetupJSON();
 	for (let i = 0; i < setupJSON.length; i++) {
 		pushObjectElementsToObject(setupJSON[i].fixes, fixes);
 	}
