@@ -84,6 +84,8 @@ To help ruleset editting will raise an error with the rules not defined included
 
 ![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/getRuleCompletion.gif?raw=true)
 
+Note release 27: We add these helps to diagnostic and fix sets edition, selection an no extisting error.
+
 ### Fixes
 
 Fixes is a subtle way to do replacements. The replacement will be done only if the line has a problem, with an error code. You can set a fix this way:
