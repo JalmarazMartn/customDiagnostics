@@ -1,21 +1,6 @@
 {
     "rules": [
         {
-            "name": "Remove Source",
-            "searchExpresion": "\"source\": \".+\",",
-            "replaceExpression": ""
-        },
-        {
-            "name": "Remove ExcludeTransFromCSV",
-            "searchExpresion": "\"ExcludeTransFromCSV\": .+",
-            "replaceExpression": ""
-        },
-        {
-            "name": "Remove target label",
-            "searchExpresion": "\"target\":",
-            "replaceExpression": ""
-        },
-        {
             "name": "Xlf Remove target label",
             "searchExpresion": "<target>|<\/target>",
             "replaceExpression": ""
@@ -47,15 +32,6 @@
         }
     ],
     "rulesets": [
-        {
-            "name": "Only translations to check spell",
-            "fileExtension": "json",
-            "rules": [
-                "Remove Source",
-                "Remove ExcludeTransFromCSV",
-                "Remove target label"
-            ]
-        },
         {
             "name": "xlf Only translations to check spell",
             "fileExtension": "xlf",
