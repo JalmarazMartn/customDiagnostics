@@ -1,0 +1,80 @@
+{
+    "rules": [
+        {
+            "name": "Remove Source",
+            "searchExpresion": "\"source\": \".+\",",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove ExcludeTransFromCSV",
+            "searchExpresion": "\"ExcludeTransFromCSV\": .+",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove target label",
+            "searchExpresion": "\"target\":",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove target label",
+            "searchExpresion": "<target>|<\/target>",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove Transunit",
+            "searchExpresion": "<.*trans-unit.*",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove source",
+            "searchExpresion": "<source.*",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove note",
+            "searchExpresion": "<note.*",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove source label",
+            "searchExpresion": "<source>|<\/source>",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove target",
+            "searchExpresion": "<target.*",
+            "replaceExpression": ""
+        }
+    ],
+    "rulesets": [
+        {
+            "name": "Only translations to check spell",
+            "fileExtension": "json",
+            "rules": [
+                "Remove Source",
+                "Remove ExcludeTransFromCSV",
+                "Remove target label"
+            ]
+        },
+        {
+            "name": "xlf Only translations to check spell",
+            "fileExtension": "xlf",
+            "rules": [
+                "Xlf Remove target label",
+                "Xlf Remove Transunit",
+                "Xlf Remove source",
+                "Xlf Remove note"
+            ]
+        },
+        {
+            "name": "xlf Only sources to check spell",
+            "fileExtension": "xlf",
+            "rules": [
+                "Xlf Remove source label",
+                "Xlf Remove Transunit",
+                "Xlf Remove target",
+                "Xlf Remove note"
+            ]
+        }        
+    ]
+}
