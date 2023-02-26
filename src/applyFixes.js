@@ -87,11 +87,19 @@ function GetDiagnostics()
                 {
                   uri: AppDiagnostics[i][0].path,
                   range: ProblemRange,
-                  code: Problem.code.value,
+                  code: getProblemMessageCode(Problem.code),
                   message: Problem.message,
                   severity: Problem.severity
                           })
         }
     }
   return Problems;
+}
+function getProblemMessageCode(problemCode)
+{
+    if (!problemCode.value)
+    {
+        return problemCode.toString();
+    }
+    return problemCode.value;
 }
