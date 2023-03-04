@@ -1,0 +1,17 @@
+    {
+        "rules": [
+            {
+                "name": "Scape regex chars",
+                "searchExpresion": "\"searchExpresion\":.*",
+                "jsModuleFilePath": "C:/Users/Jesus/Documents/Proyecto js/customDiagnostics/FileExamples/escapeRegExpChar.js",
+                "jsFunctionName": "escapeRegExpChars"
+            }
+        ],
+        "rulesets": [
+            {
+                "name": "Scape regex chars",
+                "fileExtension": "json",
+                "rules": ["Scape regex chars"]
+            }
+        ]
+    }
