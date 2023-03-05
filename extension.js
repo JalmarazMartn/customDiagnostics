@@ -33,6 +33,18 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposablePickAndApllyAfixSetName);
 
+	let disposableOpenRegexHelpURL = vscode.commands.registerCommand('JAMCustomRuls.OpenRegexHelpURL', function () {
+		const regexHelper = require('./src/regexHelper.js');
+		regexHelper.openRegexHelpURL();
+	});
+	context.subscriptions.push(disposableOpenRegexHelpURL);
+
+	let disposablePasteEscapedRegex = vscode.commands.registerCommand('JAMCustomRuls.PasteEscapedRegex', function () {
+		const regexHelper = require('./src/regexHelper.js');
+		regexHelper.pasteEscapedRegex();
+	});
+	context.subscriptions.push(disposablePasteEscapedRegex);
+
 	const subsCheckRulesEdition = vscode.languages.createDiagnosticCollection("rulesNotDefined");
 	context.subscriptions.push(customDiagnostics);
 	const checkRulesEdition = require('./src/checkRulesEdition.js');

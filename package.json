@@ -37,6 +37,14 @@
 			{
 				"command": "JAMCustomRuls.pickAndApllyAfixSetName",
 				"title": "JAM Fixes. Pick a fixset and apply fixes in all workspace documents diagnostics"
+			},
+			{
+				"command": "JAMCustomRuls.OpenRegexHelpURL",
+				"title": "JAM Custom Rules. Open regex help URL in explorer"
+			},
+			{
+				"command": "JAMCustomRuls.PasteEscapedRegex",
+				"title": "JAM Custom Rules. Paste escaped clipboard content"
 			}
 		],
 		"snippets": [
@@ -44,7 +52,7 @@
 				"language": "json",
 				"path": "./src/snippets.json"
 			}
-		],
+		],		
 		"configuration": {
 			"title": "JAM diagnostics and replacement",
 			"properties": {
@@ -66,8 +74,31 @@
 				"JAMDiagnostics.ScanCustomDiagnosticsInAllWS": {
 					"type": "boolean",
 					"description": "Default: when exit from editor doc custom diagnosticsnot showed in problems panel."
-				}				
+				},
+				"JAMDiagnostics.RegexpHelpURL": {
+					"type": "string",
+					"default": "https://regex101.com/",					
+					"description": "URL to open when you are editing new rules search expresion"
+				},
+				"JAMDiagnostics.EnableHelpContextMenus": {
+					"type": "boolean",
+					"default": true,					
+					"description": "Enable context menu option to open regex Help URL"
+				}
 			}
+		},
+		"menus": {
+			"editor/context": [{
+				"when": "resourceLangId == json && config.JAMDiagnostics.EnableHelpContextMenus",
+				"group":"1_modification",
+				"command": "JAMCustomRuls.OpenRegexHelpURL"
+		  },
+		  {
+			"when": "resourceLangId == json && config.JAMDiagnostics.EnableHelpContextMenus",
+			"group":"1_modification",
+			"command": "JAMCustomRuls.PasteEscapedRegex"
+	  }		  
+		]
 		}
 	},
 	"scripts": {
