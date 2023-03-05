@@ -111,3 +111,6 @@ Apply ruleset in current document. Check rule and ruleset edition. Pick a rule e
 
 Check diagnostic and fix set edition. Pick a diagnostic or fix editing sets.
 
+### 0.0.30
+
+Regex Help

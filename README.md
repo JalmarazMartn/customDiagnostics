@@ -157,6 +157,13 @@ Note: You only will see custom diagnostics out of the document edition setting t
 - Create diagnostic sets in json, with diagnostics created in the previous step.
 - In extension settings configure this diagnostic set in `JAMDiagnostics.DefaultDiagnosticRuleset`.
 
+### Regex Help
+
+It was hard to write new regular expressions and write them escaped in a JSON value. To ease this work you can edit regular expressions this way, using specific context menu:
+
+![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/regexHelp.gif?raw=true)
+
+
 ## Requirements
 
 vscode
