@@ -175,6 +175,9 @@ This extension contributes the following settings:
 * `JAMDiagnostics.DefaultDiagnosticRuleset`: Rulesets that will be used as diagnostics in problems Panel
 * `JAMDiagnostics.AdditionalFilePaths`: Paths of aditional files to load rules and diagnostics.
 * `JAMDiagnostics.ScanCustomDiagnosticsInAllWS`: Custom diagnostics for a doc are not enabled out of doc edition. If you want to keep seeing diagnostics outside the document edition you must set true this property. Is recommended to disable this property in big workspaces to avoid performance issues.
+* `JAMDiagnostics.RegexpHelpURL`: URL to open in the context menu action "JAM Custom Rules. Open regex help URL in explorer".
+* `JAMDiagnostics.EnableHelpContextMenus`: Option to enable extension context menus.
+
 
 ## Known Issues
 
