@@ -114,3 +114,7 @@ Check diagnostic and fix set edition. Pick a diagnostic or fix editing sets.
 ### 0.0.30
 
 Regex Help
+
+### 0.0.31
+
+Error when appply fix to our own diagnostics

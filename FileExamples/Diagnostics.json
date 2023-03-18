@@ -6,13 +6,49 @@
             "searchExpresion": "SQLDataType.*Variant",
             "severity": "error",
             "language": "al"
+        },
+        {
+            "code": "JAMMIG002",
+            "message": "Hay que indicar la ruta completa del layout.",
+            "searchExpresion": "RDLCLayout =",
+            "skipFromSearchIfMatch": "report.?layout",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG003",
+            "message": "Quitar el literal Obsoleto del final del procedure",
+            "searchExpresion": "procedure .*Obsoleto\\(",
+            "skipFromSearchIfMatch": "",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG004",
+            "message": "Hay que poner CommitAll, porque se quedará el commit pendiente con problemas",
+            "searchExpresion": "scriptArgument.*git.commit\"",
+            "skipFromSearchIfMatch": "commitAll",
+            "severity": "error",
+            "language": "json"
+        },
+        {
+            "code": "JAMMIG005",
+            "message": "Revisar la longitud del campo. Si es correcto a 10 poner un comentario 'Revisada longitud' en la misma línea al final",
+            "searchExpresion": "field\\(\\d+;.+No\\.\";\\s*Code\\[10\\]\\)",
+            "skipFromSearchIfMatch": "Revisada longitud",
+            "severity": "error",
+            "language": "al"
         }
     ],
     "dianosticsets": [
         {
             "name": "Cloud Migration Errors",
             "diagnostics": [
-                "JAMMIG001"
+                "JAMMIG001",
+                "JAMMIG002",
+                "JAMMIG003",
+                "JAMMIG004",
+                "JAMMIG005"
             ]
         }
     ]

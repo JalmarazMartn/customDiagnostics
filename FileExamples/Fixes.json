@@ -17,6 +17,12 @@
             "code": "AL0729",
             "searchExpresion": ".*Promote.*",
             "replaceExpression": ""
+        },        
+        {
+            "name": "Set src-report-layout folder",
+            "code": "JAMMIG002",
+            "searchExpresion": ".\\/",
+            "replaceExpression": "./src/report/layout/"
         }
     ],
     "fixsets": [
@@ -25,7 +31,8 @@
             "fixes": [
                 "Remove unnecesary decimals places in report columns",
                 "Add Rec in field pages",
-                "Remove promote properties"
+                "Remove promote properties",
+                "Set src-report-layout folder"
             ]
         }
     ]

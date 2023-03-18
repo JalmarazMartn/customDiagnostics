@@ -1,4 +1,8 @@
 # customdiagnostics README
+Main features:
+* Replacements: You can avoid type the same replacement over and over, saving them in setting files, and applying them grouping in sets.
+* Diagnostics: You can set customized errors, warnings and messages, to show them in the Problems Panel.
+* Fixes: Combination of both previous features. You can fix diagnostics (customized or existing ones) by replacing rules.
 
 Custom diagnostics allows to define your own diagnostics to show them in problems panel. These diagnostics `also can be used as bulk replacements rules`. A set of rules can be applied with the command "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents".
 Posts about extension.

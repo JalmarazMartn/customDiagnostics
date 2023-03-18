@@ -12,7 +12,8 @@ class customDiagnosticsClass {
                 let diagnostic = diagnostics[i];
                 const allFixes = getRules.getFixes();
                 allFixes
-                    .filter(fix => fix.code === diagnostic.code.value)
+                    //.filter(fix => fix.code === diagnostic.code.value)
+                    .filter(fix => fix.code === getProblemMessageCode(diagnostic.code))
                     .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic, fix)));
             }
             return currFixes;
@@ -190,4 +191,12 @@ function skipFromSearch(lineOfText = '', skipFromSearchIfMatch) {
         return true
     }
     return false;
+}
+function getProblemMessageCode(problemCode)
+{
+    if (!problemCode.value)
+    {
+        return problemCode.toString();
+    }
+    return problemCode.value;
 }
