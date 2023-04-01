@@ -7,6 +7,10 @@ module.exports = {
     replaceRulesInCurrentDoc: function () {
         pickAndExcuteRulesetICurrDoc()
     },
+    replaceRulesInCurrDocSelection: function()
+    {
+        pickAndExcuteRulesetICurrDocSelection();
+    },
     getNewText: function (originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName) {
         return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
     },
@@ -48,6 +52,9 @@ async function replaceRulesInAllDocuments(rules, fileExtension) {
     })
 }
 async function replaceRuleInDocument(replaceRule, document) {
+    replaceRuleInRange(replaceRule,document,new vscode.Range(0, 0, document.lineCount, 0));
+}
+async function replaceRuleInRange(replaceRule, document,replaceRange=new vscode.Range(0,0,0,0)) {
     if (!replaceRule) {
         return;
     }
@@ -58,14 +65,16 @@ async function replaceRuleInDocument(replaceRule, document) {
     if (document.getText().search(regex) < 0) {
         return;
     }
-    const replaceText = getNewText(document.getText(), replaceRule.searchExpresion, replaceRule.replaceExpression,
+    let originalText = document.getText(replaceRange);
+
+    const replaceText = getNewText(originalText, replaceRule.searchExpresion, replaceRule.replaceExpression,
         replaceRule.jsModuleFilePath, replaceRule.jsFunctionName);
 
-    if (replaceText === document.getText()) {
+    if (replaceText === originalText) {
         return;
     }
     let edit = new vscode.WorkspaceEdit();
-    edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), replaceText);
+    edit.replace(document.uri, replaceRange, replaceText);
     await vscode.workspace.applyEdit(edit);
 }
 function pickAndExcuteRuleset() {
@@ -125,6 +134,18 @@ function pickAndExcuteRulesetICurrDoc() {
     }
     );
 }
+function pickAndExcuteRulesetICurrDocSelection() {
+    const getRules = require('./getRules.js');    
+    let ruleSetNames = getRuleSetNames();
+    //show vscode code picker with the ruleSetNames        
+    vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
+        if (value) {
+            let rules = getRules.getRulesFromRuleSetName(value);
+            await replaceRulesInCurrDocSelection(rules);
+        }
+    }
+    );
+}
 async function replaceRulesInCurrDoc(rules) {
     if (!rules) {
         return;
@@ -134,6 +155,19 @@ async function replaceRulesInCurrDoc(rules) {
         let customRule = rules[i];
 
         await replaceRuleInDocument(customRule, document);
+    }
+}
+async function replaceRulesInCurrDocSelection(rules) {
+    if (!rules) {
+        return;
+    }
+    let document = await vscode.window.activeTextEditor.document;
+    let selectioRange = new vscode.Range(vscode.window.activeTextEditor.selection.start,
+                vscode.window.activeTextEditor.selection.end);
+    for (let i = 0; i < rules.length; i++) {
+        let customRule = rules[i];
+
+        await replaceRuleInRange(customRule, document,selectioRange);
     }
 }
 function getRuleSetNames()

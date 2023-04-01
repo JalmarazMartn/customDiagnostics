@@ -1,0 +1,56 @@
+{
+    "rules": [
+        {
+            "name": "Xlf Remove target label",
+            "searchExpresion": ".*<target>|<\/target>",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove Transunit",
+            "searchExpresion": ".*<.*trans-unit.*\\r\\n",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove source",
+            "searchExpresion": ".*<source.*\\r\\n",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove note",
+            "searchExpresion": ".*<note.*\\r\\n",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove source label",
+            "searchExpresion": ".*<source>|<\/source>",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Xlf Remove target",
+            "searchExpresion": ".*<target.*\\r\\n",
+            "replaceExpression": ""
+        }
+    ],
+    "rulesets": [
+        {
+            "name": "xlf Only translations to check spell",
+            "fileExtension": "xlf",
+            "rules": [
+                "Xlf Remove target label",
+                "Xlf Remove Transunit",
+                "Xlf Remove source",
+                "Xlf Remove note"
+            ]
+        },
+        {
+            "name": "xlf Only sources to check spell",
+            "fileExtension": "xlf",
+            "rules": [
+                "Xlf Remove source label",
+                "Xlf Remove Transunit",
+                "Xlf Remove target",
+                "Xlf Remove note"
+            ]
+        }        
+    ]
+}

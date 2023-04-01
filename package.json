@@ -35,6 +35,10 @@
 				"title": "JAM Custom Rules. Pick a ruleset and apply replacements in current document"
 			},
 			{
+				"command": "JAMCustomRuls.replaceRulesInCurrDocSelection",
+				"title": "JAM Custom Rules. Pick a ruleset and apply replacements in current selection"
+			},
+			{
 				"command": "JAMCustomRuls.pickAndApllyAfixSetName",
 				"title": "JAM Fixes. Pick a fixset and apply fixes in all workspace documents diagnostics"
 			},

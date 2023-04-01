@@ -27,6 +27,12 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposableChangeRulesInCurrentDoc);
 
+	let disposableChangeRulesInCurrDocSelection = vscode.commands.registerCommand('JAMCustomRuls.replaceRulesInCurrDocSelection', function () {
+		const rename = require('./src/replace.js');
+		rename.replaceRulesInCurrDocSelection();
+	});
+	context.subscriptions.push(disposableChangeRulesInCurrDocSelection);
+
 	let disposablePickAndApllyAfixSetName = vscode.commands.registerCommand('JAMCustomRuls.pickAndApllyAfixSetName', function () {
 		const rename = require('./src/applyFixes');
 		rename.pickAndApllyAfixSetName();
