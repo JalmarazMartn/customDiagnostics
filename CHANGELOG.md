@@ -118,3 +118,7 @@ Regex Help
 ### 0.0.31
 
 Error when appply fix to our own diagnostics
+
+### 0.0.32
+
+Apply ruleset in current document selection.

@@ -84,6 +84,8 @@ For helping you to make rules and rulesets, you can use the following snippets:
 
 **_If you only want to apply replace in current document you can execute command "JAM Custom Rules. Pick a ruleset and apply replacements in current document"_**
 
+**_And last: If you only want to apply replace in current document selection you can execute command "JAM Custom Rules. Pick a ruleset and apply replacements in current selection"_**
+
 To help ruleset editting will raise an error with the rules not defined included in ruleset. To select existing an rule to include it in a ruleset you can use this completion item (with control+Space):
 
 ![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/getRuleCompletion.gif?raw=true)
