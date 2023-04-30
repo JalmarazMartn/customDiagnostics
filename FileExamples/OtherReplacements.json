@@ -30,6 +30,16 @@
             "name": "Remove PageNo",
             "searchExpresion": "CurrReport.PageNo.*",
             "replaceExpression": ""
+        },
+        {
+            "name": "fields setting from field definition",
+            "searchExpresion": "field\\(\\d+;\\s*(.+)\\s*;.+\\)",
+            "replaceExpression": "FromRecord1.$1 := ToRecord2.$1;"
+        },
+        {
+            "name": "fields setting from field definition remove other",
+            "searchExpresion": "{([^{]|\\n)+}(\\s|\\n)*",
+            "replaceExpression": ""
         }
     ],
     "rulesets": [
@@ -53,6 +63,14 @@
             "fileExtension": "al",
             "rules": [
                 "Layout destination NewObjs"
+            ]
+        },
+        {
+            "name": "fields setting from field definition",
+            "fileExtension": "al",
+            "rules": [
+                "fields setting from field definition",
+                "fields setting from field definition remove other"
             ]
         }
     ]
