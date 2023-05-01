@@ -12,8 +12,9 @@
         },
         {
             "name": "Replace parameters in Create Reservation for",
-            "searchExpresion": "(CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
-            "replaceExpression": "$1$2,ReservationEntry);"
+            "searchExpresion": "(\\w+\\.CreateReservEntryFor\\((.|\r|\n)*)(,(.|\r|\n)*,(.|\r|\n)*\\);)",
+            "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\FileExamples\\ComplexReplaces.js",
+            "jsFunctionName": "CreateReservEntryFor"
         },
         {
             "name": "Layout destination NewObjs",
@@ -71,6 +72,13 @@
             "rules": [
                 "fields setting from field definition",
                 "fields setting from field definition remove other"
+            ]
+        },
+        {
+            "name": "Create Reservation for",
+            "fileExtension": "al",
+            "rules": [
+                "Replace parameters in Create Reservation for"
             ]
         }
     ]
