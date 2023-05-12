@@ -39,7 +39,7 @@
         },
         {
             "name": "fields setting from field definition remove other",
-            "searchExpresion": "{([^{]|\\n)+}(\\s|\\n)*",
+            "searchExpresion": "{([^{]|\\r\\rE\\n)+}(\\s|\\n)*",
             "replaceExpression": ""
         }
     ],
