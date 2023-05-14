@@ -122,3 +122,7 @@ Error when appply fix to our own diagnostics
 ### 0.0.32
 
 Apply ruleset in current document selection.
+
+### 0.0.33
+
+Disable commands when must not be used. In document replacement get only rule sets for current file extension.

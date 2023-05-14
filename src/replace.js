@@ -79,7 +79,7 @@ async function replaceRuleInRange(replaceRule, document,replaceRange=new vscode.
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
-    const ruleSetNames = getRuleSetNames();
+    const ruleSetNames = getRuleSetNames('');
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -122,9 +122,10 @@ function emptySearchexpressionError(searchExpression, ruleName) {
     }
     return emptySearchExpression;
 }
-function pickAndExcuteRulesetICurrDoc() {
+async function pickAndExcuteRulesetICurrDoc() {
     const getRules = require('./getRules.js');    
-    let ruleSetNames = getRuleSetNames();
+    const currFileExtension = getFileExtensionFromFileName(await vscode.window.activeTextEditor.document.fileName);
+    let ruleSetNames = getRuleSetNames(currFileExtension);    
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -134,9 +135,10 @@ function pickAndExcuteRulesetICurrDoc() {
     }
     );
 }
-function pickAndExcuteRulesetICurrDocSelection() {
+async function pickAndExcuteRulesetICurrDocSelection() {
     const getRules = require('./getRules.js');    
-    let ruleSetNames = getRuleSetNames();
+    const currFileExtension = getFileExtensionFromFileName(await vscode.window.activeTextEditor.document.fileName);
+    let ruleSetNames = getRuleSetNames(currFileExtension);    
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -170,10 +172,14 @@ async function replaceRulesInCurrDocSelection(rules) {
         await replaceRuleInRange(customRule, document,selectioRange);
     }
 }
-function getRuleSetNames()
+function getRuleSetNames(fileExtension='')
 {
     const getRules = require('./getRules.js');
-    let ruleSets = getRules.getRuleSets();
+    let ruleSets = getRules.getRuleSets();    
+    if (fileExtension !=='')
+    {
+        ruleSets = filterRuleSets(ruleSets,fileExtension);
+    }
     if (!ruleSets) {
         return[];
     }
@@ -182,4 +188,12 @@ function getRuleSetNames()
         ruleSetNames.push(ruleSets[i].name);
     }
     return ruleSetNames;
+}
+function filterRuleSets(ruleSets={},currFileExtension='')
+{
+    return ruleSets.filter(ruleSetName => ruleSetName.fileExtension === currFileExtension);
+}
+function getFileExtensionFromFileName(fileName='')
+{
+    return fileName.split('.').pop();
 }
