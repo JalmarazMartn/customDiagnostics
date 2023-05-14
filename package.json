@@ -102,8 +102,25 @@
 			"group":"1_modification",
 			"command": "JAMCustomRuls.PasteEscapedRegex"
 	  }		  
-		]
-		}
+		],
+		"commandPalette": [
+			{
+			  "command": "JAMCustomRuls.replaceRulesInCurrentDoc",
+			  "when": "editorIsOpen"
+			},
+			{
+				"command": "JAMCustomRuls.replaceRulesInCurrDocSelection",
+				"when": "editorHasSelection"
+		  	},
+			{
+				"command": "JAMCustomRuls.PasteEscapedRegex",
+				"when": "resourceLangId == json"
+			},
+			{
+				"command": "JAMCustomRuls.OpenRegexHelpURL",
+				"when": "resourceLangId == json"
+			}			
+		  ]		}
 	},
 	"scripts": {
 		"lint": "eslint .",
