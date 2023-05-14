@@ -114,11 +114,11 @@
 		  	},
 			{
 				"command": "JAMCustomRuls.PasteEscapedRegex",
-				"when": "resourceLangId == json"
+				"when": "resourceLangId == DontShow"
 			},
 			{
 				"command": "JAMCustomRuls.OpenRegexHelpURL",
-				"when": "resourceLangId == json"
+				"when": "resourceLangId == DontShow"
 			}			
 		  ]		}
 	},
