@@ -126,3 +126,7 @@ Apply ruleset in current document selection.
 ### 0.0.33
 
 Disable commands when must not be used. In document replacement get only rule sets for current file extension.
+
+### 0.0.34
+
+Additional conditions in diagnostics. An object array property in diagnostic called "andFileAlsoMustInclude", can contain a "searchExpresion". For diagnostic raising  all this searchExpression must be matched in file.

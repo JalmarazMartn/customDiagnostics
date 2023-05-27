@@ -134,7 +134,13 @@ In the same file we set the replacing rules we can set a digsnotics to find and 
                     "searchExpresion": "RDLCLayout = '",
                     "skipFromSearchIfMatch": "/Layout/",
                     "severity": "error",
-                    "language": "al"
+                    "language": "al",
+                    "andFileAlsoMustInclude":
+                    [
+                        {
+                            "searchExpresion": "report\\s+\\d*\\s+.+"
+                        }
+                    ]
                 }
                         ],
         "diagnosticsets": [
@@ -154,6 +160,7 @@ The properties of a rule have the following meaning:
 * "skipFromSearchIfMatch":"/Layout/",`optional property to set a pattern to exclude from diagnostic the match`
 * "severity": "error",`severity of the diagnostic in problems panel: error, warning, information, hint`
 * "language": "al"`language to apply the rule for replacing and diagnostic`
+* "andFileAlsoMustInclude":`object array or searchExpresion that must be satisfied to raise the diagnostic`
 
 Note: You only will see custom diagnostics out of the document edition setting the extension parameter `JAMDiagnostics.ScanCustomDiagnosticsInAllWS` to true.
 

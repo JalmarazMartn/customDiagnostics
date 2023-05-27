@@ -72,6 +72,26 @@
     ],
     "description": "New snippet to add rules"
   },
+  "Create diagnostic With andFileAlsoMustInclude": {
+    "prefix": "tDiagnosticFileAlsoMustInclude",
+    "body": [
+      "            {",
+      "                \"code\": \"${1:code}\",",
+      "                \"message\": \"${2:message}\",",
+      "                \"searchExpresion\": \"${3:regularExpr}\",",
+      "                \"skipFromSearchIfMatch\": \"\",",      
+      "                \"severity\": ${4|\"error\",\"warning\",\"information\",\"hint\"|},",
+      "                \"language\": \"${5:languageCode}\",",
+      "                \"andFileAlsoMustInclude\":",
+      "                [",
+      "                   {",
+      "                      \"searchExpresion\": \"${6:regularExpr}\"",
+      "                   }",
+      "                ]",
+      "            }"
+    ],
+    "description": "New snippet to add rules"
+  },
   "Create diagnostic set": {
     "prefix": "tDiagnosticset",
     "body": [

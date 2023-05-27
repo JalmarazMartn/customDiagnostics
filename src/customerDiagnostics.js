@@ -109,10 +109,14 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
             return;
         }
     }
+    if (!checkAndFileAlsoInclude(doc,customRule))
+    {
+        return;
+    }
     let findMatchByLine = isNegativeClause(customRule.searchExpresion);
     if (!findMatchByLine) {
         findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
-    }
+    }    
     if (findMatchByLine) {
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
@@ -124,6 +128,29 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
         }
     }
 
+}
+function checkAndFileAlsoInclude(doc,customRule)
+{
+    if (!customRule.andFileAlsoMustInclude)
+    {
+        return true;
+    }
+    if (customRule.andFileAlsoMustInclude.length == 0)
+    {
+        return true;
+    }
+    const fileAlsoInclude = customRule.andFileAlsoMustInclude;
+    for (let index = 0; index < fileAlsoInclude.length; index++) {
+        const condition = fileAlsoInclude[index];
+        if (condition.searchExpresion)
+        {
+            if (doc.getText().search(condition.searchExpresion) < 0)
+            {
+                return false
+            }
+        }
+    }
+    return true
 }
 function getCustomDiagnosticData() {
     const getRules = require('./getRules.js');

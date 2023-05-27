@@ -38,6 +38,20 @@
             "skipFromSearchIfMatch": "Revisada longitud",
             "severity": "error",
             "language": "al"
+        },
+        {
+            "code": "JAMMIG020",
+            "message": "No se pueden definir campos de 7 dígitos en las tablas. Si es correcto poner Skip Error",
+            "searchExpresion": "field\\(\\s*\\d{7}\\s*;.+;.+\\)",
+            "skipFromSearchIfMatch": "Skip Error",
+            "severity": "error",
+            "language": "al",
+            "andFileAlsoMustInclude":
+            [
+                {
+                    "searchExpresion": "table\\s+\\d*\\s+.+"
+                }
+            ]
         }
     ],
     "dianosticsets": [
@@ -48,7 +62,8 @@
                 "JAMMIG002",
                 "JAMMIG003",
                 "JAMMIG004",
-                "JAMMIG005"
+                "JAMMIG005",
+                "JAMMIG020"
             ]
         }
     ]
