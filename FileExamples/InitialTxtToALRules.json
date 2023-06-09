@@ -89,6 +89,7 @@
                 "Replace Item Cross Reference Entries",
                 "Remove CreateTotals",
                 "Remove Object table use"
-            ]
+            ],
+            "saveAfterApply":true
         }]
 }

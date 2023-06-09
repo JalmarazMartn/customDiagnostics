@@ -53,7 +53,8 @@
       "                    \"fileExtension\": \"${2:fileExtension}\",",
       "                \"rules\": [",
       "                    \"${3:ruleName}\",",
-      "                ]",
+      "                ],",
+      "                \"saveAfterApply\":${4|true,false|}",
       "            },"
     ],
     "description": "Snippet to create ruleset. You must add the code rules in rules array"

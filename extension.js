@@ -16,8 +16,8 @@ function activate(context) {
 	context.subscriptions.push(vscode.languages.registerCodeActionsProvider('al',new customerDiagnostics.customDiagnosticsClass));
 
 	let disposableChangeRulesInAllDocs = vscode.commands.registerCommand('JAMCustomRuls.replaceAllRulesInAllDocuments', function () {
-		const rename = require('./src/replace.js');
-		rename.replaceRulesInAllDocuments();
+		const replace = require('./src/replace.js');
+		replace.replaceRulesInAllDocuments();
 	});
 	context.subscriptions.push(disposableChangeRulesInAllDocs);
 
@@ -28,8 +28,8 @@ function activate(context) {
 	context.subscriptions.push(disposableChangeRulesInCurrentDoc);
 
 	let disposableChangeRulesInCurrDocSelection = vscode.commands.registerCommand('JAMCustomRuls.replaceRulesInCurrDocSelection', function () {
-		const rename = require('./src/replace.js');
-		rename.replaceRulesInCurrDocSelection();
+		const replace = require('./src/replace.js');
+		replace.replaceRulesInCurrDocSelection();
 	});
 	context.subscriptions.push(disposableChangeRulesInCurrDocSelection);
 

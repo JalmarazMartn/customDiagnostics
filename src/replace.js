@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const OutputChannel = vscode.window.createOutputChannel(`Output Channel`);
 module.exports = {
     replaceRulesInAllDocuments: function () {
         //replaceAllRulesInAllDocuments()
@@ -19,13 +20,17 @@ module.exports = {
     }
 }
 
-async function replaceRulesInAllDocuments(rules, fileExtension) {
+async function replaceRulesInAllDocuments(rules, fileExtension,ruleSetName='') {
     //const getRules = require('./getRules.js');
     //let rules = getRules.getRules();
     if (!rules) {
         return;
     }
-
+    if (getSaveAfterApply(ruleSetName))
+    {
+        OutputChannel.clear();
+        OutputChannel.show();    
+    }
     //show progress window
     vscode.window.withProgress({
         cancellable: true,
@@ -40,7 +45,7 @@ async function replaceRulesInAllDocuments(rules, fileExtension) {
                 for (let i = 0; i < rules.length; i++) {
                     let customRule = rules[i];
 
-                    await replaceRuleInDocument(customRule, document);
+                    await replaceRuleInDocument(customRule, document,ruleSetName);
                 }
             }
             catch (error) {
@@ -51,10 +56,10 @@ async function replaceRulesInAllDocuments(rules, fileExtension) {
         }
     })
 }
-async function replaceRuleInDocument(replaceRule, document) {
-    replaceRuleInRange(replaceRule,document,new vscode.Range(0, 0, document.lineCount, 0));
+async function replaceRuleInDocument(replaceRule, document,ruleSetName='') {
+    replaceRuleInRange(replaceRule,document,new vscode.Range(0, 0, document.lineCount, 0),ruleSetName);
 }
-async function replaceRuleInRange(replaceRule, document,replaceRange=new vscode.Range(0,0,0,0)) {
+async function replaceRuleInRange(replaceRule, document,replaceRange=new vscode.Range(0,0,0,0),ruleSetName='') {
     if (!replaceRule) {
         return;
     }
@@ -76,6 +81,12 @@ async function replaceRuleInRange(replaceRule, document,replaceRange=new vscode.
     let edit = new vscode.WorkspaceEdit();
     edit.replace(document.uri, replaceRange, replaceText);
     await vscode.workspace.applyEdit(edit);
+    if (getSaveAfterApply(ruleSetName))
+    {
+        document.save();
+        OutputChannel.appendLine(replaceRule.name + ' applied in ' + document.uri);
+        
+    }    
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
@@ -85,7 +96,7 @@ function pickAndExcuteRuleset() {
         if (value) {
             let rules = getRules.getRulesFromRuleSetName(value);
             const fileExtension = getRules.getFileExtensionFormRuleSetName(value);
-            await replaceRulesInAllDocuments(rules, fileExtension);
+            await replaceRulesInAllDocuments(rules, fileExtension,value);
         }
     }
     );
@@ -156,7 +167,7 @@ async function replaceRulesInCurrDoc(rules) {
     for (let i = 0; i < rules.length; i++) {
         let customRule = rules[i];
 
-        await replaceRuleInDocument(customRule, document);
+        await replaceRuleInDocument(customRule, document,'');
     }
 }
 async function replaceRulesInCurrDocSelection(rules) {
@@ -169,7 +180,7 @@ async function replaceRulesInCurrDocSelection(rules) {
     for (let i = 0; i < rules.length; i++) {
         let customRule = rules[i];
 
-        await replaceRuleInRange(customRule, document,selectioRange);
+        await replaceRuleInRange(customRule, document,selectioRange,'');
     }
 }
 function getRuleSetNames(fileExtension='')
@@ -196,4 +207,22 @@ function filterRuleSets(ruleSets={},currFileExtension='')
 function getFileExtensionFromFileName(fileName='')
 {
     return fileName.split('.').pop();
+}
+function getSaveAfterApply(ruleSetName='')
+{
+    if (ruleSetName == '')
+    {
+        return false;
+    }
+    const getRules = require('./getRules.js');
+    const ruleSets = getRules.getRuleSets();
+	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
+	if (!ruleSet) {
+		return false;
+	}
+    if (!ruleSet.saveAfterApply)
+    {
+        return false;
+    }
+    return true;
 }

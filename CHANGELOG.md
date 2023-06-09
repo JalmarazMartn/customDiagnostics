@@ -130,3 +130,7 @@ Disable commands when must not be used. In document replacement get only rule se
 ### 0.0.34
 
 Additional conditions in diagnostics. An object array property in diagnostic called "andFileAlsoMustInclude", can contain a "searchExpresion". For diagnostic raising  all this searchExpression must be matched in file.
+
+### 0.0.35
+
+Additional setup in rule sets: saveAfterApply. If settled is true, changed documents will be saved and closed.
