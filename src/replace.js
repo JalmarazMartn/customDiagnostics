@@ -8,8 +8,7 @@ module.exports = {
     replaceRulesInCurrentDoc: function () {
         pickAndExcuteRulesetICurrDoc()
     },
-    replaceRulesInCurrDocSelection: function()
-    {
+    replaceRulesInCurrDocSelection: function () {
         pickAndExcuteRulesetICurrDocSelection();
     },
     getNewText: function (originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName) {
@@ -20,17 +19,14 @@ module.exports = {
     }
 }
 
-async function replaceRulesInAllDocuments(rules, fileExtension,ruleSetName='') {
+async function replaceRulesInAllDocuments(rules, fileExtension, ruleSetName = '') {
     //const getRules = require('./getRules.js');
     //let rules = getRules.getRules();
     if (!rules) {
         return;
     }
-    if (getSaveAfterApply(ruleSetName))
-    {
-        OutputChannel.clear();
-        OutputChannel.show();    
-    }
+    OutputChannel.clear();
+    OutputChannel.show();
     //show progress window
     vscode.window.withProgress({
         cancellable: true,
@@ -44,8 +40,7 @@ async function replaceRulesInAllDocuments(rules, fileExtension,ruleSetName='') {
                 progress.report({ message: 'Replacing rules in document ' + document.fileName });
                 for (let i = 0; i < rules.length; i++) {
                     let customRule = rules[i];
-
-                    await replaceRuleInDocument(customRule, document,ruleSetName);
+                    await replaceRuleInDocument(customRule, document, ruleSetName);
                 }
             }
             catch (error) {
@@ -56,10 +51,10 @@ async function replaceRulesInAllDocuments(rules, fileExtension,ruleSetName='') {
         }
     })
 }
-async function replaceRuleInDocument(replaceRule, document,ruleSetName='') {
-    replaceRuleInRange(replaceRule,document,new vscode.Range(0, 0, document.lineCount, 0),ruleSetName);
+async function replaceRuleInDocument(replaceRule, document, ruleSetName = '') {
+    replaceRuleInRange(replaceRule, document, new vscode.Range(0, 0, document.lineCount, 0), ruleSetName);
 }
-async function replaceRuleInRange(replaceRule, document,replaceRange=new vscode.Range(0,0,0,0),ruleSetName='') {
+async function replaceRuleInRange(replaceRule, document, replaceRange = new vscode.Range(0, 0, 0, 0), ruleSetName = '') {
     if (!replaceRule) {
         return;
     }
@@ -81,12 +76,10 @@ async function replaceRuleInRange(replaceRule, document,replaceRange=new vscode.
     let edit = new vscode.WorkspaceEdit();
     edit.replace(document.uri, replaceRange, replaceText);
     await vscode.workspace.applyEdit(edit);
-    if (getSaveAfterApply(ruleSetName))
-    {
+    if (getSaveAfterApply(ruleSetName)) {
         document.save();
-        OutputChannel.appendLine(replaceRule.name + ' applied in ' + document.uri);
-        
-    }    
+    }
+    OutputChannel.appendLine(replaceRule.name + ' applied in ' + document.uri);
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
@@ -96,7 +89,7 @@ function pickAndExcuteRuleset() {
         if (value) {
             let rules = getRules.getRulesFromRuleSetName(value);
             const fileExtension = getRules.getFileExtensionFormRuleSetName(value);
-            await replaceRulesInAllDocuments(rules, fileExtension,value);
+            await replaceRulesInAllDocuments(rules, fileExtension, value);
         }
     }
     );
@@ -134,9 +127,9 @@ function emptySearchexpressionError(searchExpression, ruleName) {
     return emptySearchExpression;
 }
 async function pickAndExcuteRulesetICurrDoc() {
-    const getRules = require('./getRules.js');    
+    const getRules = require('./getRules.js');
     const currFileExtension = getFileExtensionFromFileName(await vscode.window.activeTextEditor.document.fileName);
-    let ruleSetNames = getRuleSetNames(currFileExtension);    
+    let ruleSetNames = getRuleSetNames(currFileExtension);
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -147,9 +140,9 @@ async function pickAndExcuteRulesetICurrDoc() {
     );
 }
 async function pickAndExcuteRulesetICurrDocSelection() {
-    const getRules = require('./getRules.js');    
+    const getRules = require('./getRules.js');
     const currFileExtension = getFileExtensionFromFileName(await vscode.window.activeTextEditor.document.fileName);
-    let ruleSetNames = getRuleSetNames(currFileExtension);    
+    let ruleSetNames = getRuleSetNames(currFileExtension);
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -167,7 +160,7 @@ async function replaceRulesInCurrDoc(rules) {
     for (let i = 0; i < rules.length; i++) {
         let customRule = rules[i];
 
-        await replaceRuleInDocument(customRule, document,'');
+        await replaceRuleInDocument(customRule, document, '');
     }
 }
 async function replaceRulesInCurrDocSelection(rules) {
@@ -176,23 +169,21 @@ async function replaceRulesInCurrDocSelection(rules) {
     }
     let document = await vscode.window.activeTextEditor.document;
     let selectioRange = new vscode.Range(vscode.window.activeTextEditor.selection.start,
-                vscode.window.activeTextEditor.selection.end);
+        vscode.window.activeTextEditor.selection.end);
     for (let i = 0; i < rules.length; i++) {
         let customRule = rules[i];
 
-        await replaceRuleInRange(customRule, document,selectioRange,'');
+        await replaceRuleInRange(customRule, document, selectioRange, '');
     }
 }
-function getRuleSetNames(fileExtension='')
-{
+function getRuleSetNames(fileExtension = '') {
     const getRules = require('./getRules.js');
-    let ruleSets = getRules.getRuleSets();    
-    if (fileExtension !=='')
-    {
-        ruleSets = filterRuleSets(ruleSets,fileExtension);
+    let ruleSets = getRules.getRuleSets();
+    if (fileExtension !== '') {
+        ruleSets = filterRuleSets(ruleSets, fileExtension);
     }
     if (!ruleSets) {
-        return[];
+        return [];
     }
     let ruleSetNames = [];
     for (let i = 0; i < ruleSets.length; i++) {
@@ -200,28 +191,23 @@ function getRuleSetNames(fileExtension='')
     }
     return ruleSetNames;
 }
-function filterRuleSets(ruleSets={},currFileExtension='')
-{
+function filterRuleSets(ruleSets = {}, currFileExtension = '') {
     return ruleSets.filter(ruleSetName => ruleSetName.fileExtension === currFileExtension);
 }
-function getFileExtensionFromFileName(fileName='')
-{
+function getFileExtensionFromFileName(fileName = '') {
     return fileName.split('.').pop();
 }
-function getSaveAfterApply(ruleSetName='')
-{
-    if (ruleSetName == '')
-    {
+function getSaveAfterApply(ruleSetName = '') {
+    if (ruleSetName == '') {
         return false;
     }
     const getRules = require('./getRules.js');
     const ruleSets = getRules.getRuleSets();
-	let ruleSet = ruleSets.find(x => x.name === ruleSetName);
-	if (!ruleSet) {
-		return false;
-	}
-    if (!ruleSet.saveAfterApply)
-    {
+    let ruleSet = ruleSets.find(x => x.name === ruleSetName);
+    if (!ruleSet) {
+        return false;
+    }
+    if (!ruleSet.saveAfterApply) {
         return false;
     }
     return true;
