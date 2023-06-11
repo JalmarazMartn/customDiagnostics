@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const OutputChannel = vscode.window.createOutputChannel(`Output Channel`);
 module.exports = {
     pickAndApllyAfixSetName: async function () {
         pickAndApllyAfixSetName();
@@ -29,7 +30,6 @@ function pickAndApllyAfixSetName() {
 
 }
 async function applyAllFixes(fixSetName) {
-    const AppUri = vscode.workspace.workspaceFile;
     const getRuls = require('./getRules.js');
     const fixes = getRuls.getFixesFromFixSetName(fixSetName);
     const AppDiagnostics = GetDiagnostics();
@@ -37,11 +37,15 @@ async function applyAllFixes(fixSetName) {
     {
         return;
     }
+    OutputChannel.clear();
+    OutputChannel.show();
     for (let i = 0; i < AppDiagnostics.length; i++) {
         let diagnostic = AppDiagnostics[i];
-        let fix = fixes.find(fix => fix.code === diagnostic.code);
-        if (fix) {
-            await applyFixToDiagnostic(diagnostic, fix);
+        let diagFixes = fixes.filter(fix => fix.code === diagnostic.code);
+        if (diagFixes) {                   
+            for (let index = 0; index < diagFixes.length; index++) {            
+                await applyFixToDiagnostic(diagnostic, diagFixes[index]);            
+            }                
         }
     }    
 }
@@ -69,6 +73,7 @@ async function applyFixToDiagnostic(diagnostic, fix) {
     }
     edit.replace(document.uri, range, newLineText);
     await vscode.workspace.applyEdit(edit);
+    OutputChannel.appendLine(fix.name + ' applied in ' + document.uri);
 }
 function GetDiagnostics()
 {

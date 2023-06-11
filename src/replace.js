@@ -52,7 +52,7 @@ async function replaceRulesInAllDocuments(rules, fileExtension, ruleSetName = ''
     })
 }
 async function replaceRuleInDocument(replaceRule, document, ruleSetName = '') {
-    replaceRuleInRange(replaceRule, document, new vscode.Range(0, 0, document.lineCount, 0), ruleSetName);
+    await replaceRuleInRange(replaceRule, document, new vscode.Range(0, 0, document.lineCount, 0), ruleSetName);
 }
 async function replaceRuleInRange(replaceRule, document, replaceRange = new vscode.Range(0, 0, 0, 0), ruleSetName = '') {
     if (!replaceRule) {
