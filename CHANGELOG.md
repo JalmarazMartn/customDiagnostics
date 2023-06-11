@@ -134,3 +134,7 @@ Additional conditions in diagnostics. An object array property in diagnostic cal
 ### 0.0.35
 
 Additional setup in rule sets: saveAfterApply. If settled is true, changed documents will be saved and closed.
+
+### 0.0.36
+
+Error erratic behaviour, only replace one rule for document.
