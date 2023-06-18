@@ -78,7 +78,8 @@
                 "Acento e",
                 "Interrogante caracteres extraños",
                 "º con caracter raro"
-            ]
+            ],
+            "scope":["document","selection"]
         },
         {
             "name": "Acentos AL y caracteres extraños",
@@ -96,7 +97,8 @@
                 "Acento e",
                 "Interrogante caracteres extraños",
                 "º con caracter raro"
-            ]
+            ],
+            "scope":["document","selection"]
         }
     ]
 }

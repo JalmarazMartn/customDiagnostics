@@ -83,7 +83,7 @@ async function replaceRuleInRange(replaceRule, document, replaceRange = new vsco
 }
 function pickAndExcuteRuleset() {
     const getRules = require('./getRules.js');
-    const ruleSetNames = getRuleSetNames('');
+    const ruleSetNames = getRuleSetNames('','workspace');    
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -129,7 +129,7 @@ function emptySearchexpressionError(searchExpression, ruleName) {
 async function pickAndExcuteRulesetICurrDoc() {
     const getRules = require('./getRules.js');
     const currFileExtension = getFileExtensionFromFileName(await vscode.window.activeTextEditor.document.fileName);
-    let ruleSetNames = getRuleSetNames(currFileExtension);
+    let ruleSetNames = getRuleSetNames(currFileExtension,'document');
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -142,7 +142,7 @@ async function pickAndExcuteRulesetICurrDoc() {
 async function pickAndExcuteRulesetICurrDocSelection() {
     const getRules = require('./getRules.js');
     const currFileExtension = getFileExtensionFromFileName(await vscode.window.activeTextEditor.document.fileName);
-    let ruleSetNames = getRuleSetNames(currFileExtension);
+    let ruleSetNames = getRuleSetNames(currFileExtension,'selection');
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(ruleSetNames).then(async (value) => {
         if (value) {
@@ -176,7 +176,7 @@ async function replaceRulesInCurrDocSelection(rules) {
         await replaceRuleInRange(customRule, document, selectioRange, '');
     }
 }
-function getRuleSetNames(fileExtension = '') {
+function getRuleSetNames(fileExtension = '',scope='') {
     const getRules = require('./getRules.js');
     let ruleSets = getRules.getRuleSets();
     if (fileExtension !== '') {
@@ -187,12 +187,33 @@ function getRuleSetNames(fileExtension = '') {
     }
     let ruleSetNames = [];
     for (let i = 0; i < ruleSets.length; i++) {
-        ruleSetNames.push(ruleSets[i].name);
+        if (GetApplyScope(ruleSets[i],scope))
+        {
+            ruleSetNames.push(ruleSets[i].name);
+        }        
     }
     return ruleSetNames;
 }
 function filterRuleSets(ruleSets = {}, currFileExtension = '') {
     return ruleSets.filter(ruleSetName => ruleSetName.fileExtension === currFileExtension);
+}
+function GetApplyScope(ruleSet={},scope='')
+{
+    if (!ruleSet.scope)
+    {
+        return true;
+    }
+    if (ruleSet.scope.length == 0)
+    {
+        return true;
+    }
+    for (let index = 0; index < ruleSet.scope.length; index++) {
+        if (ruleSet.scope[index] == scope)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 function getFileExtensionFromFileName(fileName = '') {
     return fileName.split('.').pop();

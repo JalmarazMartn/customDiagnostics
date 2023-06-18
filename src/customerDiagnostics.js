@@ -8,6 +8,7 @@ class customDiagnosticsClass {
             if (!diagnostics) {
                 return [];
             }
+
             for (let i = 0; i < diagnostics.length; i++) {
                 let diagnostic = diagnostics[i];
                 const allFixes = getRules.getFixes();
@@ -58,8 +59,9 @@ function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     // create range that represents, where in the document the word is
     const range = new vscode.Range(lineIndex, index, lineIndex, index);
     const diagnostic = new vscode.Diagnostic(range, customRule.message,
-        GetSeverityFromString(customRule.severity));
+        GetSeverityFromString(customRule.severity));    
     diagnostic.code = customRule.code;
+    diagnostic.source = customRule.language;
     return diagnostic;
 }
 function subscribeToDocumentChanges(context, customDiagnostic) {

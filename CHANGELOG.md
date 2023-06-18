@@ -138,3 +138,7 @@ Additional setup in rule sets: saveAfterApply. If settled is true, changed docum
 ### 0.0.36
 
 Error erratic behaviour, only replace one rule for document.
+
+### 0.0.37
+
+Scope property for replace rule set.

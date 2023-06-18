@@ -54,7 +54,8 @@
       "                \"rules\": [",
       "                    \"${3:ruleName}\",",
       "                ],",
-      "                \"saveAfterApply\":${4|true,false|}",
+      "                \"saveAfterApply\":${4|true,false|},",
+      "                \"scope\":[\"workspace\",\"document\",\"selection\"]",
       "            },"
     ],
     "description": "Snippet to create ruleset. You must add the code rules in rules array"

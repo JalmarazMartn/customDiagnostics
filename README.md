@@ -36,7 +36,9 @@ You can set in this file with replacing rules and rulesets this way:
                 "rules": [
                     "Avoid using transferfields",
                     "Remove Scope Internal"
-                ]
+                ],
+                "saveAfterApply":true,
+                "scope":["workspace","document","selection"]
             },
             {
                 "name": "Empty rules to test",
@@ -67,6 +69,18 @@ instead of replaceExpression parameter, you can set a javascript function in a m
 
 
 The example of the module is in the folder "jsReplaceExampleModules". For further information about how to make a function to replace a regular expression match, you can chech this link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+
+Replace rule set properties are:
+* Name. No further remarks needed.
+* fileExtension. This property set where this rule set is applicable.
+* rules. Array of rules of the rule set.
+* saveAfterApply. Not mandatory. Set true if you want to save all documents that the rule set application modified.
+* scope. Not mandatory. When this rule set is available, depending on the command invoked.
+
+Possible values for scope are (empty or not settled=all):
+* workspace. Replace rule set is enabled for command: "JAM Custom Rules. Pick a ruleset and apply replacements in all workspace documents"
+* document. Enable for command: "JAM Custom Rules. Pick a ruleset and apply replacements in the current document"
+* selection. Enable for command: "JAM Custom Rules. Pick a ruleset and apply replacements in current selection"
 
 For helping you to make rules and rulesets, you can use the following snippets:
 

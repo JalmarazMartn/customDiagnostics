@@ -40,7 +40,8 @@
                 "Xlf Remove Transunit",
                 "Xlf Remove source",
                 "Xlf Remove note"
-            ]
+            ],
+            "scope":["document","selection"]
         },
         {
             "name": "xlf Only sources to check spell",
@@ -50,7 +51,8 @@
                 "Xlf Remove Transunit",
                 "Xlf Remove target",
                 "Xlf Remove note"
-            ]
+            ],
+            "scope":["document","selection"]
         }        
     ]
 }

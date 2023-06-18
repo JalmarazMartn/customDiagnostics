@@ -50,21 +50,24 @@
             "rules": [
                 "Language Record to Codeunit",
                 "Language GetUserLanguage to GetUserLanguageCode"
-            ]
+            ],
+            "scope":["document","selection"]
         },
         {
             "name": "Add Layout if not exists",
             "fileExtension": "al",
             "rules": [
                 "Add Layout if not exists"
-            ]
+            ],
+            "scope":["document","selection"]
         },
         {
             "name": "Layout destination NewObjs",
             "fileExtension": "al",
             "rules": [
                 "Layout destination NewObjs"
-            ]
+            ],
+            "scope":["document","selection"]
         },
         {
             "name": "fields setting from field definition",
@@ -72,14 +75,16 @@
             "rules": [
                 "fields setting from field definition",
                 "fields setting from field definition remove other"
-            ]
+            ],
+            "scope":["document","selection"]
         },
         {
             "name": "Create Reservation for",
             "fileExtension": "al",
             "rules": [
                 "Replace parameters in Create Reservation for"
-            ]
+            ],
+            "scope":["document","selection"]
         }
     ]
 }
