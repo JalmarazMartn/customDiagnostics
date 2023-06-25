@@ -154,7 +154,13 @@ In the same file we set the replacing rules we can set a digsnotics to find and 
                         {
                             "searchExpresion": "report\\s+\\d*\\s+.+"
                         }
-                    ]
+                    ],
+                    "skipIfFileInclude":
+                    [
+                        {
+                            "searchExpresion": "ProcessOnly"
+                        }
+                    ]                    
                 }
                         ],
         "diagnosticsets": [
@@ -174,7 +180,8 @@ The properties of a rule have the following meaning:
 * "skipFromSearchIfMatch":"/Layout/",`optional property to set a pattern to exclude from diagnostic the match`
 * "severity": "error",`severity of the diagnostic in problems panel: error, warning, information, hint`
 * "language": "al"`language to apply the rule for replacing and diagnostic`
-* "andFileAlsoMustInclude":`object array or searchExpresion that must be satisfied to raise the diagnostic`
+* "andFileAlsoMustInclude":`object array of searchExpresion that must be satisfied to raise the diagnostic`
+* "skipIfFileInclude": `object array of searchExpresion that skip diagnostic if match in any place of the file`
 
 Note: You only will see custom diagnostics out of the document edition setting the extension parameter `JAMDiagnostics.ScanCustomDiagnosticsInAllWS` to true.
 

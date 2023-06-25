@@ -52,6 +52,20 @@
                     "searchExpresion": "table\\s+\\d*\\s+.+"
                 }
             ]
+        },
+        {
+            "code": "JAMMIG021",
+            "message": "Layout vacio: revise la configuración del report y su properdad layout",
+            "searchExpresion": "<Report xmlns",
+            "skipFromSearchIfMatch": "",
+            "severity": "error",
+            "language": "xml",
+            "skipIfFileInclude":
+            [
+               {
+                  "searchExpresion": "Textbox"
+               }
+            ]            
         }
     ],
     "dianosticsets": [
@@ -63,7 +77,8 @@
                 "JAMMIG003",
                 "JAMMIG004",
                 "JAMMIG005",
-                "JAMMIG020"
+                "JAMMIG020",
+                "JAMMIG021"
             ]
         }
     ]

@@ -142,3 +142,7 @@ Error erratic behaviour, only replace one rule for document.
 ### 0.0.37
 
 Scope property for replace rule set.
+
+### 0.0.38
+
+New property in diagnostics: "skipIfFileInclude": object array of searchExpresion that skip diagnostic if match in any place of the file.

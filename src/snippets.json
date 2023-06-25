@@ -89,6 +89,12 @@
       "                   {",
       "                      \"searchExpresion\": \"${6:regularExpr}\"",
       "                   }",
+      "                ],",
+      "                \"skipIfFileInclude\":",
+      "                [",
+      "                   {",
+      "                      \"searchExpresion\": \"${7:regularExpr}\"",
+      "                   }",
       "                ]",
       "            }"
     ],

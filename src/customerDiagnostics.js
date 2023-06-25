@@ -115,6 +115,10 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
     {
         return;
     }
+    if (checkSkipIfFileInclude(doc,customRule))
+    {
+        return;
+    }
     let findMatchByLine = isNegativeClause(customRule.searchExpresion);
     if (!findMatchByLine) {
         findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
@@ -228,4 +232,28 @@ function getProblemMessageCode(problemCode)
         return problemCode.toString();
     }
     return problemCode.value;
+}
+
+function checkSkipIfFileInclude(doc,customRule)
+{
+    if (!customRule.skipIfFileInclude)
+    {
+        return false;
+    }
+    if (customRule.skipIfFileInclude.length == 0)
+    {
+        return false;
+    }
+    const skipIfFileInclude = customRule.skipIfFileInclude;
+    for (let index = 0; index < skipIfFileInclude.length; index++) {
+        const condition = skipIfFileInclude[index];
+        if (condition.searchExpresion)
+        {
+            if (doc.getText().search(condition.searchExpresion) > -1)
+            {
+                return true
+            }
+        }
+    }
+    return false
 }
