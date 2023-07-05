@@ -51,6 +51,12 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposablePasteEscapedRegex);
 
+	let disposableApplyFix = vscode.commands.registerCommand('JAMCustomRuls.ApplyFix', function (document,range,newText) {
+		const customerDiagnostics = require('./src/customerDiagnostics.js');
+		customerDiagnostics.replaceText(document,range,newText);
+	});
+	context.subscriptions.push(disposableApplyFix);
+
 	const subsCheckRulesEdition = vscode.languages.createDiagnosticCollection("rulesNotDefined");
 	context.subscriptions.push(customDiagnostics);
 	const checkRulesEdition = require('./src/checkRulesEdition.js');

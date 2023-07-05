@@ -29,16 +29,24 @@ class customDiagnosticsClass {
         if (newText === document.lineAt(diagnostic.range.start.line).text) {
             return;
         }
-        const action = new vscode.CodeAction(fix.name, vscode.CodeActionKind.QuickFix);
-        //action.command = { command: COMMAND, title: 'Learn more about transferfields', tooltip: 'This will open the transferfields page.' };
-        action.diagnostics = [diagnostic];
-        action.isPreferred = true;
-        action.edit = new vscode.WorkspaceEdit();
+        const CodeAction = new vscode.CodeAction(fix.name, vscode.CodeActionKind.QuickFix);
+        CodeAction.diagnostics = [diagnostic];
+        CodeAction.isPreferred = true;
         let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
-        action.edit.replace(document.uri, range, newText);
-        return action;
+        //CodeAction.edit = new vscode.WorkspaceEdit();        
+        //CodeAction.edit.replace(document.uri, range, newText);
+        CodeAction.command = {title : fix.name,command:'JAMCustomRuls.ApplyFix',
+                            arguments:[document,range,newText]};
+        return CodeAction;
     }
 };
+async function replaceText(document,range = new vscode.Range(0,0,0,0) ,newText='') {
+    let edit = new vscode.WorkspaceEdit();
+    //let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
+    await  edit.replace(document.uri, range, newText);    
+    await vscode.workspace.applyEdit(edit);
+}
+
 module.exports = {
     customDiagnosticsClass: customDiagnosticsClass,
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
@@ -47,10 +55,15 @@ module.exports = {
         //replaceAllRulesInAllDocuments()
         return isNegativeClause(Rexgexp)
     },
-    GetSeverityFromString: function(severity){
-        return GetSeverityFromString(severity) },
-    createDiagnostic: function(doc, lineOfText, lineIndex, customRule){
+    GetSeverityFromString: function (severity) {
+        return GetSeverityFromString(severity)
+    },
+    createDiagnostic: function (doc, lineOfText, lineIndex, customRule) {
         return createDiagnostic(doc, lineOfText, lineIndex, customRule);
+    },
+    replaceText: function(document,range,newText)
+    {
+        replaceText(document,range,newText)
     }
 }
 
@@ -59,7 +72,7 @@ function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     // create range that represents, where in the document the word is
     const range = new vscode.Range(lineIndex, index, lineIndex, index);
     const diagnostic = new vscode.Diagnostic(range, customRule.message,
-        GetSeverityFromString(customRule.severity));    
+        GetSeverityFromString(customRule.severity));
     diagnostic.code = customRule.code;
     diagnostic.source = customRule.language;
     return diagnostic;
@@ -82,11 +95,15 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
     context.subscriptions.push(
         vscode.workspace.onDidCloseTextDocument(doc => {
             if (getEnableWSDiagnostics) { refreshDiagnostics(doc, customDiagnostic) }
-            else {customDiagnostic.delete(doc.uri)}
+            else { customDiagnostic.delete(doc.uri) }
         })
         //vscode.workspace.onDidCloseTextDocument(doc => customDiagnostic.delete(doc.uri))
 
     );
+    context.subscriptions.push(
+        vscode.debug.onDidStartDebugSession(e => parseAllDocs(customDiagnostic))
+    );
+
     //context.subscriptions.push(
     //    vscode.workspace.onDidCloseTextDocument (()=>
     //vscode.workspace.textDocuments.forEach(doc => refreshDiagnostics(doc,customDiagnostic))
@@ -111,18 +128,16 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
             return;
         }
     }
-    if (!checkAndFileAlsoInclude(doc,customRule))
-    {
+    if (!checkAndFileAlsoInclude(doc, customRule)) {
         return;
     }
-    if (checkSkipIfFileInclude(doc,customRule))
-    {
+    if (checkSkipIfFileInclude(doc, customRule)) {
         return;
     }
     let findMatchByLine = isNegativeClause(customRule.searchExpresion);
     if (!findMatchByLine) {
         findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
-    }    
+    }
     if (findMatchByLine) {
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
@@ -135,23 +150,18 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
     }
 
 }
-function checkAndFileAlsoInclude(doc,customRule)
-{
-    if (!customRule.andFileAlsoMustInclude)
-    {
+function checkAndFileAlsoInclude(doc, customRule) {
+    if (!customRule.andFileAlsoMustInclude) {
         return true;
     }
-    if (customRule.andFileAlsoMustInclude.length == 0)
-    {
+    if (customRule.andFileAlsoMustInclude.length == 0) {
         return true;
     }
     const fileAlsoInclude = customRule.andFileAlsoMustInclude;
     for (let index = 0; index < fileAlsoInclude.length; index++) {
         const condition = fileAlsoInclude[index];
-        if (condition.searchExpresion)
-        {
-            if (doc.getText().search(condition.searchExpresion) < 0)
-            {
+        if (condition.searchExpresion) {
+            if (doc.getText().search(condition.searchExpresion) < 0) {
                 return false
             }
         }
@@ -225,32 +235,25 @@ function skipFromSearch(lineOfText = '', skipFromSearchIfMatch) {
     }
     return false;
 }
-function getProblemMessageCode(problemCode)
-{
-    if (!problemCode.value)
-    {
+function getProblemMessageCode(problemCode) {
+    if (!problemCode.value) {
         return problemCode.toString();
     }
     return problemCode.value;
 }
 
-function checkSkipIfFileInclude(doc,customRule)
-{
-    if (!customRule.skipIfFileInclude)
-    {
+function checkSkipIfFileInclude(doc, customRule) {
+    if (!customRule.skipIfFileInclude) {
         return false;
     }
-    if (customRule.skipIfFileInclude.length == 0)
-    {
+    if (customRule.skipIfFileInclude.length == 0) {
         return false;
     }
     const skipIfFileInclude = customRule.skipIfFileInclude;
     for (let index = 0; index < skipIfFileInclude.length; index++) {
         const condition = skipIfFileInclude[index];
-        if (condition.searchExpresion)
-        {
-            if (doc.getText().search(condition.searchExpresion) > -1)
-            {
+        if (condition.searchExpresion) {
+            if (doc.getText().search(condition.searchExpresion) > -1) {
                 return true
             }
         }
