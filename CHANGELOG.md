@@ -146,3 +146,7 @@ Scope property for replace rule set.
 ### 0.0.38
 
 New property in diagnostics: "skipIfFileInclude": object array of searchExpresion that skip diagnostic if match in any place of the file.
+
+### 0.0.39
+
+Apply fix with command instead edit
