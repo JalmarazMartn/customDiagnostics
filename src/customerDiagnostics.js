@@ -15,7 +15,7 @@ class customDiagnosticsClass {
                 allFixes
                     //.filter(fix => fix.code === diagnostic.code.value)
                     .filter(fix => fix.code === getProblemMessageCode(diagnostic.code))
-                    .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic, fix)));
+                    .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic, fix,document)));
             }
             return currFixes;
         }
@@ -24,15 +24,15 @@ class customDiagnosticsClass {
         if (!document) { document = vscode.window.activeTextEditor.document; }
         const replace = require('./replace.js');
         //const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
+        let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
         const newText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion,
-            fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName);
+            fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName,document,range);
         if (newText === document.lineAt(diagnostic.range.start.line).text) {
             return;
         }
         const CodeAction = new vscode.CodeAction(fix.name, vscode.CodeActionKind.QuickFix);
         CodeAction.diagnostics = [diagnostic];
         CodeAction.isPreferred = true;
-        let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
         //CodeAction.edit = new vscode.WorkspaceEdit();        
         //CodeAction.edit.replace(document.uri, range, newText);
         CodeAction.command = {title : fix.name,command:'JAMCustomRuls.ApplyFix',

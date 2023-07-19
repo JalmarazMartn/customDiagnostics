@@ -1,3 +1,6 @@
+const vscode = require('vscode');
+var document = {};
+var range = new vscode.Range(0,0,0,0);
 module.exports = {
     replaceToUppercase: function (exprMatch) {
         return exprMatch.toUpperCase();
@@ -7,9 +10,17 @@ module.exports = {
     },
     addLayoutFolderIfNotExists: function (exprMatch) {
         return addLayoutFolderIfNotExists(exprMatch);
+    },
+    setDocumentAndRange(document,newRange)
+    {
+        setDocumentAndRange(document,newRange);
+    },
+    getDocument()
+    {
+        return getDocument();
     }
 }
-function CreateReservEntryFor(exprMatch) {
+function CreateReservEntryFor(exprMatch) {    
     const regex = new RegExp(/(,([^,]|\r|\n)*)/gmi);
     const CommaAndOthers = new RegExp(/;|,|\)|\r|\n|\s/gmi);
     const result = exprMatch.match(regex);
@@ -38,4 +49,13 @@ function stringAlreadyExists(exprMatch = '', newString = '') {
     }
     return false;
 
+}
+function setDocumentAndRange(newDocument,newRange)
+{
+    document = newDocument;
+    range = newRange;
+}
+function getDocument()
+{
+return document;
 }

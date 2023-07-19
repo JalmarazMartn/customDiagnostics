@@ -11,8 +11,8 @@ module.exports = {
     replaceRulesInCurrDocSelection: function () {
         pickAndExcuteRulesetICurrDocSelection();
     },
-    getNewText: function (originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName) {
-        return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName)
+    getNewText: function (originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,document,range) {
+        return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,document,range)
     },
     emptySearchexpressionError: function (searchExpresion, ruleName) {
         return emptySearchexpressionError(searchExpresion, ruleName);
@@ -68,7 +68,7 @@ async function replaceRuleInRange(replaceRule, document, replaceRange = new vsco
     let originalText = document.getText(replaceRange);
 
     const replaceText = getNewText(originalText, replaceRule.searchExpresion, replaceRule.replaceExpression,
-        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName);
+        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName,document,replaceRange);
 
     if (replaceText === originalText) {
         return;
@@ -94,7 +94,7 @@ function pickAndExcuteRuleset() {
     }
     );
 }
-function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,) {
+function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName,document,range = new vscode.Range(0, 0, 0, 0)) {
     const existsReplaceExpr = replaceExpression !== undefined;
     let newText = originalText;
     const regex = new RegExp(searchExpresion, 'mgi');
@@ -104,7 +104,19 @@ function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFi
                 var fn = new Function();
                 const jsModule = require(jsModuleFilePath);
                 fn = jsModule[jsFunctionName];
+                var setDocumentAndRange = new Function();
+                setDocumentAndRange = jsModule['setDocumentAndRange'];
+                if (setDocumentAndRange)
+                {
+                    setDocumentAndRange(document,range);
+                }
                 newText = originalText.replace(regex, fn);
+                var getDocument = new Function();
+                getDocument = jsModule['getDocument'];
+                if (getDocument)
+                {
+                    document = getDocument();
+                }
             }
             catch (error) {
                 vscode.window.showErrorMessage('Error: ' + error.message);

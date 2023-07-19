@@ -66,7 +66,7 @@ async function applyFixToDiagnostic(diagnostic, fix) {
     //const RegEx = new RegExp(fix.searchExpresion, 'gi');
     //const newLineText = document.lineAt(diagnostic.range.start.line).text.replace(RegEx,fix.replaceExpression);
     const newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
-    fix.jsModuleFilePath, fix.jsFunctionName);
+    fix.jsModuleFilePath, fix.jsFunctionName,document,range);
 
     if (newLineText === document.lineAt(diagnostic.range.start.line).text) {
         return;
