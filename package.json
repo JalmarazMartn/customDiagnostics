@@ -21,7 +21,8 @@
 		"onLanguage:json",
 		"onCommand:JAMCustomRuls.replaceAllRulesInAllDocuments",
 		"onCommand:JAMCustomRuls.replaceRulesInCurrentDoc",
-		"onCommand:JAMCustomRuls.pickAndApllyAfixSetName"
+		"onCommand:JAMCustomRuls.pickAndApllyAfixSetName",
+		"onCommand:JAMCustomRuls.pickAndApllyAfixSetNameCurrDoc"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -41,6 +42,10 @@
 			{
 				"command": "JAMCustomRuls.pickAndApllyAfixSetName",
 				"title": "JAM Fixes. Pick a fixset and apply fixes in all workspace documents diagnostics"
+			},
+			{
+				"command": "JAMCustomRuls.pickAndApplyAfixSetNameCurrDoc",
+				"title": "JAM Fixes. Pick a fixset and apply fixes in current document diagnostics"
 			},
 			{
 				"command": "JAMCustomRuls.OpenRegexHelpURL",
@@ -108,6 +113,10 @@
 			  "command": "JAMCustomRuls.replaceRulesInCurrentDoc",
 			  "when": "editorIsOpen"
 			},
+			{
+				"command": "JAMCustomRuls.pickAndApplyAfixSetNameCurrDoc",
+				"when": "editorIsOpen"
+			},  
 			{
 				"command": "JAMCustomRuls.replaceRulesInCurrDocSelection",
 				"when": "editorHasSelection"

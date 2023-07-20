@@ -39,6 +39,12 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposablePickAndApllyAfixSetName);
 
+	let disposablepickAndApplyAfixSetNameCurrDoc = vscode.commands.registerCommand('JAMCustomRuls.pickAndApplyAfixSetNameCurrDoc', function () {
+		const applyFixes = require('./src/applyFixes');
+		applyFixes.pickAndApllyAfixSetNameCurrDoc();
+	});
+	context.subscriptions.push(disposablepickAndApplyAfixSetNameCurrDoc);
+
 	let disposableOpenRegexHelpURL = vscode.commands.registerCommand('JAMCustomRuls.OpenRegexHelpURL', function () {
 		const regexHelper = require('./src/regexHelper.js');
 		regexHelper.openRegexHelpURL();
