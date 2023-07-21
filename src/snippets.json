@@ -18,6 +18,9 @@
       "        \"fixes\": [",
       "            (apply snippet tFix)",
       "        ],",            
+      "        \"fixsets\": [",
+      "            (apply snippet tfixset)",
+      "        ]",
       "    }"
     ],
     "description": "Basic scafolding of diagnostics file. You can add rules and rulesets with tDiagnostic other snippets"
@@ -50,7 +53,7 @@
     "body": [
       "            {",
       "                \"name\": \"${1:RulesetName}\",",
-      "                    \"fileExtension\": \"${2:fileExtension}\",",
+      "                \"fileExtension\": \"${2:fileExtension}\",",
       "                \"rules\": [",
       "                    \"${3:ruleName}\",",
       "                ],",
@@ -136,5 +139,18 @@
       "            }"
     ],
     "description": "New snippet to add rules with a function to fix"
+  },
+  "Create fix set": {
+    "prefix": "tfixset",
+    "body": [
+      "            {",
+      "                \"name\": \"${1:RulesetName}\",",
+      "                \"fixes\": [",
+      "                    \"${2:fixCode}\",",
+      "                ],",
+      "                \"scope\":[\"workspace\",\"document\",\"selection\"]",      
+      "            },"
+    ],
+    "description": "Snippet to create ruleset. You musta add the code rules in rules array"
   }
 }

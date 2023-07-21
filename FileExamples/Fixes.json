@@ -33,7 +33,8 @@
                 "Add Rec in field pages",
                 "Remove promote properties",
                 "Set src-report-layout folder"
-            ]
+            ],
+            "scope":["document"]
         }
     ]
 }

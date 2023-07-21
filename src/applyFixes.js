@@ -12,12 +12,18 @@ module.exports = {
 function pickAndApllyAfixSetName(onlyCurrDocument = false) {
     const getRuls = require('./getRules.js');
     const fixSets = getRuls.getFixSets();
+    let scope = 'workspace';
+    if (onlyCurrDocument) {
+        scope = 'document';
+    }
     let fixSetNames = [];
     if (!fixSets) {
         return;
     }
     for (let i = 0; i < fixSets.length; i++) {
-        fixSetNames.push(fixSets[i].name);
+        if (GetApplyScope(fixSets[i], scope)) {
+            fixSetNames.push(fixSets[i].name);
+        }
     }
     //show vscode code picker with the ruleSetNames        
     vscode.window.showQuickPick(fixSetNames).then(async (value) => {
@@ -95,7 +101,7 @@ function getProblems(onlyCurrDocument = false) {
     }
     return Problems;
 }
-function pushProblem(problemUri = vscode.Uri, Problem, Problems) {
+function pushProblem(problemUri, Problem, Problems) {
     let ProblemRange = Problem.range;
     Problems.push(
         {
@@ -111,4 +117,18 @@ function getProblemMessageCode(problemCode) {
         return problemCode.toString();
     }
     return problemCode.value;
+}
+function GetApplyScope(ruleSet = {}, scope = '') {
+    if (!ruleSet.scope) {
+        return true;
+    }
+    if (ruleSet.scope.length == 0) {
+        return true;
+    }
+    for (let index = 0; index < ruleSet.scope.length; index++) {
+        if (ruleSet.scope[index] == scope) {
+            return true;
+        }
+    }
+    return false;
 }
