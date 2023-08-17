@@ -149,4 +149,8 @@ New property in diagnostics: "skipIfFileInclude": object array of searchExpresio
 
 ### 0.0.39
 
-Apply fix with command instead edit
+Apply fix with command instead edit (internal change)
+
+### 0.0.40
+
+New command "JAM Fixes. Pick a fixset and apply fixes in current document diagnostics".

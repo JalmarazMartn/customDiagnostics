@@ -130,6 +130,8 @@ The meaning: the replacing will be applied only if the line has a problem with c
 
 **_Bellow you can configure a set of fixes and aplly them in all workspace documents with the command "JAM Fixes. Pick a fixset and apply fixes in all workspace documents diagnostics"._** Then you choose a fixset if you are more than one, and will apply all fixes in all documents.
 
+**_You can apply fixes in a more restricted mode with command:"JAM Fixes. Pick a fixset and apply fixes in current document diagnostics"._**
+
 ### Diagnostics
 
 In the same file we set the replacing rules we can set a digsnotics to find and show in problems panel.
