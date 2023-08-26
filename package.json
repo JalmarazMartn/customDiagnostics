@@ -4,7 +4,7 @@
 	"description": "Configure your own rules for diagnostics, bulk replacements and fixes",
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
-	"version": "0.0.40",
+	"version": "0.0.41",
 	"engines": {
 		"vscode": "^1.63.0"
 	},

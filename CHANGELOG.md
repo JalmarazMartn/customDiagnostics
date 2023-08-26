@@ -154,3 +154,7 @@ Apply fix with command instead edit (internal change)
 ### 0.0.40
 
 New command "JAM Fixes. Pick a fixset and apply fixes in current document diagnostics".
+
+### 0.0.41
+
+Changes in apply fix behaviour: you can set in fix code an empty string to apply it in any diagnostic code. But in this case the search expression must also match in the diagnostic message.

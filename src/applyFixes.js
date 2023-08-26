@@ -45,7 +45,7 @@ async function applyAllFixes(fixSetName, onlyCurrDocument = false) {
     OutputChannel.show();
     for (let i = 0; i < AppDiagnostics.length; i++) {
         let diagnostic = AppDiagnostics[i];
-        let diagFixes = fixes.filter(fix => fix.code === diagnostic.code);
+        let diagFixes = fixes.filter(fix => (fix.code === diagnostic.code || fix.code === ""));
         if (diagFixes) {
             for (let index = 0; index < diagFixes.length; index++) {
                 let document = await vscode.workspace.openTextDocument(diagnostic.uri);
@@ -68,6 +68,9 @@ async function applyFixToDiagnostic(diagnostic, fix, document) {
         document.lineAt(diagnostic.range.start.line).text.length);
     //const RegEx = new RegExp(fix.searchExpresion, 'gi');
     //const newLineText = document.lineAt(diagnostic.range.start.line).text.replace(RegEx,fix.replaceExpression);
+    if (!matchSearchExprInFix(document.lineAt(diagnostic.range.start.line).text, fix, diagnostic)) {
+        return;
+    }
     const newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
         fix.jsModuleFilePath, fix.jsFunctionName, document, range);
 
@@ -131,4 +134,17 @@ function GetApplyScope(ruleSet = {}, scope = '') {
         }
     }
     return false;
+}
+
+function matchSearchExprInFix(originalText = '', fix, diagnostic) {
+    const regex = new RegExp(fix.searchExpresion, 'mgi');
+    if (originalText.search(regex) < 0) {
+        return false;
+    }
+    if (fix.code == "") {
+        if (diagnostic.message.search(regex) < 0) {
+            return false;
+        }
+    }
+    return true;
 }

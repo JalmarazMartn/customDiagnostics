@@ -128,6 +128,8 @@ Fixes is a subtle way to do replacements. The replacement will be done only if t
         ]
 The meaning: the replacing will be applied only if the line has a problem with code "AL0223", in problems panel.
 
+**_You can set in fix code an empty string to apply it in any diagnostic code. But in this case the search expression must also match in the diagnostic message._**
+
 **_Bellow you can configure a set of fixes and aplly them in all workspace documents with the command "JAM Fixes. Pick a fixset and apply fixes in all workspace documents diagnostics"._** Then you choose a fixset if you are more than one, and will apply all fixes in all documents.
 
 **_You can apply fixes in a more restricted mode with command:"JAM Fixes. Pick a fixset and apply fixes in current document diagnostics"._**
