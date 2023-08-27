@@ -14,17 +14,22 @@ class customDiagnosticsClass {
                 const allFixes = getRules.getFixes();
                 allFixes
                     //.filter(fix => fix.code === diagnostic.code.value)
-                    .filter(fix => fix.code === getProblemMessageCode(diagnostic.code))
+                    .filter(fix => fix.code === getProblemMessageCode(diagnostic.code) || fix.code === "")
                     .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic, fix,document)));
             }
             return currFixes;
         }
     }
     createCommandCodeAction(diagnostic, fix, document) {
+        const applyFixes = require('./applyFixes.js');
         if (!document) { document = vscode.window.activeTextEditor.document; }
         const replace = require('./replace.js');
         //const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
         let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
+        if (!applyFixes.matchSearchExprInFix(document.lineAt(diagnostic.range.start.line).text,fix,diagnostic))
+        {
+            return;
+        }
         const newText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion,
             fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName,document,range);
         if (newText === document.lineAt(diagnostic.range.start.line).text) {

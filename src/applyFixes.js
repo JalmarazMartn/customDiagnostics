@@ -6,6 +6,9 @@ module.exports = {
     },
     pickAndApllyAfixSetNameCurrDoc: async function () {
         pickAndApllyAfixSetName(true);
+    },
+    matchSearchExprInFix: function(originalText, fix, diagnostic) {
+        return(matchSearchExprInFix(originalText, fix, diagnostic));
     }
 }
 
