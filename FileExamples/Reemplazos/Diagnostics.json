@@ -1,0 +1,103 @@
+{
+    "diagnostics": [
+        {
+            "code": "JAMMIG001",
+            "message": "Review SQlDateType Variant",
+            "searchExpresion": "SQLDataType.*Variant",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG002",
+            "message": "Hay que indicar la ruta completa del layout.",
+            "searchExpresion": "RDLCLayout =",
+            "skipFromSearchIfMatch": "report.?layout",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG003",
+            "message": "Quitar el literal Obsoleto del final del procedure",
+            "searchExpresion": "procedure .*Obsoleto\\(",
+            "skipFromSearchIfMatch": "",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG004",
+            "message": "Hay que poner CommitAll, porque se quedará el commit pendiente con problemas",
+            "searchExpresion": "scriptArgument.*git.commit\"",
+            "skipFromSearchIfMatch": "commitAll",
+            "severity": "error",
+            "language": "json"
+        },
+        {
+            "code": "JAMMIG005",
+            "message": "Revisar la longitud del campo. Si es correcto a 10 poner un comentario 'Revisada longitud' en la misma línea al final",
+            "searchExpresion": "field\\(\\d+;.+No\\.\";\\s*Code\\[10\\]\\)",
+            "skipFromSearchIfMatch": "Revisada longitud",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG006",
+            "message": "Revisar la longitud del campo usuario. Debe ser 50",
+            "searchExpresion": "field\\(\\d+;.*User.*; Code\\[\\d+\\]\\)",
+            "skipFromSearchIfMatch": "Code\\[50\\]",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG007",
+            "message": "No hacer valdiate del Lot No. Si es correcto poner comentario Skip Error",
+            "searchExpresion": "Validate\\(\"Lot No.\"",
+            "skipFromSearchIfMatch": "Skip Error",
+            "severity": "error",
+            "language": "al"
+        },
+        {
+            "code": "JAMMIG020",
+            "message": "No se pueden definir campos de 7 dígitos en las tablas. Si es correcto poner Skip Error",
+            "searchExpresion": "field\\(\\s*\\d{7}\\s*;.+;.+\\)",
+            "skipFromSearchIfMatch": "Skip Error",
+            "severity": "error",
+            "language": "al",
+            "andFileAlsoMustInclude":
+            [
+                {
+                    "searchExpresion": "table\\s+\\d*\\s+.+"
+                }
+            ]
+        },
+        {
+            "code": "JAMMIG021",
+            "message": "Layout vacio: revise la configuración del report y su properdad layout",
+            "searchExpresion": "<Report xmlns",
+            "skipFromSearchIfMatch": "",
+            "severity": "error",
+            "language": "xml",
+            "skipIfFileInclude":
+            [
+               {
+                  "searchExpresion": "Textbox"
+               }
+            ]            
+        }        
+    ],
+    "dianosticsets": [
+        {
+            "name": "Cloud Migration Errors",
+            "diagnostics": [
+                "JAMMIG001",
+                "JAMMIG002",
+                "JAMMIG003",
+                "JAMMIG004",
+                "JAMMIG005",
+                "JAMMIG006",
+                "JAMMIG007",
+                "JAMMIG020",
+                "JAMMIG021"
+            ]
+        }
+    ]
+}

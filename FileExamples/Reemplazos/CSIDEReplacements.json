@@ -1,0 +1,46 @@
+{
+    "rules": [
+        {
+            "name": "Remove DataClassification",
+            "searchExpresion": "DataClassification=.+;",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove ApplicationArea",
+            "searchExpresion": "ApplicationArea=.+;",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove UsageCategory",
+            "searchExpresion": "UsageCategory=.+;",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove ReplicateData",
+            "searchExpresion": "ReplicateData=.+;",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove [External]",
+            "searchExpresion": "\\[External]",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove [Internal]",
+            "searchExpresion": "\\[Internal]\\",
+            "replaceExpression": ""
+        }        
+    ],
+    "rulesets": [
+        {
+            "name": "remove in 140 CSIDE To import lowers versions",
+            "fileExtension": "txt",
+            "rules": ["Remove DataClassification",
+            "Remove ApplicationArea",
+            "Remove UsageCategory",
+            "Remove ReplicateData",
+            "Remove [External]",
+            "Remove [Internal]"
+         ]
+        }   ]
+}

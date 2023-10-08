@@ -1,0 +1,230 @@
+{
+    "rules": [
+        {
+            "name": "Formato caja",
+            "searchExpresion": "\"Formato caja\"",
+            "replaceExpression": "\"TIP Packaging Format\""
+        },
+        {
+            "name": "Cód. añada",
+            "searchExpresion": "\"Cód. añada\"",
+            "replaceExpression": "\"TIP Vintage Code\""
+        },
+        {
+            "name": "Formato botella",
+            "searchExpresion": "\"Formato botella\"",
+            "replaceExpression": "\"TIP Bottle Format\""
+        },
+        {
+            "name": "Cód. marca",
+            "searchExpresion": "\"Cód. marca\"",
+            "replaceExpression": "\"TIP Brand Code\""
+        },
+        {
+            "name": "Cód. formato botella",
+            "searchExpresion": "\"Cód. formato botella\"",
+            "replaceExpression": "\"TIP Bottle Format Code\""
+        },
+        {
+            "name": "Cód. formato caja",
+            "searchExpresion": "\"Cód. formato caja\"",
+            "replaceExpression": "\"TIP Packaging Format Code\""
+        },
+        {
+            "name": "Cod. color vino",
+            "searchExpresion": "\"Cód. color vino\"",
+            "replaceExpression": "\"TIP Wine Colour Code\""
+        },
+        {
+            "name": "Color vino",
+            "searchExpresion": "\"Color vino\"",
+            "replaceExpression": "\"TIP Wine Colour\""
+        },
+        {
+            "name": "Añada",
+            "searchExpresion": "\"Añada\"",
+            "replaceExpression": "\"TIP Vintage\""
+        },
+        {
+            "name": "Calificación",
+            "searchExpresion": "\"Calificación\"",
+            "replaceExpression": "\"TIP Wine Qualification\""
+        },
+        {
+            "name": "Relación análisis documento",
+            "searchExpresion": "Relación análisis documento",
+            "replaceExpression": "TIP Lab Test - Doc. Relation"
+        },
+        {
+            "name": "Cab. análisis",
+            "searchExpresion": "Cab. análisis",
+            "replaceExpression": "TIP Lab Test Header"
+        },
+        {
+            "name": "Lín. entrada parte bodega",
+            "searchExpresion": "Lín. entrada parte bodega",
+            "replaceExpression": "TIP Proc. Order Consume Line"
+        },
+        {
+            "name": "Lín. salida parte bodega",
+            "searchExpresion": "Lín. salida parte bodega",
+            "replaceExpression": "TIP Proc. Order Output Line"
+        },
+        {
+            "name": "EMCS - Establecimiento",
+            "searchExpresion": "EMCS - Establecimiento",
+            "replaceExpression": "TIP Establishment"
+        },
+        {
+            "name": "EMCS - Cabecera e-DAA",
+            "searchExpresion": "EMCS - Cabecera e-DAA",
+            "replaceExpression": "TIP ARC Request Header"
+        },
+        {
+            "name": "Cab. parte bodega",
+            "searchExpresion": "Cab. parte bodega",
+            "replaceExpression": "TIP Processing Order Hdr."
+        },
+        {
+            "name": "Histórico entrega agricultor",
+            "searchExpresion": "Histórico entrega agricultor",
+            "replaceExpression": "TIP Posted Harvest Rec. Header"
+        },
+        {
+            "name": "Hist. lín. entrega agricultor",
+            "searchExpresion": "Hist. lín. entrega agricultor",
+            "replaceExpression": "TIP Posted Harvest Rec. Line"
+        },
+        {
+            "name": "Parcela cultivo",
+            "searchExpresion": "Parcela cultivo",
+            "replaceExpression": "TIP Plot"
+        },
+        {
+            "name": "Lín. parte cultivo",
+            "searchExpresion": "Lín. parte cultivo",
+            "replaceExpression": "TIP Agric. Work Order Line"
+        },
+        {
+            "name": "Cab. parte cultivo",
+            "searchExpresion": "Cab. parte cultivo",
+            "replaceExpression": "TIP Agric. Work Order Header"
+        },
+        {
+            "name": "Hist. cab. parte cultivo",
+            "searchExpresion": "Hist. cab. parte cultivo",
+            "replaceExpression":"TIP Posted Agr. Work Ord. Hdr."
+        }        
+    ],
+    "rulesets": [
+        {
+            "name": "Cambios VNT viejo a Next",
+            "fileExtension": "al",
+            "rules": [
+                "Formato caja",
+                "Cód. añada",
+                "Cód. marca",
+                "Cód. formato botella",
+                "Cód. formato caja",
+                "Cod. color vino",
+                "Formato botella",
+                "Color vino",
+                "Añada",
+                "Calificación",
+                "Cab. análisis",
+                "Relación análisis documento",
+                "Lín. entrada parte bodega",
+                "Lín. salida parte bodega",
+                "EMCS - Establecimiento",
+                "EMCS - Cabecera e-DAA",
+                "Cab. parte bodega",
+                "Histórico entrega agricultor",
+                "Hist. lín. entrega agricultor",
+                "Parcela cultivo",
+                "Lín. parte cultivo",
+                "Hist. cab. parte cultivo",
+                "Cab. parte cultivo"
+            ],
+            "saveAfterApply": true
+        }
+    ],
+    "fixes": [
+        {
+            "name": "VNT Código to Code",
+            "code": "",
+            "searchExpresion": "Código",
+            "replaceExpression": "Code"
+        },
+        {
+            "name": "VNT Descripción to Description",
+            "code": "",
+            "searchExpresion": "Descripción",
+            "replaceExpression": "Description"
+        },
+        {
+            "name": "Bottles Quantity",
+            "code": "",
+            "searchExpresion": "Cantidad botellas",
+            "replaceExpression": "Bottles Quantity"
+        },
+        {
+            "name": "Cód. variante",
+            "code": "",
+            "searchExpresion": "Cód. variante",
+            "replaceExpression": "Variant Code"
+        },
+        {
+            "name": "Cód. almacén",
+            "code": "",
+            "searchExpresion": "Cód. almacén",
+            "replaceExpression": "Location Code"
+        },
+        {
+            "name": "No. documento",
+            "code": "",
+            "searchExpresion": "No. documento",
+            "replaceExpression": "Document No."
+        },
+        {
+            "name": "No. línea",
+            "code": "",
+            "searchExpresion": "No. línea",
+            "replaceExpression": "Line No."
+        },
+        {
+            "name": "No. entrega",
+            "code": "",
+            "searchExpresion": "No. entrega",
+            "replaceExpression": "Document No."
+        },
+        {
+            "name": "Cód. variedad",
+            "code": "",
+            "searchExpresion": "Cód. variedad",
+            "replaceExpression": "Variety Code"
+        },
+        {
+            "name":"Fecha registro",
+            "code": "",
+            "searchExpresion": "Fecha registro",
+            "replaceExpression": "Posting Date"
+        }
+    ],
+    "fixsets": [
+        {
+            "name": "Fixes old VNT fields names",
+            "fixes": [
+                "VNT Código to Code",
+                "VNT Descripción to Description",
+                "Bottles Quantity",
+                "Cód. variante",
+                "Cód. almacén",
+                "No. documento",
+                "No. línea",
+                "No. entrega",
+                "Cód. variedad",
+                "Fecha registro"
+            ]
+        }
+    ]
+}

@@ -15,7 +15,7 @@ class customDiagnosticsClass {
                 allFixes
                     //.filter(fix => fix.code === diagnostic.code.value)
                     .filter(fix => fix.code === getProblemMessageCode(diagnostic.code) || fix.code === "")
-                    .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic, fix,document)));
+                    .map(fix => currFixes.push(this.createCommandCodeAction(diagnostic, fix, document)));
             }
             return currFixes;
         }
@@ -26,12 +26,11 @@ class customDiagnosticsClass {
         const replace = require('./replace.js');
         //const newText = document.lineAt(diagnostic.range.start.line).text.replace(searchRegex,fix.replaceExpression);
         let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
-        if (!applyFixes.matchSearchExprInFix(document.lineAt(diagnostic.range.start.line).text,fix,diagnostic))
-        {
+        if (!applyFixes.matchSearchExprInFix(document.lineAt(diagnostic.range.start.line).text, fix, diagnostic)) {
             return;
         }
         const newText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion,
-            fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName,document,range);
+            fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName, document, range);
         if (newText === document.lineAt(diagnostic.range.start.line).text) {
             return;
         }
@@ -40,15 +39,17 @@ class customDiagnosticsClass {
         CodeAction.isPreferred = true;
         //CodeAction.edit = new vscode.WorkspaceEdit();        
         //CodeAction.edit.replace(document.uri, range, newText);
-        CodeAction.command = {title : fix.name,command:'JAMCustomRuls.ApplyFix',
-                            arguments:[document,range,newText]};
+        CodeAction.command = {
+            title: fix.name, command: 'JAMCustomRuls.ApplyFix',
+            arguments: [document, range, newText]
+        };
         return CodeAction;
     }
 };
-async function replaceText(document,range = new vscode.Range(0,0,0,0) ,newText='') {
+async function replaceText(document, range = new vscode.Range(0, 0, 0, 0), newText = '') {
     let edit = new vscode.WorkspaceEdit();
     //let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line + 1, 0);
-    await  edit.replace(document.uri, range, newText);    
+    await edit.replace(document.uri, range, newText);
     await vscode.workspace.applyEdit(edit);
 }
 
@@ -66,9 +67,8 @@ module.exports = {
     createDiagnostic: function (doc, lineOfText, lineIndex, customRule) {
         return createDiagnostic(doc, lineOfText, lineIndex, customRule);
     },
-    replaceText: function(document,range,newText)
-    {
-        replaceText(document,range,newText)
+    replaceText: function (document, range, newText) {
+        replaceText(document, range, newText)
     }
 }
 
@@ -147,7 +147,7 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
             if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
-                if (!skipFromSearch(lineOfText.text, customRule.skipFromSearchIfMatch)) {
+                if (!skipFromSearch(lineOfText.text, customRule.skipFromSearchIfMatch, customRule.code)) {
                     diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
                 }
             }
@@ -180,7 +180,12 @@ function getCustomDiagnosticData() {
         return [];
     }
     for (let i = 0; i < defaultDiagnosticRules.length; i++) {
-        defaultDiagnosticRules[i].searchExpresion = new RegExp(defaultDiagnosticRules[i].searchExpresion, 'i');
+        try {
+            defaultDiagnosticRules[i].searchExpresion = new RegExp(defaultDiagnosticRules[i].searchExpresion, 'i');
+        }
+        catch (error) {
+            showErrorRegExp(defaultDiagnosticRules[i].code, error);
+        }
     }
     return defaultDiagnosticRules;
 }
@@ -230,13 +235,18 @@ function getEnableWSDiagnostics() {
     }
     return ScanCustomDiagnosticsInAllWS;
 }
-function skipFromSearch(lineOfText = '', skipFromSearchIfMatch) {
+function skipFromSearch(lineOfText = '', skipFromSearchIfMatch, ruleCode = '') {
     if (skipFromSearchIfMatch == undefined) { return false }
     if (!skipFromSearchIfMatch) { return false }
     if (skipFromSearchIfMatch == '') { return false }
-    const regex = new RegExp(skipFromSearchIfMatch, 'mgi');
-    if (lineOfText.search(regex) !== -1) {
-        return true
+    try {
+        const regex = new RegExp(skipFromSearchIfMatch, 'mgi');
+        if (lineOfText.search(regex) !== -1) {
+            return true
+        }
+    }
+    catch (error) {
+        showErrorRegExp(ruleCode, error);
     }
     return false;
 }
@@ -265,3 +275,8 @@ function checkSkipIfFileInclude(doc, customRule) {
     }
     return false
 }
+function showErrorRegExp(ruleCode = '', errorRaised) {
+    const finalMessage = 'JAMCustomDiagnostics, error parsing rule ' + ruleCode + ' : ' + errorRaised.toString();
+    vscode.window.showErrorMessage(finalMessage);
+}
+

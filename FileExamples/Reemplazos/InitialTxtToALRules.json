@@ -1,0 +1,151 @@
+{
+    "rules": [
+        {
+            "name": "Remove Scope Internal",
+            "searchExpresion": "\\[Scope\\('Internal'\\)]\\",
+            "replaceExpression": ""
+        },
+        {
+            "name": "BuildInvLineBuffer2 en prepmt",
+            "searchExpresion": "BuildInvLineBuffer2",
+            "replaceExpression": "BuildInvLineBuffer"
+        },
+        {
+            "name": "ShowItemTrackingForMasterData",
+            "searchExpresion": "ShowItemTrackingForMasterData\\((.*)\\)",
+            "replaceExpression": "ShowItemTrackingForEntity($1,EmptyItemTrackingSetup)"
+        },
+        {
+            "name": "Replace Item Cross References",
+            "searchExpresion": "\"Item Cross Reference\"",
+            "replaceExpression": "\"Item Reference\""
+        },
+        {
+            "name": "Replace Item Cross-Reference in subsciptions",
+            "searchExpresion": "ObjectType::Table, 5717",
+            "replaceExpression": "ObjectType::Table, Database::\"Item Reference\""
+        },
+        {
+            "name": "Replace Item Cross References Fields",
+            "searchExpresion": "\"Cross-Reference",
+            "replaceExpression": "\"Reference"
+        },
+        {
+            "name": "Replace Item Cross Reference Entries",
+            "searchExpresion": "Item Cross Reference Entries",
+            "replaceExpression": "Item References"
+        },
+        {
+            "name": "ChangeStatusOnProdOrder to ChangeProdOrderStatus",
+            "searchExpresion": "ChangeStatusOnProdOrder",
+            "replaceExpression": "ChangeProdOrderStatus"
+        },
+        {
+            "name": "Replace Codeunits FilterReservFor",
+            "searchExpresion": ".*(.FilterReservFor)\\((.*),(.*)\\);",
+            "replaceExpression": "$3.SetReservationFilters($2);"
+        },
+        {
+            "name": "Sell-to Customer Templ. Code",
+            "searchExpresion": "Sell-to Customer Template Code",
+            "replaceExpression": "Sell-to Customer Templ. Code"
+        },
+        {
+            "name": "Remove CreateTotals",
+            "searchExpresion": "CurrReport.CreateTotals\\(.*\\);",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove PageNo",
+            "searchExpresion": "CurrReport.PageNo.*",
+            "replaceExpression": ""
+        },
+        {
+            "name": "Remove Object table use",
+            "searchExpresion": "Object\\.ID WHERE\\(Type = CONST\\((.+)",
+            "replaceExpression": "AllObjWithCaption.\"Object ID\" WHERE(\"Object Type\" = CONST($1"
+        },
+        {
+            "name": "Old Codeunit PeriodFormManagement by PeriodPageManagement",
+            "searchExpresion": "PeriodFormManagement",
+            "replaceExpression": "PeriodPageManagement"
+        },
+        {
+            "name": "Codeunit TextManagement",
+            "searchExpresion": "Codeunit TextManagement;",
+            "replaceExpression": "Codeunit \"Filter Tokens\";"
+        },
+        {
+            "name": "Codeunit CalendarManagement",
+            "searchExpresion": "Codeunit CalendarManagement;",
+            "replaceExpression": "Codeunit \"Shop Calendar Management\";"
+        },
+        {
+            "name": "Remove EditDimensionSet2",
+            "searchExpresion": "EditDimensionSet2",
+            "replaceExpression": "EditDimensionSet"
+        },
+        {
+            "name": "ConfirmProcess - GetResponse",
+            "searchExpresion": "ConfirmProcess\\(",
+            "replaceExpression": "GetResponse("
+        },
+        {
+            "name": "LookupUserID( Out",
+            "searchExpresion": ".*\\.LookupUserID\\(.*",
+            "replaceExpression": ""
+        },
+        {
+            "name": "LoginMgt.ValidateUserID por UserSelection.ValidateUserName",
+            "searchExpresion": "LoginMgt.ValidateUserID\\((.*)\\);",
+            "replaceExpression": "UserSelection.ValidateUserName($1)"
+        },
+        {
+            "name": "Pmt. Disc. Given Amount (Old)",
+            "searchExpresion": "Pmt. Disc. Given Amount \\(Old\\)",
+            "replaceExpression": "Pmt. Discount Amount"
+        },
+        {
+            "name": "TextEncoding = MS-DOS",
+            "searchExpresion": "TextEncoding = MS-DOS",
+            "replaceExpression": "TextEncoding = MSDOS"
+        },
+        {
+            "name": "GetLanguageId",
+            "searchExpresion": "GetLanguageId\\(",
+            "replaceExpression": "GetLanguageIdOrDefault("
+        }
+
+    ],
+    "rulesets": [
+        {
+            "name": "Initial replacement rules from Txt2al",
+            "fileExtension": "al",
+            "rules": [
+                "Remove Scope Internal",
+                "ChangeStatusOnProdOrder to ChangeProdOrderStatus",
+                "BuildInvLineBuffer2 en prepmt",
+                "Replace Codeunits FilterReservFor",
+                "ShowItemTrackingForMasterData",
+                "Sell-to Customer Templ. Code",
+                "Old Codeunit PeriodFormManagement by PeriodPageManagement",
+                "Replace Item Cross References",
+                "Replace Item Cross References Fields",
+                "Replace Item Cross-Reference in subsciptions",
+                "Replace Item Cross Reference Entries",
+                "Remove CreateTotals",
+                "Remove Object table use",
+                "Codeunit CalendarManagement",
+                "Codeunit TextManagement",
+                "Remove EditDimensionSet2",
+                "ConfirmProcess - GetResponse",
+                "LookupUserID( Out",
+                "LoginMgt.ValidateUserID por UserSelection.ValidateUserName",
+                "Pmt. Disc. Given Amount (Old)",
+                "TextEncoding = MS-DOS",
+                "GetLanguageId"
+            ],
+            "saveAfterApply": true
+        }
+    ]
+}

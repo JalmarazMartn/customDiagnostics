@@ -61,12 +61,19 @@ async function replaceRuleInRange(replaceRule, document, replaceRange = new vsco
     if (emptySearchexpressionError(replaceRule.searchExpresion, replaceRule.name)) {
         return;
     }
+    try{
+    const regex = new RegExp(replaceRule.searchExpresion, 'mgi');
+    }
+    catch (error) {
+        showErrorRegExp(replaceRule.name, error);
+        return;
+    }
     const regex = new RegExp(replaceRule.searchExpresion, 'mgi');
     if (document.getText().search(regex) < 0) {
         return;
     }
     let originalText = document.getText(replaceRange);
-
+    
     const replaceText = getNewText(originalText, replaceRule.searchExpresion, replaceRule.replaceExpression,
         replaceRule.jsModuleFilePath, replaceRule.jsFunctionName,document,replaceRange);
 
@@ -98,6 +105,7 @@ function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFi
     const existsReplaceExpr = replaceExpression !== undefined;
     let newText = originalText;
     const regex = new RegExp(searchExpresion, 'mgi');
+    
     if (jsModuleFilePath) {
         if (jsFunctionName) {
             try {
@@ -244,4 +252,9 @@ function getSaveAfterApply(ruleSetName = '') {
         return false;
     }
     return true;
+}
+function showErrorRegExp(ruleName = '', errorRaised) {
+    const finalMessage = 'JAMCustomDiagnostics, error parsing rule ' + ruleName + ' : ' + errorRaised.toString();
+    vscode.window.showErrorMessage(finalMessage);
+    OutputChannel.appendLine(finalMessage);
 }

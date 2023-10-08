@@ -49,6 +49,10 @@ module.exports = {
 	{
 		return getDiagnostics();
 	},
+	getDiagnosticsFromJSON: function(setupJSON)
+	{
+		return(getDiagnosticsFromJSON(setupJSON));
+	},
 	getDiagnosticSetsFromJSON: function (setupJSON )
 	{
 		return getDiagnosticSetsFromJSON(setupJSON);
@@ -202,12 +206,18 @@ function getDiagnosticsFromDiagnosticSetName(diagnosticSetName) {
 function getDiagnostics() {
 	var diagnostics = [];
 	var setupJSON = GetAllSetupJSON();
+	diagnostics = getDiagnosticsFromJSON(setupJSON);
+	return (diagnostics);
+}
+function getDiagnosticsFromJSON(setupJSON)
+{
+	var diagnostics = [];
 	for (let i = 0; i < setupJSON.length; i++) {
 		if (setupJSON[i].diagnostics) {
 			pushObjectElementsToObject(setupJSON[i].diagnostics, diagnostics);
 		}
 	}
-	return (diagnostics);
+	return (diagnostics);	
 }
 function getDiagnosticSets() {	
 	var setupJSON = GetAllSetupJSON();

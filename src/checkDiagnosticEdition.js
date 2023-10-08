@@ -30,10 +30,11 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
-    findDiagnosticInDocument(doc, diagnostics);
+    addDiagnosticsNotDefined(doc, diagnostics);
+    addInvalidRegExp(doc,diagnostics);
     customDiagnostic.set(doc.uri, diagnostics);
 }
-function findDiagnosticInDocument(doc, diagnostics) {
+function addDiagnosticsNotDefined(doc, diagnostics) {
     const customRule = {
         "language": "json",
         "severity": "error",
@@ -93,6 +94,74 @@ function getDiagnosticsNotDefined() {
 
     }
     return diagnosticsNotDefined;
+}
+function addInvalidRegExp(doc, diagnostics) {
+    const customRule = {
+        "language": "json",
+        "severity": "error",
+        "message": "",
+        "searchExpresion": ""
+    };
+    if (customRule.language) {
+        if (customRule.language !== doc.languageId) {
+            return;
+        }
+    }
+    const invalidRegexps = getInvalidRegexps();
+    if (!invalidRegexps)
+    {return}
+    if (invalidRegexps.length == 0) {
+        return;
+    }
+    for (let indexRule = 0; indexRule < invalidRegexps.length; indexRule++) {
+        customRule.searchExpresion = '';
+        customRule.message = "'" + invalidRegexps[indexRule].searchExpresion + invalidRegexps[indexRule].error + "'";
+        let isInvalidCode = false;
+        for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
+            const lineOfText = doc.lineAt(lineIndex);
+            const isCodeline = lineOfText.text.search('"code"') !== -1;
+            if (isCodeline)
+            {
+                isInvalidCode = lineOfText.text.search(invalidRegexps[indexRule].code) !== -1;
+            }
+            if (isInvalidCode) {
+                if (lineOfText.text.search('searchExpresion') !== -1) {
+                    diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
+                }
+            }
+        }
+    }
+}
+function getInvalidRegexps()
+{
+    let invalidRegexps = [];
+    let currDocJSON = [];
+    try {
+        currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());        
+    } catch (error) {
+        return invalidRegexps;
+    }
+    let docDiagnostics = currDocJSON.diagnostics;
+    for (let index = 0; index < docDiagnostics.length; index++) {
+        const element = docDiagnostics[index];
+        if (element.searchExpresion)
+        {
+            try{
+                const regex = new RegExp(element.searchExpresion, 'mgi');
+            }
+            catch(error)
+            {
+                invalidRegexps.push(
+                    {"code":element.code,
+                    "searchExpresion": element.searchExpresion,
+                    "error":error.toString()
+                }
+                );
+            }
+            
+        }
+    }      
+    return invalidRegexps;
 }
 function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     const cust = require('./customerDiagnostics.js');

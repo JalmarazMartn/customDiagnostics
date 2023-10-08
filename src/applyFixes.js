@@ -140,6 +140,7 @@ function GetApplyScope(ruleSet = {}, scope = '') {
 }
 
 function matchSearchExprInFix(originalText = '', fix, diagnostic) {
+    try{
     const regex = new RegExp(fix.searchExpresion, 'mgi');
     if (originalText.search(regex) < 0) {
         return false;
@@ -149,5 +150,14 @@ function matchSearchExprInFix(originalText = '', fix, diagnostic) {
             return false;
         }
     }
+}
+catch (error) {
+    showErrorRegExp(fix.name, error);
+}
+
     return true;
+}
+function showErrorRegExp(ruleName = '', errorRaised) {
+    const finalMessage = 'JAMCustomDiagnostics, error parsing rule ' + ruleName + ' : ' + errorRaised.toString();
+    vscode.window.showErrorMessage(finalMessage);
 }

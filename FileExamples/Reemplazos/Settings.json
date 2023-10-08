@@ -1,0 +1,15 @@
+{
+"JAMDiagnostics.DefaultDiagnosticRuleset": [
+    "Cloud Migration Errors"
+],
+"JAMDiagnostics.FilePath": "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/InitialTxtToALRules.json",    
+"JAMDiagnostics.AdditionalFilePaths": [
+    "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/Diagnostics.json",
+    "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/Fixes.json",
+    "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/OtherReplacements.json",
+    "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/RemoveStrangeChars.json",
+    "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/CheckSpelling.json",
+    "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/CSIDEReplacements.json",
+    "//tipsa.local/tipsa/Documentos/Desarrollo AL/Utilidades/Reemplazos/VNTOldReemplazos.json"
+]
+}
