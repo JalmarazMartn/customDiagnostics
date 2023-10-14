@@ -37,7 +37,13 @@
             "searchExpresion": "field\\(\\d+;.+No\\.\";\\s*Code\\[10\\]\\)",
             "skipFromSearchIfMatch": "Revisada longitud",
             "severity": "error",
-            "language": "al"
+            "language": "al",
+            "andFileAlsoMustInclude":
+            [
+                {
+                    "searchExpresion": "table\\s+\\d*\\s+.+"
+                }
+            ]
         },
         {
             "code": "JAMMIG020",

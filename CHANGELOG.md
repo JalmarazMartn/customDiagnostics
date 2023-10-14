@@ -163,3 +163,7 @@ Changes in apply fix behaviour: you can set in fix code an empty string to apply
 ### 0.0.42
 
 Same changes as release 41 above for the fix action suggestion feature.
+
+### 0.0.43
+
+Raise error on invalid regular expression.

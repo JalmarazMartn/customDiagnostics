@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 
-module.exports = {    
+module.exports = {
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
     refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) },
     selectDiagnosticInSet: function () { return selectDiagnosticInSet(); }
@@ -31,7 +31,7 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
     addDiagnosticsNotDefined(doc, diagnostics);
-    addInvalidRegExp(doc,diagnostics);
+    addInvalidRegExpDiagnostics(doc, diagnostics);
     customDiagnostic.set(doc.uri, diagnostics);
 }
 function addDiagnosticsNotDefined(doc, diagnostics) {
@@ -95,7 +95,18 @@ function getDiagnosticsNotDefined() {
     }
     return diagnosticsNotDefined;
 }
-function addInvalidRegExp(doc, diagnostics) {
+function addInvalidRegExpDiagnostics(doc, diagnostics)
+{
+    let currDocJSON = [];
+    try {
+        currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());
+    } catch (error) {
+        return;
+    }
+    let docDiagnostics = currDocJSON.diagnostics;
+    addInvalidRegExp(doc,docDiagnostics, diagnostics)
+}
+function addInvalidRegExp(doc, rulesOrDiagnostics,diagnostics) {
     const customRule = {
         "language": "json",
         "severity": "error",
@@ -107,61 +118,59 @@ function addInvalidRegExp(doc, diagnostics) {
             return;
         }
     }
-    const invalidRegexps = getInvalidRegexps();
-    if (!invalidRegexps)
-    {return}
+    const invalidRegexps = getInvalidRegexps(rulesOrDiagnostics);
+    if (!invalidRegexps) { return }
     if (invalidRegexps.length == 0) {
         return;
     }
     for (let indexRule = 0; indexRule < invalidRegexps.length; indexRule++) {
-        customRule.searchExpresion = '';
-        customRule.message = "'" + invalidRegexps[indexRule].searchExpresion + invalidRegexps[indexRule].error + "'";
+        customRule.searchExpresion = invalidRegexps[indexRule].searchExpresion;
+        customRule.message = "'" + invalidRegexps[indexRule].searchExpresion + ' ' + invalidRegexps[indexRule].error + "'";
         let isInvalidCode = false;
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
             const isCodeline = lineOfText.text.search('"code"') !== -1;
-            if (isCodeline)
-            {
+            if (isCodeline) {
                 isInvalidCode = lineOfText.text.search(invalidRegexps[indexRule].code) !== -1;
             }
             if (isInvalidCode) {
-                if (lineOfText.text.search('searchExpresion') !== -1) {
+                if (lineOfText.text.search(invalidRegexps[indexRule].searchExpresion) !== -1) {
                     diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
                 }
             }
         }
     }
 }
-function getInvalidRegexps()
-{
+function getInvalidRegexps(docDiagnostics=[]) {
     let invalidRegexps = [];
-    let currDocJSON = [];
-    try {
-        currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());        
-    } catch (error) {
-        return invalidRegexps;
-    }
-    let docDiagnostics = currDocJSON.diagnostics;
     for (let index = 0; index < docDiagnostics.length; index++) {
         const element = docDiagnostics[index];
-        if (element.searchExpresion)
-        {
-            try{
-                const regex = new RegExp(element.searchExpresion, 'mgi');
-            }
-            catch(error)
-            {
-                invalidRegexps.push(
-                    {"code":element.code,
-                    "searchExpresion": element.searchExpresion,
-                    "error":error.toString()
-                }
-                );
-            }
-            
+        if (element.searchExpresion) {
+            tryAndPushRegex(invalidRegexps, element.searchExpresion, element.code, 'searchExpresion')
         }
-    }      
+        if (element.skipFromSearchIfMatch) {
+            tryAndPushRegex(invalidRegexps, element.skipFromSearchIfMatch, element.code, 'skipFromSearchIfMatch')
+        }
+        if (element.andFileAlsoMustInclude) {
+            const searchExprArray = element.andFileAlsoMustInclude;
+            pushInvalidRegexInArray(searchExprArray,element,invalidRegexps,'andFileAlsoMustInclude')
+        }
+        if (element.skipIfFileInclude) {
+            const searchExprArray = element.skipIfFileInclude;
+            pushInvalidRegexInArray(searchExprArray,element,invalidRegexps,'skipIfFileInclude')
+        }        
+    }
     return invalidRegexps;
+}
+function pushInvalidRegexInArray(searchExprArray,element,invalidRegexps,arrayName='')
+{
+    for (let index = 0; index < searchExprArray.length; index++) {
+        const arrayElement = searchExprArray[index];
+        if (arrayElement.searchExpresion) {
+            tryAndPushRegex(invalidRegexps, arrayElement.searchExpresion, element.code, arrayName)
+        }
+    }
+
 }
 function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
     const cust = require('./customerDiagnostics.js');
@@ -181,9 +190,22 @@ function getCurrDocDiagnosticCodesInSets(currDocJSON) {
     }
     return diagnosticCodes;
 }
-
+function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleCode, ruleSection = '') {
+    try {
+        const regex = new RegExp(regexToTest, 'mgi');
+    }
+    catch (error) {
+        invalidRegexps.push(
+            {
+                "code": ruleCode,
+                "searchExpresion": ruleSection,
+                "error": error.toString()
+            }
+        );
+    }
+}
 async function selectDiagnosticInSet() {
-    const commandName = 'Get an existing diagnostic';    
+    const commandName = 'Get an existing diagnostic';
     if (!getIsEditingDiagnostics()) {
         return;
     }
@@ -194,7 +216,7 @@ async function selectDiagnosticInSet() {
     //commandCompletion.label = await getSnippetWithRules();
     commandCompletion.insertText = new vscode.SnippetString(await getSnippetWithDiagnostics());
     commandCompletion.detail = 'Get an existing diagnostic';
-    commandCompletion.documentation = '';    
+    commandCompletion.documentation = '';
     return [commandCompletion];
 }
 function getIsEditingDiagnostics() {
@@ -206,8 +228,7 @@ function getIsEditingDiagnostics() {
 
         for (let i = currentlineNumber; i > 0; i--) {
             const line = document.lineAt(i - 1);
-            if (isObjectKeyInLine(line.text))
-            {
+            if (isObjectKeyInLine(line.text)) {
                 return isObjectKeyDiagnosticsInLine(line.text);
             }
         }
@@ -241,11 +262,9 @@ function convertElementToSnippetText(SourceElement = '') {
 
     return ConvertedElement;
 }
-function isObjectKeyInLine(lineText='')
-{
+function isObjectKeyInLine(lineText = '') {
     return (lineText.search(/".*"\s*:/) !== -1)
 }
-function isObjectKeyDiagnosticsInLine(lineText='')
-{
+function isObjectKeyDiagnosticsInLine(lineText = '') {
     return lineText.search(/"diagnostics"\s*:/) !== -1
 }
