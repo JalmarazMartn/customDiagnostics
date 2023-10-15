@@ -2,7 +2,7 @@
     "rules": [
         {
             "name": "Remove Scope Internal",
-            "searchExpresion": "\\[Scope\\('Internal'\\)]",
+            "searchExpresion": "\\[Scope\\('Internal'\\)]\\",
             "replaceExpression": ""
         },
         {

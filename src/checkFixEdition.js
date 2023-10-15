@@ -31,6 +31,7 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
     findDiagnosticInDocument(doc, diagnostics);
+    addInvalidRegExp(doc, diagnostics);
     customDiagnostic.set(doc.uri, diagnostics);
 }
 function findDiagnosticInDocument(doc, diagnostics) {
@@ -66,6 +67,19 @@ function findDiagnosticInDocument(doc, diagnostics) {
         }
     }
 }
+function addInvalidRegExp(doc, diagnostics)
+{
+    const checkDiagnosticEdition = require('./checkDiagnosticEdition.js');
+    let currDocJSON = [];
+    try {
+        currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());
+    } catch (error) {
+        return;
+    }
+    let docFixes = currDocJSON.fixes;
+    checkDiagnosticEdition.addInvalidRegExp(doc,docFixes, diagnostics)
+}
+
 function getFixesNotDefined() {
     let fixesNotDefined = [];
     let currDocJSON = [];

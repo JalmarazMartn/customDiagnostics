@@ -31,6 +31,7 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
     findDiagnosticInDocument(doc, diagnostics);
+    addInvalidRegExp(doc, diagnostics);
     customDiagnostic.set(doc.uri, diagnostics);
 }
 function findDiagnosticInDocument(doc, diagnostics) {
@@ -128,6 +129,18 @@ async function selectRuleInRuleSet() {
     commandCompletion.detail = 'Get an existing rule';
     commandCompletion.documentation = '';    
     return [commandCompletion];
+}
+function addInvalidRegExp(doc, diagnostics)
+{
+    const checkDiagnosticEdition = require('./checkDiagnosticEdition.js');
+    let currDocJSON = [];
+    try {
+        currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());
+    } catch (error) {
+        return;
+    }
+    let docRules = currDocJSON.rules;
+    checkDiagnosticEdition.addInvalidRegExp(doc,docRules, diagnostics)
 }
 function getIsEditingRules() {
     const editor = vscode.window.activeTextEditor;
