@@ -4,8 +4,6 @@ module.exports = {
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
     refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) },
     selectDiagnosticInSet: function () { return selectDiagnosticInSet(); },
-    addInvalidRegExp: function(doc, rulesOrDiagnostics,diagnostics) {
-        addInvalidRegExp(doc, rulesOrDiagnostics,diagnostics);}
 }
 
 function subscribeToDocumentChanges(context, customDiagnostic) {

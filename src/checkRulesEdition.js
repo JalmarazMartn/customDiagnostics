@@ -31,7 +31,7 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
     findDiagnosticInDocument(doc, diagnostics);
-    addInvalidRegExp(doc, diagnostics);
+    addInvalidRegExps(doc, diagnostics);
     customDiagnostic.set(doc.uri, diagnostics);
 }
 function findDiagnosticInDocument(doc, diagnostics) {
@@ -130,17 +130,72 @@ async function selectRuleInRuleSet() {
     commandCompletion.documentation = '';    
     return [commandCompletion];
 }
-function addInvalidRegExp(doc, diagnostics)
+function addInvalidRegExps(doc, diagnostics)
 {
-    const checkDiagnosticEdition = require('./checkDiagnosticEdition.js');
     let currDocJSON = [];
     try {
         currDocJSON = JSON.parse(vscode.window.activeTextEditor.document.getText());
     } catch (error) {
         return;
     }
-    let docRules = currDocJSON.rules;
-    checkDiagnosticEdition.addInvalidRegExp(doc,docRules, diagnostics)
+    let docFixes = currDocJSON.rules;
+    const customRule = {
+        "language": "json",
+        "severity": "error",
+        "message": "",
+        "searchExpresion": ""
+    };
+    if (customRule.language) {
+        if (customRule.language !== doc.languageId) {
+            return;
+        }
+    }
+    const invalidRegexps = getInvalidRegexps(docFixes);
+    if (!invalidRegexps) { return }
+    if (invalidRegexps.length == 0) {
+        return;
+    }
+    for (let indexRule = 0; indexRule < invalidRegexps.length; indexRule++) {
+        customRule.searchExpresion = invalidRegexps[indexRule].searchExpresion;
+        customRule.message = "'" + invalidRegexps[indexRule].searchExpresion + ' ' + invalidRegexps[indexRule].error + "'";
+        let isInvalidName = false;
+        for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
+            const lineOfText = doc.lineAt(lineIndex);
+            const isNameline = lineOfText.text.search('"name"') !== -1;
+            if (isNameline) {
+                isInvalidName = lineOfText.text.search(invalidRegexps[indexRule].name) !== -1;
+            }
+            if (isInvalidName) {
+                if (lineOfText.text.search(invalidRegexps[indexRule].searchExpresion) !== -1) {
+                    diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
+                }
+            }
+        }
+    }
+}
+function getInvalidRegexps(docRepRules=[]) {
+    let invalidRegexps = [];
+    for (let index = 0; index < docRepRules.length; index++) {
+        const element = docRepRules[index];
+        if (element.searchExpresion) {
+            tryAndPushRegex(invalidRegexps, element.searchExpresion, element.name, 'searchExpresion')
+        }
+    }
+    return invalidRegexps;
+}
+function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleName, ruleSection = '') {
+    try {
+        const regex = new RegExp(regexToTest, 'mgi');
+    }
+    catch (error) {
+        invalidRegexps.push(
+            {
+                "name": ruleName,
+                "searchExpresion": ruleSection,
+                "error": error.toString()
+            }
+        );
+    }
 }
 function getIsEditingRules() {
     const editor = vscode.window.activeTextEditor;

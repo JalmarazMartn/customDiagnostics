@@ -3,7 +3,7 @@
         {
             "name": "Remove unnecesary decimals places in report columns",
             "code": "AL0223",
-            "searchExpresion": ".*DecimalPlaces.*",
+            "searchExpresion": ".*DecimalPlaces.*\\",
             "replaceExpression": ""
         },
         {
