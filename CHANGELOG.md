@@ -167,3 +167,7 @@ Same changes as release 41 above for the fix action suggestion feature.
 ### 0.0.43
 
 Raise error on invalid regular expression.
+
+### 0.0.44
+
+Check invalid regex when editting. Completion item without labels

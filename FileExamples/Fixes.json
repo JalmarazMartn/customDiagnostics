@@ -3,7 +3,7 @@
         {
             "name": "Remove unnecesary decimals places in report columns",
             "code": "AL0223",
-            "searchExpresion": ".*DecimalPlaces.*\\",
+            "searchExpresion": ".*DecimalPlaces.*",
             "replaceExpression": ""
         },
         {
@@ -32,7 +32,7 @@
                 "Remove unnecesary decimals places in report columns",
                 "Add Rec in field pages",
                 "Remove promote properties",
-                "Set src-report-layout folder"
+                "Set src-report-layout folder"              
             ],
             "scope":["document"]
         }

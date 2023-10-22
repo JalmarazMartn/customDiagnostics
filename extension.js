@@ -99,8 +99,7 @@ function activate(context) {
 				const checkRulesEdition = require('./src/checkFixEdition.js');
 				return checkRulesEdition.selectFixInFixSet();
 			}
-		},
-		'' // trigger
+		}
 	));
 
 	context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
@@ -112,8 +111,7 @@ function activate(context) {
 				const checkRulesEdition = require('./src/checkDiagnosticEdition.js');
 				return checkRulesEdition.selectDiagnosticInSet();
 			}
-		},
-		'' // trigger
+		}
 	));
 
 }

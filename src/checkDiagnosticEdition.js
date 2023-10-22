@@ -3,7 +3,7 @@ const vscode = require('vscode');
 module.exports = {
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
     refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) },
-    selectDiagnosticInSet: function () { return selectDiagnosticInSet(); },
+    selectDiagnosticInSet: async function () { return await selectDiagnosticInSet(); },
 }
 
 function subscribeToDocumentChanges(context, customDiagnostic) {
@@ -204,20 +204,17 @@ function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleCode, ruleSection
         );
     }
 }
-async function selectDiagnosticInSet() {
-    const commandName = 'Get an existing diagnostic';
-    if (!getIsEditingDiagnostics()) {
-        return;
+function selectDiagnosticInSet() {
+    let commandCompletion=[];
+    if (!getIsEditingDiagnostics()) {        
+        return commandCompletion;
+    }    
+    const getRules = require('./getRules.js');
+    let allDiagnostics = getRules.getDiagnostics();
+    for (let index = 0; index < allDiagnostics.length; index++) {        
+        commandCompletion.push(new vscode.CompletionItem(convertElementToSnippetText(allDiagnostics[index].code), vscode.CompletionItemKind.Snippet));
     }
-    const commandCompletion = new vscode.CompletionItem(commandName);
-    commandCompletion.kind = vscode.CompletionItemKind.Snippet;
-    //commandCompletion.filterText = commandName;
-    commandCompletion.label = commandName;
-    //commandCompletion.label = await getSnippetWithRules();
-    commandCompletion.insertText = new vscode.SnippetString(await getSnippetWithDiagnostics());
-    commandCompletion.detail = 'Get an existing diagnostic';
-    commandCompletion.documentation = '';
-    return [commandCompletion];
+    return commandCompletion;
 }
 function getIsEditingDiagnostics() {
     const editor = vscode.window.activeTextEditor;
@@ -235,19 +232,6 @@ function getIsEditingDiagnostics() {
         return false;
     }
 
-}
-async function getSnippetWithDiagnostics() {
-    let SnippetWithDiagnostics = '';
-    const getRules = require('./getRules.js');
-    let allDiagnostics = getRules.getDiagnostics();
-    for (let i = 0; i < allDiagnostics.length; i++) {
-        if (SnippetWithDiagnostics !== '') {
-            SnippetWithDiagnostics = SnippetWithDiagnostics + ',';
-        }
-        SnippetWithDiagnostics += convertElementToSnippetText(allDiagnostics[i].code);
-    }
-    SnippetWithDiagnostics = '${1|' + SnippetWithDiagnostics + '|}';
-    return SnippetWithDiagnostics;
 }
 function convertElementToSnippetText(SourceElement = '') {
     let ConvertedElement = '"' + SourceElement + '"';

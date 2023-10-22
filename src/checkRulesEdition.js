@@ -116,19 +116,16 @@ function getCurrDocRuleNamesInRulesets(currDocJSON) {
     return ruleNames;
 }
 async function selectRuleInRuleSet() {
-    const commandName = 'Get an existing rule';
+    let commandCompletion = [];
     if (!getIsEditingRules()) {
         return;
     }
-    const commandCompletion = new vscode.CompletionItem(commandName);
-    commandCompletion.kind = vscode.CompletionItemKind.Snippet;
-    //commandCompletion.filterText = commandName;
-    commandCompletion.label = commandName;
-    //commandCompletion.label = await getSnippetWithRules();
-    commandCompletion.insertText = new vscode.SnippetString(await getSnippetWithRules());
-    commandCompletion.detail = 'Get an existing rule';
-    commandCompletion.documentation = '';    
-    return [commandCompletion];
+    const getRules = require('./getRules.js');
+    let allRules = getRules.getRules();
+    for (let index = 0; index < allRules.length; index++) {
+        commandCompletion.push(new vscode.CompletionItem(convertElementToSnippetText(allRules[index].name), vscode.CompletionItemKind.Snippet));
+    }
+    return commandCompletion;
 }
 function addInvalidRegExps(doc, diagnostics)
 {
@@ -214,19 +211,6 @@ function getIsEditingRules() {
         return false;
     }
 
-}
-async function getSnippetWithRules() {
-    let SnippetWithRules = '';
-    const getRules = require('./getRules.js');
-    let allRules = getRules.getRules();
-    for (let i = 0; i < allRules.length; i++) {
-        if (SnippetWithRules !== '') {
-            SnippetWithRules = SnippetWithRules + ',';
-        }
-        SnippetWithRules += convertElementToSnippetText(allRules[i].name);
-    }
-    SnippetWithRules = '${1|' + SnippetWithRules + '|}';
-    return SnippetWithRules;
 }
 function convertElementToSnippetText(SourceElement = '') {
     let ConvertedElement = '"' + SourceElement + '"';

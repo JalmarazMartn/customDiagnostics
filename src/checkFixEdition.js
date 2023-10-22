@@ -182,17 +182,16 @@ function getCurrDocFixNamesInSets(currDocJSON) {
     return fixNames;
 }
 async function selectFixInFixSet() {
-    const commandName = 'Get an existing fix';
+    let commandCompletion = [];
     if (!getIsEditingFixes()) {
-        return;
+        return commandCompletion;
     }
-    const commandCompletion = new vscode.CompletionItem(commandName);
-    commandCompletion.kind = vscode.CompletionItemKind.Snippet;
-    commandCompletion.label = commandName;
-    commandCompletion.insertText = new vscode.SnippetString(await getSnippetWithFixes());
-    commandCompletion.detail = 'Get an existing fix';
-    commandCompletion.documentation = '';    
-    return [commandCompletion];
+    const getRules = require('./getRules.js');
+    let allFixes = getRules.getFixes();
+    for (let index = 0; index < allFixes.length; index++) {
+        commandCompletion.push(new vscode.CompletionItem(convertElementToSnippetText(allFixes[index].name), vscode.CompletionItemKind.Snippet));
+    }
+    return commandCompletion;
 }
 function getIsEditingFixes() {
     const editor = vscode.window.activeTextEditor;
@@ -212,19 +211,7 @@ function getIsEditingFixes() {
     }
 
 }
-async function getSnippetWithFixes() {
-    let SnippetWithRules = '';
-    const getRules = require('./getRules.js');
-    let allFixes = getRules.getFixes();
-    for (let i = 0; i < allFixes.length; i++) {
-        if (SnippetWithRules !== '') {
-            SnippetWithRules = SnippetWithRules + ',';
-        }
-        SnippetWithRules += convertElementToSnippetText(allFixes[i].name);
-    }
-    SnippetWithRules = '${1|' + SnippetWithRules + '|}';
-    return SnippetWithRules;
-}
+
 function convertElementToSnippetText(SourceElement = '') {
     let ConvertedElement = '"' + SourceElement + '"';
     // @ts-ignore
