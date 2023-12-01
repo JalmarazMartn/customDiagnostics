@@ -118,6 +118,10 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
+    if (doc.uri.scheme.toString() != 'file')
+    {
+        return;
+    }
     let customDiagnosticData = getCustomDiagnosticData();
     if (!customDiagnosticData) {
         return;

@@ -171,3 +171,7 @@ Raise error on invalid regular expression.
 ### 0.0.44
 
 Check invalid regex when editting. Completion item without labels
+
+### 0.0.45
+
+Avoid diagnostics raising in preview non-editable files.
