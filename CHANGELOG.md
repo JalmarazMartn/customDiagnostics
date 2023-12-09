@@ -175,3 +175,7 @@ Check invalid regex when editting. Completion item without labels
 ### 0.0.45
 
 Avoid diagnostics raising in preview non-editable files.
+
+### 0.0.46
+
+Define a js function to check diagnostincs conditions

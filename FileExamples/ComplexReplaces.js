@@ -18,6 +18,10 @@ module.exports = {
     getDocument()
     {
         return getDocument();
+    },
+    existsFieldDeclaration(fieldLine)
+    {
+        return existsFieldDeclaration(fieldLine);
     }
 }
 function CreateReservEntryFor(exprMatch) {    
@@ -41,6 +45,22 @@ function addLayoutFolderIfNotExists(exprMatch) {
         return exprMatch;
     }
     return exprMatch.replace(new RegExp("Layout\\s*=\\s*'.\/(.*)\'"), "Layout = '.\/src\/report\/layout\/$1'");
+}
+function existsFieldDeclaration(fieldLine='')
+{
+    const fieldRegex = new RegExp('Fields!(.+?)(\\.Value)','i');
+    const matchField = fieldLine.match(fieldRegex);
+    if (!matchField)
+    {
+        return false;
+    }
+    const fieldName = matchField[1];
+    const fieldDeclaration = 'Field Name="' + fieldName + '"';
+    try {
+        return (document.getText().search(fieldDeclaration) == -1);   
+    } catch (error) {
+        return true
+    }
 }
 function stringAlreadyExists(exprMatch = '', newString = '') {
     const newStringRegExp = new RegExp(newString, 'gmi');

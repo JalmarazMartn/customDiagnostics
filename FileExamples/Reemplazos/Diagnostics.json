@@ -82,6 +82,15 @@
                   "searchExpresion": "Textbox"
                }
             ]            
+        },
+        {
+            "code": "JAMMIG022",
+            "message": "Campo no declarado en el layout",
+            "searchExpresion": "Fields!.+.Value",
+            "severity": "error",
+            "language": "xml",
+            "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\FileExamples\\ComplexReplaces.js",
+            "jsFunctionName": "existsFieldDeclaration"
         }        
     ],
     "dianosticsets": [
@@ -96,7 +105,8 @@
                 "JAMMIG006",
                 "JAMMIG007",
                 "JAMMIG020",
-                "JAMMIG021"
+                "JAMMIG021",
+                "JAMMIG022"
             ]
         }
     ]

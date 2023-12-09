@@ -118,8 +118,7 @@ function subscribeToDocumentChanges(context, customDiagnostic) {
 
 function refreshDiagnostics(doc, customDiagnostic) {
     let diagnostics = [];
-    if (doc.uri.scheme.toString() != 'file')
-    {
+    if (doc.uri.scheme.toString() != 'file') {
         return;
     }
     let customDiagnosticData = getCustomDiagnosticData();
@@ -151,13 +150,13 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
             if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
-                if (!skipFromSearch(lineOfText.text, customRule.skipFromSearchIfMatch, customRule.code)) {
+                if (!skipFromSearch(lineOfText.text, customRule.skipFromSearchIfMatch, customRule.code) &&
+                    jsFunctionTrueOrNotExists(customRule.jsModuleFilePath, customRule.jsFunctionName, doc, lineIndex, lineOfText.text)) {
                     diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
                 }
             }
         }
     }
-
 }
 function checkAndFileAlsoInclude(doc, customRule) {
     if (!customRule.andFileAlsoMustInclude) {
@@ -283,4 +282,30 @@ function showErrorRegExp(ruleCode = '', errorRaised) {
     const finalMessage = 'JAMCustomDiagnostics, error parsing rule ' + ruleCode + ' : ' + errorRaised.toString();
     vscode.window.showErrorMessage(finalMessage);
 }
-
+function jsFunctionTrueOrNotExists(jsModuleFilePath, jsFunctionName, document, lineNumber, lineOfText) {
+    if (!jsModuleFilePath) {
+        return true
+    }
+    if (!jsFunctionName) {
+        return true
+    }
+    if (jsModuleFilePath == '' || jsFunctionName == '') {
+        return true;
+    }
+    try {
+        const range = new vscode.Range(new vscode.Position(lineNumber, 0), new vscode.Position(lineNumber + 1, 0));
+        var fn = new Function();
+        const jsModule = require(jsModuleFilePath);
+        fn = jsModule[jsFunctionName];
+        var setDocumentAndRange = new Function();
+        setDocumentAndRange = jsModule['setDocumentAndRange'];
+        if (setDocumentAndRange) {
+            setDocumentAndRange(document, range);
+        }
+        return fn(lineOfText);
+    }
+    catch (error) {
+        vscode.window.showErrorMessage('Error: ' + error.message);
+        return false
+    }
+}

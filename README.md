@@ -189,6 +189,20 @@ The properties of a rule have the following meaning:
 
 Note: You only will see custom diagnostics out of the document edition setting the extension parameter `JAMDiagnostics.ScanCustomDiagnosticsInAllWS` to true.
 
+You also can define a Javascript function to do more complex and customized diagnostic checkings:
+
+        {
+            "code": "JAMMIG022",            
+            "message": "Campo no declarado en el layout",            
+            "searchExpresion": "Fields!.+.Value",
+            "severity": "error",
+            "language": "xml",
+            "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\FileExamples\\ComplexReplaces.js",
+            "jsFunctionName": "existsFieldDeclaration"
+        }
+
+Js module must include a function with this signature: `function existsFieldDeclaration(fieldLine='')` and return true if diagnostic matches. You can see example in this repo file: https://github.com/JalmarazMartn/customDiagnostics/blob/main/FileExamples/ComplexReplaces.js 
+
 #### Steps to set the diagnostics
 - Open json settings.
 - Set all diagnostics you can need.
