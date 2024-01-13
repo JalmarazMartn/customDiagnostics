@@ -57,9 +57,9 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposablePasteEscapedRegex);
 
-	let disposableApplyFix = vscode.commands.registerCommand('JAMCustomRuls.ApplyFix', function (document,range,newText) {
-		const customerDiagnostics = require('./src/customerDiagnostics.js');
-		customerDiagnostics.replaceText(document,range,newText);
+	let disposableApplyFix = vscode.commands.registerCommand('JAMCustomRuls.ApplyFix', function (diagnostic,fix,document) {
+		const applyFixes = require('./src/applyFixes.js');
+		applyFixes.applyFixToDiagnostic(diagnostic,fix,document);
 	});
 	context.subscriptions.push(disposableApplyFix);
 

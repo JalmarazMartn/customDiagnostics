@@ -7,8 +7,12 @@ module.exports = {
     pickAndApllyAfixSetNameCurrDoc: async function () {
         pickAndApllyAfixSetName(true);
     },
-    matchSearchExprInFix: function(originalText, fix, diagnostic) {
-        return(matchSearchExprInFix(originalText, fix, diagnostic));
+    matchSearchExprInFix: function (originalText, fix, diagnostic) {
+        return (matchSearchExprInFix(originalText, fix, diagnostic));
+    },
+    applyFixToDiagnostic: function (diagnostic,fix,document)
+    {
+        applyFixToDiagnostic(diagnostic,fix,document)
     }
 }
 
@@ -73,10 +77,17 @@ async function applyFixToDiagnostic(diagnostic, fix, document) {
     //const newLineText = document.lineAt(diagnostic.range.start.line).text.replace(RegEx,fix.replaceExpression);
     if (!matchSearchExprInFix(document.lineAt(diagnostic.range.start.line).text, fix, diagnostic)) {
         return;
+    }    
+    let newLineText = '';
+    if (fix.replaceExpression!='')
+    {
+        newLineText = getNewLineText(fix,diagnostic,document.lineAt(diagnostic.range.start.line).text);
     }
-    const newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
+    else
+    {
+    newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
         fix.jsModuleFilePath, fix.jsFunctionName, document, range);
-
+    }
     if (newLineText === document.lineAt(diagnostic.range.start.line).text) {
         return;
     }
@@ -140,24 +151,41 @@ function GetApplyScope(ruleSet = {}, scope = '') {
 }
 
 function matchSearchExprInFix(originalText = '', fix, diagnostic) {
-    try{
-    const regex = new RegExp(fix.searchExpresion, 'mgi');
-    if (originalText.search(regex) < 0) {
-        return false;
-    }
-    if (fix.code == "") {
-        if (diagnostic.message.search(regex) < 0) {
+    try {
+        const regex = new RegExp(fix.searchExpresion, 'mgi');
+        if (originalText.search(regex) < 0) {
             return false;
         }
+        if (fix.code == "") {
+            if (diagnostic.message.search(regex) < 0) {
+                return false;
+            }
+        }
     }
-}
-catch (error) {
-    showErrorRegExp(fix.name, error);
-}
+    catch (error) {
+        showErrorRegExp(fix.name, error);
+    }
 
     return true;
 }
 function showErrorRegExp(ruleName = '', errorRaised) {
     const finalMessage = 'JAMCustomDiagnostics, error parsing rule ' + ruleName + ' : ' + errorRaised.toString();
     vscode.window.showErrorMessage(finalMessage);
+}
+function getNewLineText(fix,diagnostic,originalText)
+{
+    let newLineText = originalText;
+    const regex = new RegExp(fix.searchExpresion, 'i');
+    const diagnosticStart = diagnostic.range.start.character+1;
+    const matchSearch = originalText.substring(diagnosticStart).match(regex);
+    if (!matchSearch)
+    {
+        return newLineText;
+    }
+    const matchText = matchSearch[0];
+    const newLineTextPartial = matchText.replace(regex,fix.replaceExpression);
+    const diagnosticEnd = diagnosticStart + matchText.length;
+    newLineText = originalText.substring(0,diagnosticStart) + newLineTextPartial +
+        originalText.substring(diagnosticEnd)
+    return newLineText;
 }

@@ -41,7 +41,7 @@ class customDiagnosticsClass {
         //CodeAction.edit.replace(document.uri, range, newText);
         CodeAction.command = {
             title: fix.name, command: 'JAMCustomRuls.ApplyFix',
-            arguments: [document, range, newText]
+            arguments: [diagnostic,fix,document]
         };
         return CodeAction;
     }

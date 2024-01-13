@@ -35,7 +35,13 @@
             "code": "AL0135",
             "searchExpresion": "ErrorMessageMgt.PopContext",
             "replaceExpression": "ErrorMessageMgt.PopContext(ErrorContextElement)"
-        }
+        },
+        {
+            "name": "Replace Nº producto",
+            "code": "",
+            "searchExpresion": "Nº producto",
+            "replaceExpression": "Item No."
+        }        
     ],
     "fixsets": [
         {
@@ -46,7 +52,8 @@
                 "Remove promote properties",
                 "Add ErrorContextElement to PushContext",
                 "Add ErrorContextElement to PopContext",
-                "Remove Unused Variables"
+                "Remove Unused Variables",
+                "Replace Nº producto"
             ]
         }
     ]
