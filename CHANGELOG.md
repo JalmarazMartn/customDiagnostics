@@ -179,3 +179,7 @@ Avoid diagnostics raising in preview non-editable files.
 ### 0.0.46
 
 Define a js function to check diagnostincs conditions
+
+### 0.0.47
+
+More precision in fix replacing
