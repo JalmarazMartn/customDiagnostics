@@ -108,6 +108,8 @@ Note release 27: We add these helps to diagnostic and fix sets edition, selectio
 
 ### Fixes
 
+![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/CustomFix.gif?raw=true)
+
 Fixes is a subtle way to do replacements. The replacement will be done only if the line has a problem, with an error code. You can set a fix this way:
 
         "fixes": [

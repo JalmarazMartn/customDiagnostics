@@ -183,3 +183,7 @@ Define a js function to check diagnostincs conditions
 ### 0.0.47
 
 More precision in fix replacing
+
+### 0.0.48
+
+Improving fix replacing: search in whole line if not match the diagnostic position.
