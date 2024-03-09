@@ -69,6 +69,10 @@ module.exports = {
     },
     replaceText: function (document, range, newText) {
         replaceText(document, range, newText)
+    },
+    findDiagnosticInDocument: function (customRule,doc,diagnostics)
+    {
+        findDiagnosticInDocument(customRule,doc,diagnostics);
     }
 }
 
