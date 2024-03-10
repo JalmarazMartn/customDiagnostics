@@ -13,7 +13,7 @@ function activate(context) {
 	context.subscriptions.push(customDiagnostics);
 	const customerDiagnostics = require('./src/customerDiagnostics.js');
 	customerDiagnostics.subscribeToDocumentChanges(context, customDiagnostics);
-	context.subscriptions.push(vscode.languages.registerCodeActionsProvider('al',new customerDiagnostics.customDiagnosticsClass));
+	context.subscriptions.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file'},new customerDiagnostics.customDiagnosticsClass));
 
 	let disposableChangeRulesInAllDocs = vscode.commands.registerCommand('JAMCustomRuls.replaceAllRulesInAllDocuments', function () {
 		const replace = require('./src/replace.js');
