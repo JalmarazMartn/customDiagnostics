@@ -140,6 +140,18 @@
     ],
     "description": "New snippet to add rules with a function to fix"
   },
+  "Create fix with code action": {
+    "prefix": "tFixWithFunction",
+    "body": [
+      "            {",
+      "                \"name\": \"${1:name}\",",
+      "                \"code\": \"${2:code}\",",                
+      "                \"searchExpresion\": \"${3:regularExpr}\",",
+      "                \"codeAction\": \"${4:Code action}\"",
+      "            }"
+    ],
+    "description": "New snippet to add rules with a code Action to fix"
+  },
   "Create fix set": {
     "prefix": "tfixset",
     "body": [

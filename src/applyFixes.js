@@ -12,6 +12,10 @@ module.exports = {
     },
     applyFixToDiagnostic: function (diagnostic, fix, document) {
         applyFixToDiagnostic(diagnostic, fix, document)
+    },
+    getProblems: function (onlyCurrDocument=false,currSelectionOnly=false)
+    {
+        return getProblems(onlyCurrDocument,currSelectionOnly);
     }
 }
 
@@ -43,7 +47,7 @@ function pickAndApllyAfixSetName(onlyCurrDocument = false) {
 async function applyAllFixes(fixSetName, onlyCurrDocument = false) {
     const getRuls = require('./getRules.js');
     const fixes = getRuls.getFixesFromFixSetName(fixSetName);
-    const AppDiagnostics = getProblems(onlyCurrDocument);
+    const AppDiagnostics = getProblems(onlyCurrDocument,false);
     if (!AppDiagnostics) {
         return;
     }
@@ -92,12 +96,26 @@ async function applyFixToDiagnostic(diagnostic, fix, document) {
     await vscode.workspace.applyEdit(edit);
     OutputChannel.appendLine(fix.name + ' applied in ' + document.uri);
 }
-function getProblems(onlyCurrDocument = false) {
+function getProblems(onlyCurrDocument = false,currSelectionOnly=false) {
     let AppUri = vscode.workspace.workspaceFile;
+    let AppDiagnostics = [];    
     if (onlyCurrDocument) {
         AppUri = vscode.window.activeTextEditor.document.uri;
     }
-    const AppDiagnostics = vscode.languages.getDiagnostics(AppUri);
+    const docDiagnostics = vscode.languages.getDiagnostics(AppUri);
+    if (currSelectionOnly)
+    {
+        const selectionDiagnostics = docDiagnostics.filter(x => x.range.start.line == vscode.window.activeTextEditor.selection.start.line);
+        if (!selectionDiagnostics)
+        {
+            return AppDiagnostics;
+        }
+        AppDiagnostics = selectionDiagnostics;    
+    }
+    else
+    {
+    AppDiagnostics = docDiagnostics;
+    }
     let Problems = [];
     if (!AppDiagnostics) {
         return [];
@@ -115,6 +133,7 @@ function getProblems(onlyCurrDocument = false) {
     }
     return Problems;
 }
+
 function pushProblem(problemUri, Problem, Problems) {
     let ProblemRange = Problem.range;
     Problems.push(
