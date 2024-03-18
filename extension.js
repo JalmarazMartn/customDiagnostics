@@ -78,6 +78,12 @@ function activate(context) {
 	const checkFixesEdition = require('./src/checkFixEdition.js');
 	checkFixesEdition.subscribeToDocumentChanges(context, subsCheckFixesEdition);
 
+	let disposableGetFixToClip = vscode.commands.registerCommand('JAMCustomRuls.getFixToClipboard', function () {
+		const getFixes = require('./src/getFixes.js');
+		getFixes.getFixToClipboard();
+	});
+	context.subscriptions.push(disposableGetFixToClip);
+
 	context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
 		{ language: 'json', scheme: 'file' },
 

@@ -54,6 +54,10 @@
 			{
 				"command": "JAMCustomRuls.PasteEscapedRegex",
 				"title": "JAM Custom Rules. Paste escaped clipboard content"
+			},
+			{
+				"command": "JAMCustomRuls.getFixToClipboard",
+				"title": "JAM Custom Rules. Build a fix form current diagnostics and copy it in clipboard"
 			}
 		],
 		"snippets": [
@@ -128,7 +132,12 @@
 			{
 				"command": "JAMCustomRuls.OpenRegexHelpURL",
 				"when": "resourceLangId == DontShow"
-			}			
+			},
+			{
+				"command": "JAMCustomRuls.getFixToClipboard",
+				"when": "editorIsOpen"
+		  	}
+
 		  ]		}
 	},
 	"scripts": {

@@ -141,7 +141,7 @@
     "description": "New snippet to add rules with a function to fix"
   },
   "Create fix with code action": {
-    "prefix": "tFixWithFunction",
+    "prefix": "tFixWithCodeAction",
     "body": [
       "            {",
       "                \"name\": \"${1:name}\",",
