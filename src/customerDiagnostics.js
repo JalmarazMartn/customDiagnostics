@@ -1,9 +1,14 @@
 const vscode = require('vscode');
-class customDiagnosticsClass {
+class customDiagnosticsClass {    
     constructor() {
-        this.provideCodeActions = function (document, range, context, token) {
+        this.provideCodeActions = function (document, range, context, token,testDocument, diagnostic,fix) {
             const getRules = require('./getRules.js');
             let currFixes = [];
+            if (testDocument)
+            {
+                currFixes.push(this.createCommandCodeAction(diagnostic, fix, document));            
+                return currFixes;
+            }
             let diagnostics = context.diagnostics;
             if (!diagnostics) {
                 return [];
@@ -45,6 +50,11 @@ class customDiagnosticsClass {
         };
         return CodeAction;
     }
+    setTestParameters(doc,diagnostic,fix)
+    {
+
+    }
+    
 };
 async function replaceText(document, range = new vscode.Range(0, 0, 0, 0), newText = '') {
     let edit = new vscode.WorkspaceEdit();

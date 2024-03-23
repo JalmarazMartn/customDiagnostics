@@ -31,3 +31,19 @@ function getDiagnostics(doc,diagnosticCode='',searchExpresion='',messageText='')
 	customerDiagnostics.findDiagnosticInDocument(customRule,doc,diagnostics);
 	return diagnostics;
 }
+async function addFixToDiagnostic(doc,diagnostic,searchExpresion='',replaceExpression='')
+{
+const fix = {"name":searchExpresion,
+"searchExpresion":searchExpresion,
+"replaceExpression":replaceExpression}
+
+//            fix., fix.jsModuleFilePath, fix.jsFunctionName
+const context = await getContextForTest();
+const customerDiagnostics = require('../../src/customerDiagnostics.js');
+new customerDiagnostics.customDiagnosticsClass(doc, diagnostic,fix);
+context.subscriptions.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file'},new customerDiagnostics.customDiagnosticsClass(doc, diagnostic,fix)));
+}
+async function getContextForTest()
+{
+    return await vscode.commands.executeCommand("getContextForTest");
+}

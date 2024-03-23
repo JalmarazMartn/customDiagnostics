@@ -83,6 +83,10 @@ function activate(context) {
 		getFixes.getFixToClipboard();
 	});
 	context.subscriptions.push(disposableGetFixToClip);
+	
+	context.subscriptions.push(vscode.commands.registerCommand('getContextForTest', () => context));
+
+	
 
 	context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
 		{ language: 'json', scheme: 'file' },
