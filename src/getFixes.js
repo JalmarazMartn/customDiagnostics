@@ -1,20 +1,6 @@
 //DocumentRangeFormattingEditProvider
 //vscode.executeFormatRangeProvider
 const vscode = require('vscode');
-const fixWithCodeAction =
-{
-    "name": "",
-    "code": "",
-    "searchExpresion": "",
-    "codeAction": ""
-}
-const fixWithReplaceExpr =
-{
-    "name": "",
-    "code": "",
-    "searchExpresion": "",
-    "replaceExpression": ""
-}
 
 module.exports = {
     getFixToClipboard: async function () {
@@ -25,7 +11,6 @@ async function getFixToClipboard() {
     const noDiagMessage = 'No diagnostics in the line.';
     const applyFixes = require('./applyFixes.js');
     const currProblems = applyFixes.getProblems(true, true);
-    let finalFix = {}
     if (!currProblems) {
         vscode.window.showInformationMessage(noDiagMessage);
         return;
@@ -34,19 +19,45 @@ async function getFixToClipboard() {
         vscode.window.showInformationMessage(noDiagMessage);
         return;
     }
-    const codeAction = await pickCodeAction();
-    if (codeAction.length == 0)
+    const codeAction = await pickCodeAction();    
+    let codeActionTitle = '';
+    if (codeAction)
     {
-        //finalFix = fixWithReplaceExpr;
+        if (codeAction.length != 0)
+        {
+            codeActionTitle = codeAction.title;
+        }
+    }
+    if (codeActionTitle == '')
+    {
+        let fixWithReplaceExpr =
+        {
+            "name": "",
+            "code": "",
+            "searchExpresion": "",
+            "replaceExpression": ""
+        }
+
+        fixWithReplaceExpr.code = currProblems[0].code;
+        fixWithReplaceExpr.name = await getTextInRange(currProblems[0].range);        
+        fixWithReplaceExpr.searchExpresion = fixWithReplaceExpr.name;
+        vscode.env.clipboard.writeText(JSON.stringify(fixWithReplaceExpr));
     }
     else
     {
-        finalFix = fixWithCodeAction;
-        finalFix.codeAction = codeAction.command.title;
-    }
-    finalFix.code = currProblems[0].code;
-    finalFix.name = await getTextInRange(currProblems[0].range);    
-    vscode.env.clipboard.writeText(JSON.stringify(finalFix));
+        let fixWithCodeAction =
+        {
+            "name": "",
+            "code": "",
+            "searchExpresion": "",
+            "codeAction": ""
+        }        
+        fixWithCodeAction.code = currProblems[0].code;
+        fixWithCodeAction.name = await getTextInRange(currProblems[0].range);        
+        fixWithCodeAction.codeAction = codeActionTitle;
+        fixWithCodeAction.searchExpresion = fixWithCodeAction.name;
+        vscode.env.clipboard.writeText(JSON.stringify(fixWithCodeAction));
+    }    
 }
 async function getTextInRange(range) {
     const doc = await vscode.window.activeTextEditor.document;
