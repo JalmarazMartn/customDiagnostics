@@ -5,6 +5,10 @@ const vscode = require('vscode');
 module.exports = {
     getFixToClipboard: async function () {
         await getFixToClipboard()
+    },
+    getCommandCodeActionFromTitle: async function(codeActionTitle,diagnosticPosition,documentUri)
+    {
+        return await getCommandCodeActionFromTitle(codeActionTitle,diagnosticPosition,documentUri);
     }
 }
 async function getFixToClipboard() {
@@ -64,13 +68,11 @@ async function getTextInRange(range) {
     let textInRange = doc.lineAt(range.start.line).text.substring(range.start.character, range.end.character);
     return textInRange;
 }
-async function getCurrCodeActions() {
+async function getCurrCodeActions(startPosition,documentUri) {
     let codeActions = [];
-    const startRange = new vscode.Range(vscode.window.activeTextEditor.selection.start,
-        vscode.window.activeTextEditor.selection.start);
+    const startRange = new vscode.Range(startPosition,startPosition);
 
-    const codeActionsStart = await vscode.commands.executeCommand("vscode.executeCodeActionProvider", vscode.window.activeTextEditor.document.uri,
-        startRange);
+    const codeActionsStart = await vscode.commands.executeCommand("vscode.executeCodeActionProvider", documentUri,startRange);
     if (!codeActionsStart) {
         return codeActions;
     }
@@ -91,7 +93,7 @@ function pushCodeActionsIfNotExists(codeActionStart, codeActions) {
     codeActions.push(codeActionStart);
 }
 async function pickCodeAction() {
-    const currCodeActions = await getCurrCodeActions();
+    const currCodeActions = await getCurrCodeActions(vscode.window.activeTextEditor.selection.start,vscode.window.activeTextEditor.document.uri);
     if (!currCodeActions) {
         return {}
     }
@@ -109,4 +111,17 @@ async function pickCodeAction() {
     }
     const codeAction = currCodeActions.filter(x => x.title == codeActionTitle);
     return codeAction[0];
+}
+async function getCommandCodeActionFromTitle(codeActionTitle='',diagnosticPosition,documentUri)
+{
+    const currCodeActions = await getCurrCodeActions(diagnosticPosition,documentUri);
+    if (!currCodeActions) {
+        return {}
+    }
+    if (currCodeActions.length == 0) {
+        return {}
+    }
+    const codeAction = currCodeActions.filter(x => x.title == codeActionTitle);
+    return codeAction[0].command;
+      
 }

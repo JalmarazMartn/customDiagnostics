@@ -47,7 +47,8 @@
             "code": "AA0139",
             "searchExpresion": "(\\s*)(.+) :=\\s*(.+);",
             "replaceExpression": "$1$2 := Copystr($3,1,Maxstrlen($2));"
-        }        
+        },
+        {"name":"GetCurrency","code":"AA0008","searchExpresion":"GetCurrency","codeAction":"Add parenthesis fix this instance only"}        
     ],
     "fixsets": [
         {
@@ -60,7 +61,8 @@
                 "Add ErrorContextElement to PopContext",
                 "Remove Unused Variables",
                 "Replace Nº producto",
-                "Avoid overflow surrounding with copystr"
+                "Avoid overflow surrounding with copystr",
+                "GetCurrency"
             ]
         }
     ]
