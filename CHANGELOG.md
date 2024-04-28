@@ -187,3 +187,7 @@ More precision in fix replacing
 ### 0.0.48
 
 Improving fix replacing: search in whole line if not match the diagnostic position.
+
+### 0.0.49
+
+New commnad: Build a fix from current diagnostic and copy it in clipboard

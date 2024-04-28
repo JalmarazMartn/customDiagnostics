@@ -136,6 +136,16 @@ The meaning: the replacing will be applied only if the line has a problem with c
 
 **_You can apply fixes in a more restricted mode with command:"JAM Fixes. Pick a fixset and apply fixes in current document diagnostics"._**
 
+### Command: Build a fix from current diagnostic and copy it in clipboard
+
+This commend features the partial creation of a fix and his store in clipboard to past it in a .json rules file. The steps to use it are:
+
+- Place the cursor in the editor, in a text that raise a diagnostic bellow in the diagnostic panel.
+- Execute in command palette: **_"JAM Custom Rules. Build a fix from current diagnostic and copy it in clipboard"_**. Then, you will get in your clipboard a new fix definition, with the diagnostic code, name, and searchexpression.
+- Edit your rules json file, and paste the fix.
+- Edit **_replaceexpression_** in the fix.
+- If needed include this fix in a fixset.
+
 ### Diagnostics
 
 In the same file we set the replacing rules we can set a digsnotics to find and show in problems panel.

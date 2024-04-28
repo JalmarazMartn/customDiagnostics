@@ -23,8 +23,8 @@ async function getFixToClipboard() {
         vscode.window.showInformationMessage(noDiagMessage);
         return;
     }
-    const codeAction = await pickCodeAction();    
-    let codeActionTitle = '';
+    //Later const codeAction = await pickCodeAction();    
+    /*let codeActionTitle = '';
     if (codeAction)
     {
         if (codeAction.length != 0)
@@ -33,7 +33,7 @@ async function getFixToClipboard() {
         }
     }
     if (codeActionTitle == '')
-    {
+    {*/
         let fixWithReplaceExpr =
         {
             "name": "",
@@ -46,7 +46,7 @@ async function getFixToClipboard() {
         fixWithReplaceExpr.name = await getTextInRange(currProblems[0].range);        
         fixWithReplaceExpr.searchExpresion = fixWithReplaceExpr.name;
         vscode.env.clipboard.writeText(JSON.stringify(fixWithReplaceExpr));
-    }
+    /*}
     else
     {
         let fixWithCodeAction =
@@ -61,12 +61,12 @@ async function getFixToClipboard() {
         fixWithCodeAction.codeAction = codeActionTitle;
         fixWithCodeAction.searchExpresion = fixWithCodeAction.name;
         vscode.env.clipboard.writeText(JSON.stringify(fixWithCodeAction));
-    }    
+    } */   
 }
 async function getTextInRange(range) {
     const doc = await vscode.window.activeTextEditor.document;
-    let textInRange = doc.lineAt(range.start.line).text.substring(range.start.character, range.end.character);
-    return textInRange;
+    let textInRange = doc.lineAt(range.start.line).text.substring(range.start.character, range.end.character);    
+    return removeDoubleQuote(textInRange);
 }
 async function getCurrCodeActions(startPosition,documentUri) {
     let codeActions = [];
@@ -122,6 +122,17 @@ async function getCommandCodeActionFromTitle(codeActionTitle='',diagnosticPositi
         return {}
     }
     const codeAction = currCodeActions.filter(x => x.title == codeActionTitle);
-    return codeAction[0].command;
-      
+    return codeAction[0].command;         
 }
+function removeDoubleQuote(originalText='')
+{
+    if (originalText == '')
+    {
+        return originalText;
+    }
+    return originalText.replace(RegExp('"', 'g'),'');
+}
+/*function addLineBreaks(originalText='')
+{
+    return originalText.replace(RegExp('","', 'g'),'",\n"');
+}*/
