@@ -8,7 +8,6 @@ const messageText = 'Avoid '+consoleLogText;
 // as well as import your extension to test it
 const vscode = require('vscode');
 const testLibrary = require('./testLibrary.js');
-const { default: test } = require('node:test');
 // const myExtension = require('../extension');
 
 suite('Extension Test Suite', () => {
