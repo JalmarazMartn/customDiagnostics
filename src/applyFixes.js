@@ -202,6 +202,7 @@ function getNewLineText(fix, diagnostic, originalText) {
     }
     const matchText = matchSearch[0];
     const newLineTextPartial = matchText.replace(regex, fix.replaceExpression);
+    diagnosticStart = diagnosticStart + matchSearch.index;
     const diagnosticEnd = diagnosticStart + matchText.length;
     newLineText = originalText.substring(0, diagnosticStart) + newLineTextPartial +
         originalText.substring(diagnosticEnd)

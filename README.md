@@ -138,7 +138,7 @@ The meaning: the replacing will be applied only if the line has a problem with c
 
 ### Command: Build a fix from current diagnostic and copy it in clipboard
 
-This commend features the partial creation of a fix and his store in clipboard to past it in a .json rules file. The steps to use it are:
+This command features the partial creation of a fix and his store in clipboard to past it in a .json rules file. The steps to use it are:
 
 - Place the cursor in the editor, in a text that raise a diagnostic bellow in the diagnostic panel.
 - Execute in command palette: **_"JAM Custom Rules. Build a fix from current diagnostic and copy it in clipboard"_**. Then, you will get in your clipboard a new fix definition, with the diagnostic code, name, and searchexpression.

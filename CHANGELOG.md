@@ -191,3 +191,7 @@ Improving fix replacing: search in whole line if not match the diagnostic positi
 ### 0.0.49
 
 New commnad: Build a fix from current diagnostic and copy it in clipboard
+
+### 0.0.50
+
+Error replacing text in fix
