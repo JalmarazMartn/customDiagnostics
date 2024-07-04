@@ -59,19 +59,26 @@ async function applyAllFixes(fixSetName, onlyCurrDocument = false) {
         if (diagFixes) {
             for (let index = 0; index < diagFixes.length; index++) {
                 let document = await vscode.workspace.openTextDocument(diagnostic.uri);
-                await applyFixToDiagnostic(diagnostic, diagFixes[index], document);
+                if (await applyFixWithReturn(diagnostic, diagFixes[index], document))
+                    {
+                        return;
+                    }
             }
         }
     }
+    OutputChannel.appendLine('Process ended');
 }
 
 async function applyFixToDiagnostic(diagnostic, fix, document) {
+    const endResult = await applyFixWithReturn(diagnostic,fix,document);
+}
+async function applyFixWithReturn(diagnostic, fix, document) {
     //if (diagnostic.code !== 'AL0223') {
     //    return;
     //}
     const replace = require('./replace.js');
     if (replace.emptySearchexpressionError(fix.searchExpresion, fix.name)) {
-        return;
+        return false;
     }
     let edit = new vscode.WorkspaceEdit();
     let range = new vscode.Range(diagnostic.range.start.line, 0, diagnostic.range.start.line,
@@ -79,7 +86,7 @@ async function applyFixToDiagnostic(diagnostic, fix, document) {
     //const RegEx = new RegExp(fix.searchExpresion, 'gi');
     //const newLineText = document.lineAt(diagnostic.range.start.line).text.replace(RegEx,fix.replaceExpression);
     if (!matchSearchExprInFix(document.lineAt(diagnostic.range.start.line).text, fix, diagnostic)) {
-        return;
+        return false;
     }
     let newLineText = '';
     if (fix.replaceExpression != '') {
@@ -90,11 +97,12 @@ async function applyFixToDiagnostic(diagnostic, fix, document) {
             fix.jsModuleFilePath, fix.jsFunctionName, document, range);
     }
     if (newLineText === document.lineAt(diagnostic.range.start.line).text) {
-        return;
-    }
+        return false;
+    }    
     edit.replace(document.uri, range, newLineText);
-    await vscode.workspace.applyEdit(edit);
-    OutputChannel.appendLine(fix.name + ' applied in ' + document.uri);
+    await vscode.workspace.applyEdit(edit);    
+    await OutputChannel.appendLine(fix.name + ' applied in ' + document.uri);
+    return true;
 }
 function getProblems(onlyCurrDocument = false,currSelectionOnly=false) {
     let AppUri = vscode.workspace.workspaceFile;

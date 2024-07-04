@@ -195,3 +195,7 @@ New commnad: Build a fix from current diagnostic and copy it in clipboard
 ### 0.0.50
 
 Error replacing text in fix
+
+### 0.0.51
+
+Apply only first successful fix in each diagnostic.

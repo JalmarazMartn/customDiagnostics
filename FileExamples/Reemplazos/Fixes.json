@@ -37,6 +37,12 @@
             "replaceExpression": "ErrorMessageMgt.PopContext(ErrorContextElement)"
         },
         {
+            "name": "Replace Table producto",
+            "code": "",
+            "searchExpresion": "producto",
+            "replaceExpression": "Item"
+        },
+        {
             "name": "Replace Nº producto",
             "code": "",
             "searchExpresion": "Nº producto",
@@ -61,7 +67,8 @@
                 "Add ErrorContextElement to PushContext",
                 "Add ErrorContextElement to PopContext",
                 "Remove Unused Variables",
-                "Replace Nº producto",
+                "Replace Nº producto",                
+                "Replace Table producto",
                 "Avoid overflow surrounding with copystr",
                 "Nº Cliente"
             ]
