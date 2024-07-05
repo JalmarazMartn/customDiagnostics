@@ -199,3 +199,7 @@ Error replacing text in fix
 ### 0.0.51
 
 Apply only first successful fix in each diagnostic.
+
+### 0.0.52
+
+Error in previous modification. Only fixed a diagnostic by document. Solved.

@@ -61,7 +61,7 @@ async function applyAllFixes(fixSetName, onlyCurrDocument = false) {
                 let document = await vscode.workspace.openTextDocument(diagnostic.uri);
                 if (await applyFixWithReturn(diagnostic, diagFixes[index], document))
                     {
-                        return;
+                        break;
                     }
             }
         }
