@@ -119,7 +119,7 @@
 			},
 			{
 				"command": "JAMCustomRuls.pickAndApplyAfixSetNameCurrDoc",
-				"when": "editorIsOpen"
+				"when": "editorIsOpen && customdiagnostics.enableFixCommands"
 			},  
 			{
 				"command": "JAMCustomRuls.replaceRulesInCurrDocSelection",
@@ -135,7 +135,7 @@
 			},
 			{
 				"command": "JAMCustomRuls.getFixToClipboard",
-				"when": "editorIsOpen"
+				"when": "editorIsOpen && editorIsOpen && customdiagnostics.enableFixCommands"
 		  	}
 
 		  ]		}

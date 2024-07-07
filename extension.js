@@ -15,6 +15,9 @@ function activate(context) {
 	customerDiagnostics.subscribeToDocumentChanges(context, customDiagnostics);
 	context.subscriptions.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file'},new customerDiagnostics.customDiagnosticsClass));
 
+	const commandsVisibility = require('./src/commandsVisibility.js');
+	commandsVisibility.subscribeToDocumentChanges(context);
+
 	let disposableChangeRulesInAllDocs = vscode.commands.registerCommand('JAMCustomRuls.replaceAllRulesInAllDocuments', function () {
 		const replace = require('./src/replace.js');
 		replace.replaceRulesInAllDocuments();
