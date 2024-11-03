@@ -203,3 +203,7 @@ Apply only first successful fix in each diagnostic.
 ### 0.0.52
 
 Error in previous modification. Only fixed a diagnostic by document. Solved.
+
+### 0.0.53
+
+Advanced in beta feature create codeActions set. Will be explined in a future. Build a fix from current diagnostic and copy it in clipboard now in centext menu.

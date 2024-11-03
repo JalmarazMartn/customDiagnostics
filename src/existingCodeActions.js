@@ -34,7 +34,6 @@ async function getFixToClipboard() {
     let fixWithCodeAction =
     {
         "name": "",
-        "code": "",
         "searchExpresion": "",
         "codeAction": await pickCodeAction()
     }

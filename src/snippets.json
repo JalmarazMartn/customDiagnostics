@@ -141,13 +141,12 @@
     "description": "New snippet to add rules with a function to fix"
   },
   "Create fix with code action": {
-    "prefix": "tFixWithCodeAction",
+    "prefix": "tCodeAction",
     "body": [
       "            {",
       "                \"name\": \"${1:name}\",",
-      "                \"code\": \"${2:code}\",",                
-      "                \"searchExpresion\": \"${3:regularExpr}\",",
-      "                \"codeAction\": \"${4:Code action}\"",
+      "                \"searchExpresion\": \"${2:regularExpr}\",",
+      "                \"codeAction\": \"${3:Code action}\"",
       "            }"
     ],
     "description": "New snippet to add rules with a code Action to fix"
@@ -159,6 +158,19 @@
       "                \"name\": \"${1:RulesetName}\",",
       "                \"fixes\": [",
       "                    \"${2:fixCode}\",",
+      "                ],",
+      "                \"scope\":[\"workspace\",\"document\",\"selection\"]",      
+      "            },"
+    ],
+    "description": "Snippet to create ruleset. You musta add the code rules in rules array"
+  },
+  "Create CodeAction set": {
+    "prefix": "tCodeActionSet",
+    "body": [
+      "            {",
+      "                \"name\": \"${1:RulesetName}\",",
+      "                \"codeActions\": [",
+      "                    \"${2:codeAction}\",",
       "                ],",
       "                \"scope\":[\"workspace\",\"document\",\"selection\"]",      
       "            },"

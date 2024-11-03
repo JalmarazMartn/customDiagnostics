@@ -5,7 +5,7 @@
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
 	"repository": "https://github.com/JalmarazMartn/customDiagnostics",
-	"version": "0.0.52",
+	"version": "0.0.53",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
@@ -117,7 +117,13 @@
 					"when": "resourceLangId == json && config.JAMDiagnostics.EnableHelpContextMenus",
 					"group": "1_modification",
 					"command": "JAMCustomRuls.PasteEscapedRegex"
+				},
+				{
+					"command": "JAMCustomRuls.getFixToClipboard",
+					"when": "editorIsOpen && editorIsOpen && customdiagnostics.enableFixCommands",
+					"group": "1_modification"
 				}
+
 			],
 			"commandPalette": [
 				{
