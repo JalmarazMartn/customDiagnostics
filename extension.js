@@ -86,7 +86,14 @@ function activate(context) {
 		getFixes.getFixToClipboard();
 	});
 	context.subscriptions.push(disposableGetFixToClip);
+
+	let disposableGetCodeActionFixToClip = vscode.commands.registerCommand('JAMCustomRuls.getCodeActionFixToClipboard', function () {
+		const exinstingCodeActions = require('./src/existingCodeActions.js');
+		exinstingCodeActions.getFixToClipboard();
+	});
+	context.subscriptions.push(disposableGetCodeActionFixToClip);
 	
+
 	context.subscriptions.push(vscode.commands.registerCommand('getContextForTest', () => context));
 
 	

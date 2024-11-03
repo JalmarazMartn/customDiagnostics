@@ -4,6 +4,7 @@
 	"description": "Configure your own rules for diagnostics, bulk replacements and fixes",
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
+	"repository": "https://github.com/JalmarazMartn/customDiagnostics",
 	"version": "0.0.52",
 	"engines": {
 		"vscode": "^1.63.0"
@@ -14,14 +15,11 @@
 	"author": {
 		"name": "Jesús Almaraz Martín",
 		"email": "JalmarazMartn@gmail.com"
-	},	
+	},
 	"activationEvents": [
 		"onLanguage:al",
 		"onLanguage:javascript",
 		"onLanguage:json",
-		"onCommand:JAMCustomRuls.replaceAllRulesInAllDocuments",
-		"onCommand:JAMCustomRuls.replaceRulesInCurrentDoc",
-		"onCommand:JAMCustomRuls.pickAndApllyAfixSetName",
 		"onCommand:JAMCustomRuls.pickAndApllyAfixSetNameCurrDoc"
 	],
 	"main": "./extension.js",
@@ -58,14 +56,19 @@
 			{
 				"command": "JAMCustomRuls.getFixToClipboard",
 				"title": "JAM Custom Rules. Build a fix from current diagnostic and copy it in clipboard"
+			},
+			{
+				"command": "JAMCustomRuls.getCodeActionFixToClipboard",
+				"title": "JAM Custom Rules. Build a fix from code actions in selection choose one and copy it in clipboard"
 			}
+
 		],
 		"snippets": [
 			{
 				"language": "json",
 				"path": "./src/snippets.json"
 			}
-		],		
+		],
 		"configuration": {
 			"title": "JAM diagnostics and replacement",
 			"properties": {
@@ -76,7 +79,10 @@
 				},
 				"JAMDiagnostics.AdditionalFilePaths": {
 					"type": "array",
-					"default": ["JAMRulesAdd1.json","JAMRulesAdd2.json"],
+					"default": [
+						"JAMRulesAdd1.json",
+						"JAMRulesAdd2.json"
+					],
 					"description": "Set of absolute paths of rules of aditional json file names"
 				},
 				"JAMDiagnostics.DefaultDiagnosticRuleset": {
@@ -90,55 +96,56 @@
 				},
 				"JAMDiagnostics.RegexpHelpURL": {
 					"type": "string",
-					"default": "https://regex101.com/",					
+					"default": "https://regex101.com/",
 					"description": "URL to open when you are editing new rules search expresion"
 				},
 				"JAMDiagnostics.EnableHelpContextMenus": {
 					"type": "boolean",
-					"default": true,					
+					"default": true,
 					"description": "Enable context menu option to open regex Help URL"
 				}
 			}
 		},
 		"menus": {
-			"editor/context": [{
-				"when": "resourceLangId == json && config.JAMDiagnostics.EnableHelpContextMenus",
-				"group":"1_modification",
-				"command": "JAMCustomRuls.OpenRegexHelpURL"
-		  },
-		  {
-			"when": "resourceLangId == json && config.JAMDiagnostics.EnableHelpContextMenus",
-			"group":"1_modification",
-			"command": "JAMCustomRuls.PasteEscapedRegex"
-	  }		  
-		],
-		"commandPalette": [
-			{
-			  "command": "JAMCustomRuls.replaceRulesInCurrentDoc",
-			  "when": "editorIsOpen"
-			},
-			{
-				"command": "JAMCustomRuls.pickAndApplyAfixSetNameCurrDoc",
-				"when": "editorIsOpen && customdiagnostics.enableFixCommands"
-			},  
-			{
-				"command": "JAMCustomRuls.replaceRulesInCurrDocSelection",
-				"when": "editorHasSelection"
-		  	},
-			{
-				"command": "JAMCustomRuls.PasteEscapedRegex",
-				"when": "resourceLangId == DontShow"
-			},
-			{
-				"command": "JAMCustomRuls.OpenRegexHelpURL",
-				"when": "resourceLangId == DontShow"
-			},
-			{
-				"command": "JAMCustomRuls.getFixToClipboard",
-				"when": "editorIsOpen && editorIsOpen && customdiagnostics.enableFixCommands"
-		  	}
-
-		  ]		}
+			"editor/context": [
+				{
+					"when": "resourceLangId == json && config.JAMDiagnostics.EnableHelpContextMenus",
+					"group": "1_modification",
+					"command": "JAMCustomRuls.OpenRegexHelpURL"
+				},
+				{
+					"when": "resourceLangId == json && config.JAMDiagnostics.EnableHelpContextMenus",
+					"group": "1_modification",
+					"command": "JAMCustomRuls.PasteEscapedRegex"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "JAMCustomRuls.replaceRulesInCurrentDoc",
+					"when": "editorIsOpen"
+				},
+				{
+					"command": "JAMCustomRuls.pickAndApplyAfixSetNameCurrDoc",
+					"when": "editorIsOpen && customdiagnostics.enableFixCommands"
+				},
+				{
+					"command": "JAMCustomRuls.replaceRulesInCurrDocSelection",
+					"when": "editorHasSelection"
+				},
+				{
+					"command": "JAMCustomRuls.PasteEscapedRegex",
+					"when": "resourceLangId == DontShow"
+				},
+				{
+					"command": "JAMCustomRuls.OpenRegexHelpURL",
+					"when": "resourceLangId == DontShow"
+				},
+				{
+					"command": "JAMCustomRuls.getFixToClipboard",
+					"when": "editorIsOpen && editorIsOpen && customdiagnostics.enableFixCommands"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"lint": "eslint .",
@@ -146,14 +153,18 @@
 		"test": "node ./test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.63.0",
 		"@types/glob": "^7.1.4",
 		"@types/mocha": "^9.0.0",
-		"@types/node": "14.17.27",
+		"@types/node": "^14.17.27",
+		"@types/vscode": "^1.63.0",
+		"@vscode/test-electron": "^1.6.2",
 		"eslint": "^8.1.0",
 		"glob": "^7.1.7",
+		"keypress": "0.2.1",
 		"mocha": "^9.1.3",
-		"typescript": "^4.4.4",
-		"@vscode/test-electron": "^1.6.2"
+		"typescript": "^4.4.4"
+	},
+	"dependencies": {
+		"keypress": "0.2.1"
 	}
 }

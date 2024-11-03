@@ -1,3 +1,4 @@
+const { escapeLeadingUnderscores } = require('typescript');
 const vscode = require('vscode');
 const OutputChannel = vscode.window.createOutputChannel(`Output Channel`);
 module.exports = {
@@ -13,9 +14,8 @@ module.exports = {
     applyFixToDiagnostic: function (diagnostic, fix, document) {
         applyFixToDiagnostic(diagnostic, fix, document)
     },
-    getProblems: function (onlyCurrDocument=false,currSelectionOnly=false)
-    {
-        return getProblems(onlyCurrDocument,currSelectionOnly);
+    getProblems: function (onlyCurrDocument = false, currSelectionOnly = false) {
+        return getProblems(onlyCurrDocument, currSelectionOnly);
     }
 }
 
@@ -47,7 +47,7 @@ function pickAndApllyAfixSetName(onlyCurrDocument = false) {
 async function applyAllFixes(fixSetName, onlyCurrDocument = false) {
     const getRuls = require('./getRules.js');
     const fixes = getRuls.getFixesFromFixSetName(fixSetName);
-    const AppDiagnostics = getProblems(onlyCurrDocument,false);
+    const AppDiagnostics = getProblems(onlyCurrDocument, false);
     if (!AppDiagnostics) {
         return;
     }
@@ -59,10 +59,9 @@ async function applyAllFixes(fixSetName, onlyCurrDocument = false) {
         if (diagFixes) {
             for (let index = 0; index < diagFixes.length; index++) {
                 let document = await vscode.workspace.openTextDocument(diagnostic.uri);
-                if (await applyFixWithReturn(diagnostic, diagFixes[index], document))
-                    {
-                        break;
-                    }
+                if (await applyFixWithReturn(diagnostic, diagFixes[index], document)) {
+                    break;
+                }
             }
         }
     }
@@ -70,7 +69,7 @@ async function applyAllFixes(fixSetName, onlyCurrDocument = false) {
 }
 
 async function applyFixToDiagnostic(diagnostic, fix, document) {
-    const endResult = await applyFixWithReturn(diagnostic,fix,document);
+    const endResult = await applyFixWithReturn(diagnostic, fix, document);
 }
 async function applyFixWithReturn(diagnostic, fix, document) {
     //if (diagnostic.code !== 'AL0223') {
@@ -93,36 +92,41 @@ async function applyFixWithReturn(diagnostic, fix, document) {
         newLineText = getNewLineText(fix, diagnostic, document.lineAt(diagnostic.range.start.line).text);
     }
     else {
-        newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
-            fix.jsModuleFilePath, fix.jsFunctionName, document, range);
+        if (fix.jsFunctionName != '') {
+            newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
+                fix.jsModuleFilePath, fix.jsFunctionName, document, range);
+        }
+        else {
+            if (fix.codeAction != '') {
+                const getFixes = require('./getFixes.js');
+                if (getFixes.applyCodeAction(diagnostic, fix,document)) { return true }
+            }
+        }
     }
     if (newLineText === document.lineAt(diagnostic.range.start.line).text) {
         return false;
-    }    
+    }
     edit.replace(document.uri, range, newLineText);
-    await vscode.workspace.applyEdit(edit);    
+    await vscode.workspace.applyEdit(edit);
     await OutputChannel.appendLine(fix.name + ' applied in ' + document.uri);
     return true;
 }
-function getProblems(onlyCurrDocument = false,currSelectionOnly=false) {
+function getProblems(onlyCurrDocument = false, currSelectionOnly = false) {
     let AppUri = vscode.workspace.workspaceFile;
-    let AppDiagnostics = [];    
+    let AppDiagnostics = [];
     if (onlyCurrDocument) {
         AppUri = vscode.window.activeTextEditor.document.uri;
     }
     const docDiagnostics = vscode.languages.getDiagnostics(AppUri);
-    if (currSelectionOnly)
-    {
+    if (currSelectionOnly) {
         const selectionDiagnostics = docDiagnostics.filter(x => x.range.start.line == vscode.window.activeTextEditor.selection.start.line);
-        if (!selectionDiagnostics)
-        {
+        if (!selectionDiagnostics) {
             return AppDiagnostics;
         }
-        AppDiagnostics = selectionDiagnostics;    
+        AppDiagnostics = selectionDiagnostics;
     }
-    else
-    {
-    AppDiagnostics = docDiagnostics;
+    else {
+        AppDiagnostics = docDiagnostics;
     }
     let Problems = [];
     if (!AppDiagnostics) {
