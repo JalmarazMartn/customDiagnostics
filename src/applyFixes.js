@@ -1,4 +1,3 @@
-const { escapeLeadingUnderscores } = require('typescript');
 const vscode = require('vscode');
 const OutputChannel = vscode.window.createOutputChannel(`Output Channel`);
 module.exports = {
