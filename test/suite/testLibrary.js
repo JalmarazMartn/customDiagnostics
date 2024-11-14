@@ -7,6 +7,10 @@ module.exports = {
     getDiagnostics: function(doc,diagnosticCode,searchExpresion,messageText)
     {
         return getDiagnostics(doc,diagnosticCode,searchExpresion,messageText);
+    },
+    applyFixToDiagnostic: async function(doc,diagnostic,searchExpresion,replaceExpression)
+    {
+        await applyFixToDiagnostic(doc,diagnostic,searchExpresion,replaceExpression)
     }
 }
 //general
@@ -31,17 +35,17 @@ function getDiagnostics(doc,diagnosticCode='',searchExpresion='',messageText='')
 	customerDiagnostics.findDiagnosticInDocument(customRule,doc,diagnostics);
 	return diagnostics;
 }
-async function addFixToDiagnostic(doc,diagnostic,searchExpresion='',replaceExpression='')
+async function applyFixToDiagnostic(doc,diagnostic,searchExpresion,replaceExpression)
 {
 const fix = {"name":searchExpresion,
 "searchExpresion":searchExpresion,
 "replaceExpression":replaceExpression}
 
 //            fix., fix.jsModuleFilePath, fix.jsFunctionName
-const context = await getContextForTest();
-const customerDiagnostics = require('../../src/customerDiagnostics.js');
-new customerDiagnostics.customDiagnosticsClass(doc, diagnostic,fix);
-context.subscriptions.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file'},new customerDiagnostics.customDiagnosticsClass(doc, diagnostic,fix)));
+const applyFixes = require('../../src/applyFixes.js');
+await applyFixes.applyFixToDiagnostic(diagnostic,fix,doc);
+const lineText = doc.lineAt(0).text;
+console.log(lineText);
 }
 async function getContextForTest()
 {

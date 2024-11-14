@@ -10,8 +10,8 @@ module.exports = {
     matchSearchExprInFix: function (originalText, fix, diagnostic) {
         return (matchSearchExprInFix(originalText, fix, diagnostic));
     },
-    applyFixToDiagnostic: function (diagnostic, fix, document) {
-        applyFixToDiagnostic(diagnostic, fix, document)
+    applyFixToDiagnostic: async function (diagnostic, fix, document) {
+        await applyFixToDiagnostic(diagnostic, fix, document)
     },
     getProblems: function (onlyCurrDocument = false, currSelectionOnly = false) {
         return getProblems(onlyCurrDocument, currSelectionOnly);
