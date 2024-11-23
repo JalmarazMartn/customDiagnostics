@@ -40,7 +40,9 @@ async function replaceRulesInAllDocuments(rules, fileExtension, ruleSetName = ''
                 progress.report({ message: 'Replacing rules in document ' + document.fileName });
                 for (let i = 0; i < rules.length; i++) {
                     let customRule = rules[i];
-                    await replaceRuleInDocument(customRule, document, ruleSetName);
+                    for (let index = 0; index < 2; index++) {                        
+                        await replaceRuleInDocument(customRule, document, ruleSetName);   
+                    }                    
                 }
             }
             catch (error) {
@@ -55,6 +57,12 @@ async function replaceRuleInDocument(replaceRule, document, ruleSetName = '') {
     await replaceRuleInRange(replaceRule, document, new vscode.Range(0, 0, document.lineCount, 0), ruleSetName);
 }
 async function replaceRuleInRange(replaceRule, document, replaceRange = new vscode.Range(0, 0, 0, 0), ruleSetName = '') {
+    for (let index = 0; index < getNumberOfRepetitions(replaceRule); index++) {
+        await replaceRuleInRangeOnce(replaceRule, document, replaceRange, ruleSetName);
+    }
+    
+}
+async function replaceRuleInRangeOnce(replaceRule, document, replaceRange = new vscode.Range(0, 0, 0, 0), ruleSetName = '') {
     if (!replaceRule) {
         return;
     }
@@ -257,4 +265,12 @@ function showErrorRegExp(ruleName = '', errorRaised) {
     const finalMessage = 'JAMCustomDiagnostics, error parsing rule ' + ruleName + ' : ' + errorRaised.toString();
     vscode.window.showErrorMessage(finalMessage);
     OutputChannel.appendLine(finalMessage);
+}
+function getNumberOfRepetitions(replaceRule)
+{
+    if (replaceRule.numberOfRepetitions)
+    {
+        return replaceRule.numberOfRepetitions ;
+    }
+    return 1;
 }

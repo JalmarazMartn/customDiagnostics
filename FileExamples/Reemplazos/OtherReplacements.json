@@ -41,7 +41,13 @@
             "name": "fields setting from field definition remove other",
             "searchExpresion": "{([^{]|\\r\\rE\\n)+}(\\s|\\n)*",
             "replaceExpression": ""
-        }        
+        },
+        {
+            "name": "Multiline procedure to single line",
+            "searchExpresion": "procedure (.+)[(]([^)\\r\\n]+)\\r\\n",
+            "replaceExpression": "procedure $1($2",
+            "numberOfRepetitions": 2
+        }
     ],
     "rulesets": [
         {
@@ -79,6 +85,13 @@
             "rules": [
                 "fields setting from field definition",
                 "fields setting from field definition remove other"
+            ]
+        },
+        {
+            "name": "Multiline procedure to single line",
+            "fileExtension":"al",
+            "rules":[
+                "Multiline procedure to single line"
             ]
         }
     ]

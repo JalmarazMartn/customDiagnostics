@@ -25,8 +25,8 @@ function activate(context) {
 	context.subscriptions.push(disposableChangeRulesInAllDocs);
 
 	let disposableChangeRulesInCurrentDoc = vscode.commands.registerCommand('JAMCustomRuls.replaceRulesInCurrentDoc', function () {
-		const rename = require('./src/replace.js');
-		rename.replaceRulesInCurrentDoc();
+		const replace = require('./src/replace.js');
+		replace.replaceRulesInCurrentDoc();
 	});
 	context.subscriptions.push(disposableChangeRulesInCurrentDoc);
 

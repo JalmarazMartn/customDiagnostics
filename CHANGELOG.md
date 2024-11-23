@@ -211,3 +211,11 @@ Advanced in beta feature create codeActions set. Will be explined in a future. B
 ### 0.0.54
 
 Critical failure. Thank you gengyj16
+
+### 0.0.55
+
+Sync applying of fixes with await to improve the feature. Automated test suite for extension.
+
+### 0.0.56
+
+Include numberOfRepetitions in replace rules. Search for this in README. Thank you Marvin Wagner.

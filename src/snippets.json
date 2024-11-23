@@ -31,7 +31,8 @@
       "            {",
       "                \"name\": \"${1:name}\",",
       "                \"searchExpresion\": \"${2:regularExpr}\",",
-      "                \"replaceExpression\": \"${3:JavascriptExpr}\"",
+      "                \"replaceExpression\": \"${3:JavascriptExpr}\",",
+      "                \"numberOfRepetitions\": ${4:numberOfRepetitions}",
       "            }"
     ],
     "description": "New snippet to add rules"
@@ -43,7 +44,8 @@
       "                \"name\": \"${1:name}\",",
       "                \"searchExpresion\": \"${2:regularExpr}\",",
       "                \"jsModuleFilePath\": \"${3:jsFilePath}\",",
-      "                \"jsFunctionName\": \"${4:function name}\"",        
+      "                \"jsFunctionName\": \"${4:function name}\",",
+      "                \"numberOfRepetitions\": ${4:numberOfRepetitions}",      
       "            }"
     ],
     "description": "New snippet to add rules with a function to replace"
