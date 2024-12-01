@@ -62,8 +62,7 @@
             "skipFromSearchIfMatch": "Skip Error",
             "severity": "error",
             "language": "al",
-            "andFileAlsoMustInclude":
-            [
+            "andFileAlsoMustInclude": [
                 {
                     "searchExpresion": "table\\s+\\d*\\s+.+"
                 }
@@ -76,12 +75,11 @@
             "skipFromSearchIfMatch": "",
             "severity": "error",
             "language": "xml",
-            "skipIfFileInclude":
-            [
-               {
-                  "searchExpresion": "Textbox"
-               }
-            ]            
+            "skipIfFileInclude": [
+                {
+                    "searchExpresion": "Textbox"
+                }
+            ]
         },
         {
             "code": "JAMMIG022",
@@ -91,7 +89,15 @@
             "language": "xml",
             "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\FileExamples\\ComplexReplaces.js",
             "jsFunctionName": "existsFieldDeclaration"
-        }        
+        },
+        {
+            "code": "JAMJSON0001",
+            "message": "Multiline replacement will not be done. Add r-scaped before n-scaped this way: \\r\\n",
+            "searchExpresion": "searchExpresion.*\\\\n",
+            "skipFromSearchIfMatch": "\\\\r",
+            "severity": "information",
+            "language": "json"
+        }
     ],
     "dianosticsets": [
         {
@@ -106,7 +112,8 @@
                 "JAMMIG007",
                 "JAMMIG020",
                 "JAMMIG021",
-                "JAMMIG022"
+                "JAMMIG022",
+                "JAMJSON0001"
             ]
         }
     ]

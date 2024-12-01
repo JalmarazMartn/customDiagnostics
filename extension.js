@@ -92,7 +92,13 @@ function activate(context) {
 		exinstingCodeActions.getFixToClipboard();
 	});
 	context.subscriptions.push(disposableGetCodeActionFixToClip);
+
 	
+	let disposablePickAndCheckRegexInCurrDoc = vscode.commands.registerCommand('JAMCustomRuls.disposablePickAndCheckRegexInCurrDoc', function () {
+		const regexHelper = require('./src/regexHelper.js');
+		regexHelper.PickAndCheckRegexInCurrDoc();
+	});
+	context.subscriptions.push(disposablePickAndCheckRegexInCurrDoc);
 
 	context.subscriptions.push(vscode.commands.registerCommand('getContextForTest', () => context));
 

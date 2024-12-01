@@ -1,10 +1,14 @@
 const vscode = require('vscode');
+let expressionToCheck = '';
 module.exports = {
 	openRegexHelpURL: function () {
 		openRegexHelpURL();
 	},
     pasteEscapedRegex: function(){
         pasteEscapedRegex();
+    },
+    PickAndCheckRegexInCurrDoc: async function(){
+        await PickAndCheckRegexInCurrDoc();
     }
 }
 function openRegexHelpURL()
@@ -77,4 +81,41 @@ function right(strToCheck, lenghtToCheck)
 function left(strToCheck, lenghtToCheck)
 {
   return strToCheck.slice(0, lenghtToCheck - strToCheck.length);
+}
+async function PickAndCheckRegexInCurrDoc()
+{    
+    expressionToCheck = await vscode.window.showInputBox({
+        prompt: "Type here the regex to find in current document",
+        value: expressionToCheck,        
+    });
+    const document = vscode.window.activeTextEditor.document;
+    await checkRegexInDoc(expressionToCheck,document);
+    
+}
+async function checkRegexInDoc(searchExpresion='',document)
+{
+    const regex = new RegExp(searchExpresion, 'mgi');
+    const index = document.getText().search(regex);
+    if (index < 0) {
+        return;
+    }
+    let target = document.positionAt(index);
+    vscode.window.activeTextEditor.selection = new vscode.Selection(target,new vscode.Position(target.line,target.character+10));
+    vscode.window.activeTextEditor.revealRange(new vscode.Selection(target,new vscode.Position(target.line,target.character+10)),vscode.TextEditorRevealType.Default);
+    /*vscode.commands.executeCommand(
+        'editor.action.goToLocations',
+        document.uri,
+        target,
+        [
+            new vscode.Location(
+                document.uri,
+                target,
+            )
+        ]);    */
+    //procedure (.+)[(]([^)\\r\\n]+)\\r\\n
+    /*
+            "searchExpresion": "procedure (.+)[(]([^)\n]+)\n",
+            "replaceExpression": "procedure $1($2",
+    
+    */
 }

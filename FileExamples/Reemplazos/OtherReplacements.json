@@ -47,9 +47,27 @@
             "searchExpresion": "procedure (.+)[(]([^)\\r\\n]+)\\r\\n",
             "replaceExpression": "procedure $1($2",
             "numberOfRepetitions": 2
+        },
+        {
+            "name": "No work Multiline procedure to single line",
+            "searchExpresion": "procedure (.+)[(]([^)\\n]+)\\n",
+            "replaceExpression": "procedure $1($2",
+            "numberOfRepetitions": 2
         }
     ],
     "rulesets": [
+        {
+            "name": "Multiline procedure to single line",
+            "fileExtension":"al",
+            "rules":[
+                "Multiline procedure to single line"
+            ]
+        },
+        {
+            "name":"No work Multiline procedure to single line",
+            "fileExtension":"al",
+            "rules":["No work Multiline procedure to single line"]
+        },
         {
             "name": "Language issues in report",
             "fileExtension": "al",
@@ -85,13 +103,6 @@
             "rules": [
                 "fields setting from field definition",
                 "fields setting from field definition remove other"
-            ]
-        },
-        {
-            "name": "Multiline procedure to single line",
-            "fileExtension":"al",
-            "rules":[
-                "Multiline procedure to single line"
             ]
         }
     ]
