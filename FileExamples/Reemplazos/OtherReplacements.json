@@ -58,7 +58,7 @@
     "rulesets": [
         {
             "name": "Multiline procedure to single line",
-            "fileExtension":"al",
+            "fileExtension":"",
             "rules":[
                 "Multiline procedure to single line"
             ]

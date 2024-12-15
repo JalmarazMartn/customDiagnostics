@@ -7,7 +7,7 @@
         },
         {
             "name": "Xlf Remove Transunit",
-            "searchExpresion": ".*<.*trans-unit.*\\r\\n",
+            "searchExpresion": ".*<.*trans-unit.*\\n",
             "replaceExpression": ""
         },
         {

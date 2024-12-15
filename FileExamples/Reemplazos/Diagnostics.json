@@ -89,14 +89,6 @@
             "language": "xml",
             "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\FileExamples\\ComplexReplaces.js",
             "jsFunctionName": "existsFieldDeclaration"
-        },
-        {
-            "code": "JAMJSON0001",
-            "message": "Multiline replacement will not be done. Add r-scaped before n-scaped this way: \\r\\n",
-            "searchExpresion": "searchExpresion.*\\\\n",
-            "skipFromSearchIfMatch": "\\\\r",
-            "severity": "information",
-            "language": "json"
         }
     ],
     "dianosticsets": [

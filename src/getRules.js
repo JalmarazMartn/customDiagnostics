@@ -167,6 +167,8 @@ function getDefaultDiagnostics() {
 			}
 		}
 	}
+	const extensionDiagnostics = require('./extensionDiagnostics.js');
+	extensionDiagnostics.addOwnExtensionRules(defaultDiagnosticRules);
 	return (defaultDiagnosticRules);
 }
 function getFixSets() {

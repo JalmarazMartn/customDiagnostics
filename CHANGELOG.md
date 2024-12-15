@@ -219,3 +219,9 @@ Sync applying of fixes with await to improve the feature. Automated test suite f
 ### 0.0.56
 
 Include numberOfRepetitions in replace rules. Search for this in README. Thank you Marvin Wagner.
+
+### 0.0.57
+
+Last ruleset selected will be in top next time picking.
+You can leave empty string in language replace rules and this way rule will apply all languages.
+New rule inside the code to avoid multi-line replacement fail.

@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+let lastPickedItem = '';
 const OutputChannel = vscode.window.createOutputChannel(`Output Channel`);
 module.exports = {
     pickAndApllyAfixSetName: async function () {
@@ -34,9 +35,11 @@ function pickAndApllyAfixSetName(onlyCurrDocument = false) {
             fixSetNames.push(fixSets[i].name);
         }
     }
-    //show vscode code picker with the ruleSetNames        
+    //show vscode code picker with the ruleSetNames
+    placeLastSelectionInTop(fixSetNames, lastPickedItem);        
     vscode.window.showQuickPick(fixSetNames).then(async (value) => {
         if (value) {
+            lastPickedItem = value;
             await applyAllFixes(value, onlyCurrDocument);
         }
     }
@@ -218,4 +221,9 @@ function getNewLineText(fix, diagnostic, originalText) {
     newLineText = originalText.substring(0, diagnosticStart) + newLineTextPartial +
         originalText.substring(diagnosticEnd)
     return newLineText;
+}
+function placeLastSelectionInTop(ruleSetNames, lastPickedItem) {
+    //bring it from replace.js to avoid duplicity
+    const replace = require('./replace.js');
+    replace.placeLastSelectionInTop(ruleSetNames, lastPickedItem);
 }

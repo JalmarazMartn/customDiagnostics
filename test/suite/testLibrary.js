@@ -44,8 +44,6 @@ const fix = {"name":searchExpresion,
 //            fix., fix.jsModuleFilePath, fix.jsFunctionName
 const applyFixes = require('../../src/applyFixes.js');
 await applyFixes.applyFixToDiagnostic(diagnostic,fix,doc);
-const lineText = doc.lineAt(0).text;
-console.log(lineText);
 }
 async function getContextForTest()
 {

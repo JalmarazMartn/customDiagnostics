@@ -5,7 +5,7 @@
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
 	"repository": "https://github.com/JalmarazMartn/customDiagnostics",
-	"version": "0.0.56",
+	"version": "0.0.57",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
