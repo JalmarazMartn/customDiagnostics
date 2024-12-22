@@ -35,7 +35,7 @@ class customDiagnosticsClass {
             return;
         }
         const newText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion,
-            fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName, document, range);
+            fix.replaceExpression, fix.jsModuleFilePath, fix.jsFunctionName, document, range,getRegexOptions(diagnostic));
         if (newText === document.lineAt(diagnostic.range.start.line).text) {
             return;
         }
@@ -159,14 +159,15 @@ function findDiagnosticInDocument(customRule, doc, diagnostics) {
         return;
     }
     let findMatchByLine = isNegativeClause(customRule.searchExpresion);
+    const regex = new RegExp(customRule.searchExpresion, getRegexOptions(customRule));
     if (!findMatchByLine) {
-        findMatchByLine = (doc.getText().search(customRule.searchExpresion) > -1)
+        findMatchByLine = (doc.getText().search(regex) > -1)
     }
     if (findMatchByLine) {
         for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
             const lineOfText = doc.lineAt(lineIndex);
-            if (lineOfText.text.search(customRule.searchExpresion) !== -1) {
-                if (!skipFromSearch(lineOfText.text, customRule.skipFromSearchIfMatch, customRule.code) &&
+            if (lineOfText.text.search(regex) !== -1) {
+                if (!skipFromSearch(lineOfText.text, customRule.skipFromSearchIfMatch, customRule.code,getRegexOptions(customRule)) &&
                     jsFunctionTrueOrNotExists(customRule.jsModuleFilePath, customRule.jsFunctionName, doc, lineIndex, lineOfText.text)) {
                     diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, customRule));
                 }
@@ -254,12 +255,12 @@ function getEnableWSDiagnostics() {
     }
     return ScanCustomDiagnosticsInAllWS;
 }
-function skipFromSearch(lineOfText = '', skipFromSearchIfMatch, ruleCode = '') {
+function skipFromSearch(lineOfText = '', skipFromSearchIfMatch, ruleCode = '',regexOptions='') {
     if (skipFromSearchIfMatch == undefined) { return false }
     if (!skipFromSearchIfMatch) { return false }
     if (skipFromSearchIfMatch == '') { return false }
     try {
-        const regex = new RegExp(skipFromSearchIfMatch, 'mgi');
+        const regex = new RegExp(skipFromSearchIfMatch, regexOptions);
         if (lineOfText.search(regex) !== -1) {
             return true
         }
@@ -324,4 +325,8 @@ function jsFunctionTrueOrNotExists(jsModuleFilePath, jsFunctionName, document, l
         vscode.window.showErrorMessage('Error: ' + error.message);
         return false
     }
+}
+function getRegexOptions(element) {
+    const checkRulesEdition = require('./checkRulesEdition.js');
+    return checkRulesEdition.getRegexOptions(element);
 }

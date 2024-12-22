@@ -151,6 +151,7 @@ function getInvalidRegexps(docDiagnostics=[]) {
         if (element.skipFromSearchIfMatch) {
             tryAndPushRegex(invalidRegexps, element.skipFromSearchIfMatch, element.code, 'skipFromSearchIfMatch')
         }
+        tryRegexOptions(invalidRegexps, element.code, getRegexOptions(element));
         if (element.andFileAlsoMustInclude) {
             const searchExprArray = element.andFileAlsoMustInclude;
             pushInvalidRegexInArray(searchExprArray,element,invalidRegexps,'andFileAlsoMustInclude')
@@ -167,7 +168,7 @@ function pushInvalidRegexInArray(searchExprArray,element,invalidRegexps,arrayNam
     for (let index = 0; index < searchExprArray.length; index++) {
         const arrayElement = searchExprArray[index];
         if (arrayElement.searchExpresion) {
-            tryAndPushRegex(invalidRegexps, arrayElement.searchExpresion, element.code, arrayName)
+            tryAndPushRegex(invalidRegexps, arrayElement.searchExpresion, element.code)
         }
     }
 
@@ -191,8 +192,10 @@ function getCurrDocDiagnosticCodesInSets(currDocJSON) {
     return diagnosticCodes;
 }
 function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleCode, ruleSection = '') {
+    const regexHelper = require('./regexHelper.js');
+    const defaultRegexOptions = regexHelper.getDefaultRegexOptions();
     try {
-        const regex = new RegExp(regexToTest, 'mgi');
+        const regex = new RegExp(regexToTest, defaultRegexOptions);
     }
     catch (error) {
         invalidRegexps.push(
@@ -204,6 +207,28 @@ function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleCode, ruleSection
         );
     }
 }
+function tryRegexOptions(invalidRegexps, ruleCode, getRegexOptions)
+{
+    const regexHelper = require('./regexHelper.js');
+    const defaultRegexOptions = regexHelper.getDefaultRegexOptions();
+
+if (getRegexOptions==defaultRegexOptions) {
+    return;
+}
+    try {
+        const regex = new RegExp('anyExprDoesNotmater', getRegexOptions);
+        }
+        catch (error) {
+            invalidRegexps.push(
+                {
+                    "code": ruleCode,
+                    "searchExpresion": "regexOptions",
+                    "error": error.toString()
+                }
+            );
+        }
+    }
+
 function selectDiagnosticInSet() {
     let commandCompletion=[];
     if (!getIsEditingDiagnostics()) {        
@@ -251,4 +276,8 @@ function isObjectKeyInLine(lineText = '') {
 }
 function isObjectKeyDiagnosticsInLine(lineText = '') {
     return lineText.search(/"diagnostics"\s*:/) !== -1
+}
+function getRegexOptions(element) {
+    const checkRulesEdition = require('./checkRulesEdition.js');
+    return checkRulesEdition.getRegexOptions(element);
 }

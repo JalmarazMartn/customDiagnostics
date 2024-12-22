@@ -35,6 +35,7 @@
             "code": "JAMMIG005",
             "message": "Revisar la longitud del campo. Si es correcto a 10 poner un comentario 'Revisada longitud' en la misma línea al final",
             "searchExpresion": "field\\(\\d+;.+No\\.\";\\s*Code\\[10\\]\\)",
+            "regexOptions": "ñ",
             "skipFromSearchIfMatch": "Revisada longitud",
             "severity": "error",
             "language": "al"

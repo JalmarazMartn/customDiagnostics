@@ -3,7 +3,10 @@ const vscode = require('vscode');
 module.exports = {    
     subscribeToDocumentChanges: function (context, customDiagnostic) { subscribeToDocumentChanges(context, customDiagnostic) },
     refreshDiagnostics: function (doc, customDiagnostic) { refreshDiagnostics(doc, customDiagnostic) },
-    selectRuleInRuleSet: function () { return selectRuleInRuleSet(); }
+    selectRuleInRuleSet: function () { return selectRuleInRuleSet(); },
+    tryAndPushRegex: function(invalidRegexps, regexToTest, ruleName, ruleSection,regexOptions)
+    { tryAndPushRegex(invalidRegexps, regexToTest, ruleName, ruleSection,regexOptions); },
+    getRegexOptions: function(element){return getRegexOptions(element)}
 }
 
 function subscribeToDocumentChanges(context, customDiagnostic) {
@@ -175,14 +178,15 @@ function getInvalidRegexps(docRepRules=[]) {
     for (let index = 0; index < docRepRules.length; index++) {
         const element = docRepRules[index];
         if (element.searchExpresion) {
-            tryAndPushRegex(invalidRegexps, element.searchExpresion, element.name, 'searchExpresion')
+            tryAndPushRegex(invalidRegexps, element.searchExpresion, element.name, 'searchExpresion',getRegexOptions(element))
         }
     }
     return invalidRegexps;
 }
-function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleName, ruleSection = '') {
+function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleName, ruleSection = '',regexOptions='') {
+    const defaultRegexOptions = getDefaultRegexOptions();
     try {
-        const regex = new RegExp(regexToTest, 'mgi');
+        const regex = new RegExp(regexToTest, defaultRegexOptions);
     }
     catch (error) {
         invalidRegexps.push(
@@ -192,6 +196,20 @@ function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleName, ruleSection
                 "error": error.toString()
             }
         );
+    }
+    if (regexOptions!==defaultRegexOptions) {
+        try {
+            const regex = new RegExp(regexToTest, regexOptions);
+        }
+        catch (error) {
+            invalidRegexps.push(
+                {
+                    "name": ruleName,
+                    "searchExpresion": "regexOptions",
+                    "error": error.toString()
+                }
+            );
+        }    
     }
 }
 function getIsEditingRules() {
@@ -232,4 +250,17 @@ function isObjectKeyInLine(lineText='')
 function isObjectKeyRulesInLine(lineText='')
 {
     return lineText.search(/"rules"\s*:/) !== -1
+}
+function getRegexOptions(element) {
+    if (element.regexOptions) {
+        if (element.regexOptions !== '') {
+        return element.regexOptions;
+    }
+    }
+    return getDefaultRegexOptions();
+}
+function getDefaultRegexOptions()
+{
+    const regexHelper = require('./regexHelper.js');
+    return regexHelper.getDefaultRegexOptions();
 }

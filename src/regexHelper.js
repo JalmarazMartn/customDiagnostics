@@ -9,6 +9,9 @@ module.exports = {
     },
     PickAndCheckRegexInCurrDoc: async function(){
         await PickAndCheckRegexInCurrDoc();
+    },
+    getDefaultRegexOptions: function(){
+        return getDefaultRegexOptions();
     }
 }
 function openRegexHelpURL()
@@ -94,7 +97,7 @@ async function PickAndCheckRegexInCurrDoc()
 }
 async function checkRegexInDoc(searchExpresion='',document)
 {
-    const regex = new RegExp(searchExpresion, 'mgi');
+    const regex = new RegExp(searchExpresion, getDefaultRegexOptions());
     const index = document.getText().search(regex);
     if (index < 0) {
         return;
@@ -118,4 +121,8 @@ async function checkRegexInDoc(searchExpresion='',document)
             "replaceExpression": "procedure $1($2",
     
     */
+}
+function getDefaultRegexOptions()
+{
+    return 'mgi';
 }

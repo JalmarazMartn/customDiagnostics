@@ -31,8 +31,9 @@
       "            {",
       "                \"name\": \"${1:name}\",",
       "                \"searchExpresion\": \"${2:regularExpr}\",",
-      "                \"replaceExpression\": \"${3:JavascriptExpr}\",",
-      "                \"numberOfRepetitions\": ${4:numberOfRepetitions}",
+      "                \"regexOptions\": \"${3:regexOptions}\",",
+      "                \"replaceExpression\": \"${4:JavascriptExpr}\",",
+      "                \"numberOfRepetitions\": ${5:numberOfRepetitions}",
       "            }"
     ],
     "description": "New snippet to add rules"
@@ -43,9 +44,10 @@
       "            {",
       "                \"name\": \"${1:name}\",",
       "                \"searchExpresion\": \"${2:regularExpr}\",",
-      "                \"jsModuleFilePath\": \"${3:jsFilePath}\",",
-      "                \"jsFunctionName\": \"${4:function name}\",",
-      "                \"numberOfRepetitions\": ${4:numberOfRepetitions}",      
+      "                \"regexOptions\": \"${3:regexOptions}\",",      
+      "                \"jsModuleFilePath\": \"${4:jsFilePath}\",",
+      "                \"jsFunctionName\": \"${5:function name}\",",
+      "                \"numberOfRepetitions\": ${6:numberOfRepetitions}",      
       "            }"
     ],
     "description": "New snippet to add rules with a function to replace"
@@ -72,9 +74,10 @@
       "                \"code\": \"${1:code}\",",
       "                \"message\": \"${2:message}\",",
       "                \"searchExpresion\": \"${3:regularExpr}\",",
+      "                \"regexOptions\": \"${4:regexOptions}\",",      
       "                \"skipFromSearchIfMatch\": \"\",",      
-      "                \"severity\": ${4|\"error\",\"warning\",\"information\",\"hint\"|},",
-      "                \"language\": \"${5:languageCode}\"",
+      "                \"severity\": ${5|\"error\",\"warning\",\"information\",\"hint\"|},",
+      "                \"language\": \"${6:languageCode}\"",
       "            }"
     ],
     "description": "New snippet to add rules"
@@ -86,19 +89,20 @@
       "                \"code\": \"${1:code}\",",
       "                \"message\": \"${2:message}\",",
       "                \"searchExpresion\": \"${3:regularExpr}\",",
+      "                \"regexOptions\": \"${4:regexOptions}\",",      
       "                \"skipFromSearchIfMatch\": \"\",",      
-      "                \"severity\": ${4|\"error\",\"warning\",\"information\",\"hint\"|},",
-      "                \"language\": \"${5:languageCode}\",",
+      "                \"severity\": ${5|\"error\",\"warning\",\"information\",\"hint\"|},",
+      "                \"language\": \"${6:languageCode}\",",
       "                \"andFileAlsoMustInclude\":",
       "                [",
       "                   {",
-      "                      \"searchExpresion\": \"${6:regularExpr}\"",
+      "                      \"searchExpresion\": \"${7:regularExpr}\"",
       "                   }",
       "                ],",
       "                \"skipIfFileInclude\":",
       "                [",
       "                   {",
-      "                      \"searchExpresion\": \"${7:regularExpr}\"",
+      "                      \"searchExpresion\": \"${8:regularExpr}\"",
       "                   }",
       "                ]",
       "            }"
@@ -124,7 +128,8 @@
       "                \"name\": \"${1:name}\",",
       "                \"code\": \"${2:code}\",",        
       "                \"searchExpresion\": \"${3:regularExpr}\",",
-      "                \"replaceExpression\": \"${4:JavascriptExpr}\"",
+      "                \"regexOptions\": \"${4:regexOptions}\",",      
+      "                \"replaceExpression\": \"${5:JavascriptExpr}\"",
       "            }"
     ],
     "description": "New snippet to add fixes"
@@ -136,8 +141,9 @@
       "                \"name\": \"${1:name}\",",
       "                \"code\": \"${2:code}\",",                
       "                \"searchExpresion\": \"${3:regularExpr}\",",
-      "                \"jsModuleFilePath\": \"${4:jsFilePath}\",",
-      "                \"jsFunctionName\": \"${5:function name}\"",
+      "                \"regexOptions\": \"${4:regexOptions}\",",      
+      "                \"jsModuleFilePath\": \"${5:jsFilePath}\",",
+      "                \"jsFunctionName\": \"${6:function name}\"",
       "            }"
     ],
     "description": "New snippet to add rules with a function to fix"
@@ -148,7 +154,8 @@
       "            {",
       "                \"name\": \"${1:name}\",",
       "                \"searchExpresion\": \"${2:regularExpr}\",",
-      "                \"codeAction\": \"${3:Code action}\"",
+      "                \"regexOptions\": \"${3:regexOptions}\",",      
+      "                \"codeAction\": \"${4:Code action}\"",
       "            }"
     ],
     "description": "New snippet to add rules with a code Action to fix"

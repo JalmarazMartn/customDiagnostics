@@ -55,6 +55,7 @@ The properties of a replacing rule have the following meaning:
 * "searchExpresion": "\\[Scope\\('Internal'\\)]",`pattern to search and replace in bulk replacement. This pattern can be a regular expression`
 * "replaceExpression": "",`target string for substitution`
 * "numberOfRepetitions": 1 `sometimes a rule needs to be applied more then once. Optional setting, for doing more iterations wih the rule`
+* "regexOptions": gmi `This property sets flags of regex search. If not settled, the default is gmi. More info https://javascript.info/regexp-introduction`
 
 There is another powerful but complex way to set a replacing rule: instead of replaceExpression parameter, you can set a javascript function in a module. You can set the rule this way:
 
@@ -199,6 +200,7 @@ The properties of a rule have the following meaning:
 * "language": "al"`language to apply the rule for replacing and diagnostic`
 * "andFileAlsoMustInclude":`object array of searchExpresion that must be satisfied to raise the diagnostic`
 * "skipIfFileInclude": `object array of searchExpresion that skip diagnostic if match in any place of the file`
+* "regexOptions": gmi `This property sets flags of regex search. If not settled, the default is gmi. More info https://javascript.info/regexp-introduction`
 
 Note: You only will see custom diagnostics out of the document edition setting the extension parameter `JAMDiagnostics.ScanCustomDiagnosticsInAllWS` to true.
 

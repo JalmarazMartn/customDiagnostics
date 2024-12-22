@@ -12,8 +12,8 @@ module.exports = {
     replaceRulesInCurrDocSelection: function () {
         pickAndExcuteRulesetICurrDocSelection();
     },
-    getNewText: function (originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName, document, range) {
-        return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName, document, range)
+    getNewText: function (originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName, document, range,regexOptions) {
+        return getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName, document, range,regexOptions)
     },
     emptySearchexpressionError: function (searchExpresion, ruleName) {
         return emptySearchexpressionError(searchExpresion, ruleName);
@@ -74,20 +74,20 @@ async function replaceRuleInRangeOnce(replaceRule, document, replaceRange = new 
         return;
     }
     try {
-        const regex = new RegExp(replaceRule.searchExpresion, 'mgi');
+        const regex = new RegExp(replaceRule.searchExpresion, getRegexOptions(replaceRule));
     }
     catch (error) {
         showErrorRegExp(replaceRule.name, error);
         return;
     }
-    const regex = new RegExp(replaceRule.searchExpresion, 'mgi');
+    const regex = new RegExp(replaceRule.searchExpresion, getRegexOptions(replaceRule));
     if (document.getText().search(regex) < 0) {
         return;
     }
     let originalText = document.getText(replaceRange);
 
     const replaceText = getNewText(originalText, replaceRule.searchExpresion, replaceRule.replaceExpression,
-        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName, document, replaceRange);
+        replaceRule.jsModuleFilePath, replaceRule.jsFunctionName, document, replaceRange,getRegexOptions(replaceRule));
 
     if (replaceText === originalText) {
         return;
@@ -115,11 +115,10 @@ function pickAndExcuteRuleset() {
     }
     );
 }
-function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName, document, range = new vscode.Range(0, 0, 0, 0)) {
+function getNewText(originalText, searchExpresion, replaceExpression, jsModuleFilePath, jsFunctionName, document, range = new vscode.Range(0, 0, 0, 0),regexOptions='') {
     const existsReplaceExpr = replaceExpression !== undefined;
     let newText = originalText;
-    const regex = new RegExp(searchExpresion, 'mgi');
-
+    const regex = new RegExp(searchExpresion, regexOptions);
     if (jsModuleFilePath) {
         if (jsFunctionName) {
             try {
@@ -281,4 +280,8 @@ function getNumberOfRepetitions(replaceRule) {
         return replaceRule.numberOfRepetitions;
     }
     return 1;
+}
+function getRegexOptions(element) {
+    const checkRulesEdition = require('./checkRulesEdition.js');
+    return checkRulesEdition.getRegexOptions(element);
 }

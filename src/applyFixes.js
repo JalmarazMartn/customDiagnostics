@@ -96,7 +96,7 @@ async function applyFixWithReturn(diagnostic, fix, document) {
     else {
         if (fix.jsFunctionName != '') {
             newLineText = replace.getNewText(document.lineAt(diagnostic.range.start.line).text, fix.searchExpresion, fix.replaceExpression,
-                fix.jsModuleFilePath, fix.jsFunctionName, document, range);
+                fix.jsModuleFilePath, fix.jsFunctionName, document, range,getRegexOptions(fix));
         }
         else {
             if (fix.codeAction != '') {
@@ -182,7 +182,7 @@ function GetApplyScope(ruleSet = {}, scope = '') {
 
 function matchSearchExprInFix(originalText = '', fix, diagnostic) {
     try {
-        const regex = new RegExp(fix.searchExpresion, 'mgi');
+        const regex = new RegExp(fix.searchExpresion,getRegexOptions(fix));
         if (originalText.search(regex) < 0) {
             return false;
         }
@@ -226,4 +226,8 @@ function placeLastSelectionInTop(ruleSetNames, lastPickedItem) {
     //bring it from replace.js to avoid duplicity
     const replace = require('./replace.js');
     replace.placeLastSelectionInTop(ruleSetNames, lastPickedItem);
+}
+function getRegexOptions(element) {
+    const checkRulesEdition = require('./checkRulesEdition.js');
+    return checkRulesEdition.getRegexOptions(element);
 }

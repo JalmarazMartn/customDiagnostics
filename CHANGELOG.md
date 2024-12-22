@@ -225,3 +225,7 @@ Include numberOfRepetitions in replace rules. Search for this in README. Thank y
 Last ruleset selected will be in top next time picking.
 You can leave empty string in language replace rules and this way rule will apply all languages.
 New rule inside the code to avoid multi-line replacement fail.
+
+### 0.0.58
+
+regexOptions property in replaces, diagnostics adn fixes.

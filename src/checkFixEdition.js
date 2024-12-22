@@ -115,24 +115,14 @@ function getInvalidRegexps(docDiagnostics=[]) {
     for (let index = 0; index < docDiagnostics.length; index++) {
         const element = docDiagnostics[index];
         if (element.searchExpresion) {
-            tryAndPushRegex(invalidRegexps, element.searchExpresion, element.name, 'searchExpresion')
+            tryAndPushRegex(invalidRegexps, element.searchExpresion, element.name, 'searchExpresion',getRegexOptions(element))
         }
     }
     return invalidRegexps;
 }
-function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleName, ruleSection = '') {
-    try {
-        const regex = new RegExp(regexToTest, 'mgi');
-    }
-    catch (error) {
-        invalidRegexps.push(
-            {
-                "name": ruleName,
-                "searchExpresion": ruleSection,
-                "error": error.toString()
-            }
-        );
-    }
+function tryAndPushRegex(invalidRegexps, regexToTest = '', ruleName, ruleSection = '',RegexOptions='') {
+    const checkRulesEdition = require('./checkRulesEdition.js');
+    checkRulesEdition.tryAndPushRegex(invalidRegexps, regexToTest, ruleName, ruleSection,RegexOptions)
 }
 
 function getFixesNotDefined() {
@@ -232,4 +222,8 @@ function isObjectKeyInLine(lineText='')
 function isObjectKeyFixesInLine(lineText='')
 {
     return lineText.search(/"fixes"\s*:/) !== -1
+}
+function getRegexOptions(element) {
+    const checkRulesEdition = require('./checkRulesEdition.js');
+    return checkRulesEdition.getRegexOptions(element);
 }
