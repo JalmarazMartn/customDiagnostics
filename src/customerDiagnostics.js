@@ -87,9 +87,10 @@ module.exports = {
 }
 
 function createDiagnostic(doc, lineOfText, lineIndex, customRule) {
-    const index = lineOfText.text.search(customRule.searchExpresion);
-    const finalIndex = index + lineOfText.text.match(customRule.searchExpresion)[0].length;
-    lineOfText.text.match(customRule.searchExpresion);
+    const regex = new RegExp(customRule.searchExpresion,getRegexOptions(customRule));    
+    const index = lineOfText.text.search(regex);
+    const finalIndex = index + lineOfText.text.match(regex)[0].length;
+    //lineOfText.text.match(customRule.searchExpresion);
     // create range that represents, where in the document the word is
     const range = new vscode.Range(lineIndex, index, lineIndex, finalIndex);
     const diagnostic = new vscode.Diagnostic(range, customRule.message,

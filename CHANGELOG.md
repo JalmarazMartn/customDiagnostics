@@ -229,3 +229,7 @@ New rule inside the code to avoid multi-line replacement fail.
 ### 0.0.58
 
 regexOptions property in replaces, diagnostics adn fixes.
+
+### 0.0.60
+
+New tests and fixes for diagnostics.

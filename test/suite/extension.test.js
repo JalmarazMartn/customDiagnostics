@@ -21,13 +21,13 @@ suite('Extension Test Suite', () => {
 
 		let doc = await vscode.workspace.openTextDocument();
 		await testLibrary.addTextToDocument(doc, noErrorText, 0, 0);
-		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText,messageText);		
+		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText,messageText,'');		
 		assert.strictEqual(0, diagnostics.length);
 	})
 	test('get diagnostic', async () => {
 		let doc = await vscode.workspace.openTextDocument();
 		await testLibrary.addTextToDocument(doc, consoleLogText, 0, 0);
-		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText,messageText);
+		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText,messageText,'');
 		const diagnostic = diagnostics[0];
 		assert.strictEqual(1, diagnostics.length);
 		assert.strictEqual(diagnostic.code,diagnosticCode);		
@@ -36,9 +36,24 @@ suite('Extension Test Suite', () => {
 		let doc = await vscode.workspace.openTextDocument();
 		await testLibrary.addTextToDocument(doc, consoleLogText, 0, 0);
 		assert.strictEqual(doc.lineAt(0).text,consoleLogText);
-		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText,messageText);
+		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText,messageText,'');
 		const diagnostic = diagnostics[0];
 		await testLibrary.applyFixToDiagnostic(doc,diagnostic,consoleLogText,xonsoleLogText);
 		assert.strictEqual(doc.lineAt(0).text,xonsoleLogText);
 	})
+	test('get No diagnostic when regexOptions is case sensitive', async () => {
+		let doc = await vscode.workspace.openTextDocument();
+		await testLibrary.addTextToDocument(doc, consoleLogText, 0, 0);
+		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText.toUpperCase(),messageText,'gm');
+		assert.strictEqual(0, diagnostics.length);
+	})
+	test('get diagnostic when regexOptions is not case sensitive', async () => {
+		let doc = await vscode.workspace.openTextDocument();
+		await testLibrary.addTextToDocument(doc, consoleLogText, 0, 0);
+		const diagnostics = testLibrary.getDiagnostics(doc,diagnosticCode,consoleLogText.toUpperCase(),messageText,'i');
+		const diagnostic = diagnostics[0];
+		assert.strictEqual(1, diagnostics.length);
+		assert.strictEqual(diagnostic.code,diagnosticCode);		
+	})
+
 });

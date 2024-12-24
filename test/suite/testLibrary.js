@@ -4,9 +4,9 @@ module.exports = {
     {
         await addTextToDocument(doc, newText, line, column);
     },
-    getDiagnostics: function(doc,diagnosticCode,searchExpresion,messageText)
+    getDiagnostics: function(doc,diagnosticCode,searchExpresion,messageText,regexOptions)
     {
-        return getDiagnostics(doc,diagnosticCode,searchExpresion,messageText);
+        return getDiagnostics(doc,diagnosticCode,searchExpresion,messageText,regexOptions);
     },
     applyFixToDiagnostic: async function(doc,diagnostic,searchExpresion,replaceExpression)
     {
@@ -20,7 +20,7 @@ async function addTextToDocument(doc, newText='', line = 0, column = 0) {
 	await vscode.workspace.applyEdit(edit);
 }
 //especific
-function getDiagnostics(doc,diagnosticCode='',searchExpresion='',messageText='')
+function getDiagnostics(doc,diagnosticCode='',searchExpresion='',messageText='',regexOptions='')
 {
 	const customerDiagnostics = require('../../src/customerDiagnostics.js');
 	const customRule = 
@@ -29,6 +29,7 @@ function getDiagnostics(doc,diagnosticCode='',searchExpresion='',messageText='')
             "message": messageText,
             "searchExpresion": searchExpresion,
             "severity": "error",
+            "regexOptions": regexOptions,            
             "language": doc.languageId,
 		};
 	let diagnostics = [];
