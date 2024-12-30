@@ -1,0 +1,46 @@
+{
+    "title": "Make variable global (AL CodeActions)",
+    "kind": {
+        "value": "refactor.rewrite"
+    },
+    "edit": [
+        [
+            {
+                "$mid": 1,
+                "fsPath": "c:\\Users\\Jesus\\Documents\\AL\\WarehouseAssistant\\src\\codeunit\\TIPWhseAsistantMngt.codeunit.69005.al",
+                "_sep": 1,
+                "external": "file:///c%3A/Users/Jesus/Documents/AL/WarehouseAssistant/src/codeunit/TIPWhseAsistantMngt.codeunit.69005.al",
+                "path": "/c:/Users/Jesus/Documents/AL/WarehouseAssistant/src/codeunit/TIPWhseAsistantMngt.codeunit.69005.al",
+                "scheme": "file"
+            },
+            [
+                {
+                    "range": [
+                        {
+                            "line": 4,
+                            "character": 0
+                        },
+                        {
+                            "line": 5,
+                            "character": 0
+                        }
+                    ],
+                    "newText": ""
+                },
+                {
+                    "range": [
+                        {
+                            "line": 332,
+                            "character": 0
+                        },
+                        {
+                            "line": 332,
+                            "character": 0
+                        }
+                    ],
+                    "newText": "        CrearReserva: Codeunit \"Create Reserv. Entry\";\r\n"
+                }
+            ]
+        ]
+    ]
+}
