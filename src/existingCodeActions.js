@@ -1,8 +1,14 @@
 const vscode = require('vscode');
+let ExecNumber = 0;
+let HTMLContent = '';
 module.exports = {
     getFixToClipboard: async function()
     {
         await getFixToClipboard();
+    },
+    ShowStepHTMLView: async function(context)
+    {
+        await ShowStepHTMLView(context);
     }
 }
 async function getCurrCodeActionsSelection(document, codeActions, SelectionRange) {    
@@ -75,8 +81,7 @@ async function pickCodeAction() {
     const codeAction = currCodeActions.filter(x => x.title == codeActionTitle);        
     console.log(codeAction[0]);
     console.log(getElementFromJsonWithLevel(JSON.parse(JSON.stringify(codeAction[0])),'range'));
-    console.log(getElementFromJsonWithLevel(JSON.parse(JSON.stringify(codeAction[0])),'line'));
-
+    console.log(getElementFromJsonWithLevel(JSON.parse(JSON.stringify(codeAction[0])),'line'));    
     return codeAction[0].title;
 }
 async function getCommandCodeActionFromTitle(codeActionTitle = '', diagnosticPosition, documentUri) {
@@ -181,4 +186,83 @@ function getAllWordBeginnings(text) {
     }
   
     return wordBeginnings;
+  }
+  async function ShowStepHTMLView(context) {
+    HTMLContent = await GetHTMLContent(context);
+    const WebviewSteps = vscode.window.createWebviewPanel(
+      'Code Actions discoverer',
+      'Code Actions discoverer',
+      vscode.ViewColumn.One,
+      {
+        enableScripts: true
+      }
+    );    
+    
+    WebviewSteps.webview.onDidReceiveMessage(
+      async function (message) {
+        console.log(message);
+        ExecNumber = ExecNumber + 1;
+        WebviewSteps.webview.html = HTMLContent + ExecNumber.toString();
+        /*const IsSkipMessageCommand = message.command.indexOf('Skip') > -1;
+        const IsNextMessageCommand = message.command.indexOf('Next') > -1;
+        const IsPickScriptStepToExecuteMessageCommand = message.command.indexOf('PickScriptStepToExecute') > -1;
+        CurrentStep = CurrentStep + 1;
+        if (CurrentStep >= scriptsSteps.vsCodeSteps.length) {
+          WebviewSteps.dispose();
+          return;
+        }
+        if (IsSkipMessageCommand) {
+          const ConfirmationSkipMessage = 'Do you want to skip step"' + GetCurrentDescription(CurrentStep) + '"?';
+          //if (vscode.window.showInformationMessage(ConfirmationSkipMessage,{modal:true}, 'Yes', 'No') == 'No') {
+          if (GetConfirmRequired()) {
+            vscode.window.showInformationMessage(ConfirmationSkipMessage, { modal: true }, 'Yes', 'No').then(
+              (resolve) => {
+                if (resolve == 'No') {
+                  CurrentStep = CurrentStep - 1;
+                }
+                WebviewSteps.webview.html = GetHTMLContent(GetCurrentDescription(CurrentStep), GetCurrentDescription(CurrentStep + 1), context);
+              });
+          }
+        } else if (IsNextMessageCommand) {
+          ExecuteCurrentStep();
+        }
+        else if (IsPickScriptStepToExecuteMessageCommand) {
+          //PickScriptStepToExecute();
+          //CurrentStep = CurrentStep - 1;
+          //WebviewSteps.dispose();
+          CurrentStep = await PickStepNumber() - 1;
+        }
+        WebviewSteps.webview.html = GetHTMLContent(GetCurrentDescription(CurrentStep), GetCurrentDescription(CurrentStep + 1), context);
+      */},
+      undefined,
+      context.subscriptions
+    );    
+    ExecNumber = 0;
+    WebviewSteps.webview.html = HTMLContent;
+  }
+  async function GetHTMLContent(context) {
+    const path = require('path');
+    const fs = require('fs');
+    const filePath = context.asAbsolutePath(path.join('src', 'html', 'codeActions.html'));
+    let FinalTable = fs.readFileSync(filePath, 'utf8');
+    FinalTable = FinalTable.replace('<option value="CodeActionTitle">CodeActionTitle</option>', await getCodeactionTitlesAsHtmlOptions());
+    return FinalTable;
+  }
+  async function getCodeactionTitlesAsHtmlOptions()
+  {
+    const document = vscode.window.activeTextEditor.document;
+    const selectionRange = vscode.window.activeTextEditor.selection;    
+    let OptionsSelection = ''
+    let currCodeActions = [];    
+    await getCurrCodeActionsSelection(document,currCodeActions,selectionRange);
+    if (!currCodeActions) {
+        return ''
+    }
+    if (currCodeActions.length == 0) {
+        return ''
+    }
+    for (let index = 0; index < currCodeActions.length; index++) {
+        OptionsSelection = OptionsSelection + '<option value="' + currCodeActions[index].title + '">' + currCodeActions[index].title + '</option>';
+    }
+    return OptionsSelection;
   }

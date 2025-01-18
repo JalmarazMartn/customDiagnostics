@@ -88,8 +88,9 @@ function activate(context) {
 	context.subscriptions.push(disposableGetFixToClip);
 
 	let disposableGetCodeActionFixToClip = vscode.commands.registerCommand('JAMCustomRuls.getCodeActionFixToClipboard', function () {
-		const exinstingCodeActions = require('./src/existingCodeActions.js');
-		exinstingCodeActions.getFixToClipboard();
+		const existingCodeActions = require('./src/existingCodeActions.js');
+		//existingCodeActions.getFixToClipboard();
+		existingCodeActions.ShowStepHTMLView(context);
 	});
 	context.subscriptions.push(disposableGetCodeActionFixToClip);
 
