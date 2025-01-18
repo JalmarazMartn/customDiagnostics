@@ -1,137 +1,193 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Dropdown Example</title>
-<style>
-  #codeActions {
-    width: 600px; /* Adjust width as needed */
-  }
-  #showValue {
-    display: block; /* Makes the button take up the full width and start on a new line */
-    margin-top: 10px; /* Adds some spacing between the dropdown and the button */
-  }
-  #regexInput:invalid {
-    border: 2px solid red; /* Red border for invalid regex */
-}
+    <title>Dropdown Example</title>
+    <style>
+        #codeActions {
+            width: 600px;
+            /* Adjust width as needed */
+        }
 
-#regexInput:valid {
-    border: 2px solid green; /* Green border for valid regex */
-}
-#regexInput {
-    width: 400px;  /* Or whatever width suits you */
-    padding: 5px;
-    font-size: 16px;
-}
-#testString
-{
-    width: 500px;
-    padding: 5px;
-    font-size: 16px;    
-}
-#message { /* Styles for the message display */
-    margin-top: 10px;
-    margin-left: 10px; /* Add margin here */
-    font-weight: bold; /* Or other styling as desired */
-    color: green;     /* Example: green for success, red for error */
-    white-space: pre-wrap; /* Allow multi-line messages */
-}
-button {
-    height: 40px; /* Adjust height as desired */
-    background-color: orange;
-    color: white; /* Text color for contrast */
-    border: none;  /* Remove default button border */
-    padding: 8px 16px; /* Add some padding */
-    cursor: pointer;  /* Indicate it's clickable */
-    font-size: 16px; /* Adjust font size as needed */
-    margin-right: 10px; /* Add margin here */
-}
+        #showValue {
+            display: block;
+            /* Makes the button take up the full width and start on a new line */
+            margin-top: 10px;
+            /* Adds some spacing between the dropdown and the button */
+        }
 
-button:hover {
-    background-color: darkorange; /* Darker orange on hover */
-}
+        #regexInput:invalid {
+            border: 2px solid red;
+            /* Red border for invalid regex */
+        }
 
-button:active {
-    background-color: orangered; /* Even darker orange when clicked */
-}
+        #regexInput:valid {
+            border: 2px solid green;
+            /* Green border for valid regex */
+        }
 
-</style>
+        #regexInput {
+            width: 500px;
+            /* Or whatever width suits you */
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        #testString {
+            width: 500px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        #message {
+            /* Styles for the message display */
+            margin-top: 10px;
+            margin-left: 10px;
+            /* Add margin here */
+            font-weight: bold;
+            /* Or other styling as desired */
+            color: green;
+            /* Example: green for success, red for error */
+            white-space: pre-wrap;
+            /* Allow multi-line messages */
+        }
+
+        button {
+            height: 40px;
+            /* Adjust height as desired */
+            background-color: orange;
+            color: white;
+            /* Text color for contrast */
+            border: none;
+            /* Remove default button border */
+            padding: 8px 16px;
+            /* Add some padding */
+            cursor: pointer;
+            /* Indicate it's clickable */
+            font-size: 16px;
+            /* Adjust font size as needed */
+            margin-right: 10px;
+            /* Add margin here */
+        }
+
+        button:hover {
+            background-color: darkorange;
+            /* Darker orange on hover */
+        }
+
+        button:active {
+            background-color: orangered;
+            /* Even darker orange when clicked */
+        }
+    </style>
 </head>
+
 <body>
-<h1>CodeActions discoverer</h1>  <!-- The new heading -->
-<label for="codeActions">Choose an option:</label>
+    <h1>CodeActions discoverer</h1> <!-- The new heading -->
+    <label for="codeActions">Choose an option:</label>
 
-<select id="codeActions">
-  <option value="CodeActionTitle">CodeActionTitle</option>
-</select>
-<br>
-<br>
-<label for="execTimes">Number executions:</label>
-<select id="execTimes">
-  <option value="1">Once</option>
-  <option value="n">n Times</option>
-</select>
-<br>
-<br>
-<input type="text" id="regexInput" placeholder="Apply codeAction to regex matches" oninput="validateRegex(this)"> <br><br>
+    <select id="codeActions">
+        <option value="CodeActionTitle">CodeActionTitle</option>
+    </select>
+    <br>
+    <br>
+    <label for="execTimes">Number executions:</label>
+    <select id="execTimes">
+        <option value="1">Once</option>
+        <option value="n">n Times</option>
+    </select>
+    <br>
+    <br>
+    <input type="text" id="regexInput" placeholder="Enter a regex pattern to apply codeAction to text matches" oninput="validateRegex(this)">
+    <br>
+    <input type="text" id="testString" placeholder="Enter test string fro regex here and push button to test regex"><button onclick="testRegex()">Test Regex</button>
+    <br>
+    <label id="message"></label>
+    <button id="ExecCommand" onclick="ExecCommand()">Exec Command</button>
+    <br>
+    <br>
+    <script>
+        // In your existing <script> block, or in a new one
 
-<script>
-function validateRegex(input) {
-    try {
-        new RegExp(input.value);
-        input.setCustomValidity(''); // Reset validation if valid
-    } catch (error) {
-        input.setCustomValidity('Invalid regular expression'); // Set error message
-    }
-}
-</script>
-<label for="testString">Test String:</label><br>
-<input type="text" id="testString" placeholder="Enter test string here">
-<button onclick="testRegex()">Test Regex</button><label id="message"></label>
-<br>
-<br>
-<button id="ExecCommand" onclick="ExecCommand()">Exec Command</button>
-<br>
-<br>
-<script>
-function testRegex() {
-    const regex = document.getElementById("regexInput").value;
-    const testString = document.getElementById("testString").value; // Get value from input field
-
-    try {
-        const matches = testString.match(new RegExp(regex));
+        const execTimesSelect = document.getElementById("execTimes");
+        const regexInput = document.getElementById("regexInput");
+        const testStringInput = document.getElementById("testString");
+        const testRegexButton = document.querySelector("button[onclick='testRegex()']"); // Select button by its onclick
         const messageLabel = document.getElementById("message");
 
-        if (matches) {
-            messageLabel.textContent = "Matches: " + matches.join(", ");
-            messageLabel.style.color = "green"; // Example: Green for success
-        } else {
-            messageLabel.textContent = "No matches found.";
-            // Optionally style for "no match" (e.g., different color)
+
+        // Initial state: hide the regex input elements
+        regexInput.style.display = "none";
+        testStringInput.style.display = "none";
+        testRegexButton.style.display = "none";
+        messageLabel.style.display = "none";
+
+
+        execTimesSelect.addEventListener("change", function () {
+            if (this.value === "n") {
+                regexInput.style.display = "block";
+                testStringInput.style.display = "block";
+                testRegexButton.style.display = "block";
+                messageLabel.style.display = "block";
+
+            } else {
+                regexInput.style.display = "none";
+                testStringInput.style.display = "none";
+                testRegexButton.style.display = "none";
+                messageLabel.style.display = "none";
+            }
+        });
+    </script>
+    <script>
+        function testRegex() {
+            const regex = document.getElementById("regexInput").value;
+            const testString = document.getElementById("testString").value; // Get value from input field
+
+            try {
+                const matches = testString.match(new RegExp(regex));
+                const messageLabel = document.getElementById("message");
+
+                if (matches) {
+                    messageLabel.textContent = "Matches: " + matches.join(", ");
+                    messageLabel.style.color = "green"; // Example: Green for success
+                } else {
+                    messageLabel.textContent = "No matches found.";
+                    // Optionally style for "no match" (e.g., different color)
+                }
+            } catch (error) {
+                document.getElementById("message").textContent = "Invalid regular expression: " + error.message;
+                document.getElementById("message").style.color = "red"; // Example: Red for error
+            }
         }
-    } catch (error) {
-        document.getElementById("message").textContent = "Invalid regular expression: " + error.message;
-        document.getElementById("message").style.color = "red"; // Example: Red for error
-    }
-}
-</script>
-<script>
-  // ... (JavaScript remains unchanged)
-  
-
-  function ExecCommand() {
-    const codeAction = document.getElementById("codeActions").value;
-    const execTimes = document.getElementById("execTimes").value;
-    const regex = document.getElementById("regexInput").value;
+    </script>
+    <script>
+        // ... (JavaScript remains unchanged)
 
 
-    const vscode = acquireVsCodeApi();
-    vscode.postMessage({
-        command: codeAction,
-        times: execTimes,
-        regex: regex, // Include the regex in the message
-    });
-}
-</script>
+        function ExecCommand() {
+            const codeAction = document.getElementById("codeActions").value;
+            const execTimes = document.getElementById("execTimes").value;
+            const regex = document.getElementById("regexInput").value;
 
+
+            const vscode = acquireVsCodeApi();
+            vscode.postMessage({
+                command: codeAction,
+                times: execTimes,
+                regex: regex, // Include the regex in the message
+            });
+        }
+    </script>
+    <script>
+        function validateRegex(input) {
+            try {
+                new RegExp(input.value);
+                input.setCustomValidity(''); // Reset validation if valid
+            } catch (error) {
+                input.setCustomValidity('Invalid regular expression'); // Set error message
+            }
+        }
+    </script>
 </body>
+
 </html>
