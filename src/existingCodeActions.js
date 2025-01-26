@@ -1,14 +1,17 @@
 const vscode = require('vscode');
 let ExecNumber = 0;
 let HTMLContent = '';
+let currDocument = {};
+let currSelectionRange = {};
 module.exports = {
     getFixToClipboard: async function()
+    //Not using now
     {
         await getFixToClipboard();
     },
-    ShowStepHTMLView: async function(context)
+    ShowCodeActionsHTMLView: async function(context)
     {
-        await ShowStepHTMLView(context);
+        await ShowCodeActionsHTMLView(context);
     }
 }
 async function getCurrCodeActionsSelection(document, codeActions, SelectionRange) {    
@@ -48,46 +51,14 @@ function pushCodeActionsIfNotExists(codeActionStart, codeActions) {
     }
     codeActions.push(codeActionStart);
 }
-async function getFixToClipboard() {
-    let fixWithCodeAction =
-    {
-        "name": "",
-        "searchExpresion": "",
-        "codeAction": await pickCodeAction()
-    }
-    //vscode.env.clipboard.writeText(JSON.stringify(fixWithCodeAction));
+async function getCommandCodeActionFromTitle(codeActionTitle = '',  documentUri,selectionRange) {
 
-}
-async function pickCodeAction() {
-    const document = vscode.window.activeTextEditor.document;
-    const selectionRange = vscode.window.activeTextEditor.selection;    
+    if (!documentUri) 
+    {
+        documentUri = vscode.window.activeTextEditor.document.uri;
+    }
+    const document = await vscode.workspace.openTextDocument(documentUri);
     let currCodeActions = [];
-    await getCurrCodeActionsSelection(document,currCodeActions,selectionRange);
-    if (!currCodeActions) {
-        return {}
-    }
-    if (currCodeActions.length == 0) {
-        return {}
-    }
-    let codeActionsTitles = [];
-    for (let index = 0; index < currCodeActions.length; index++) {
-        codeActionsTitles.push(currCodeActions[index].title);
-    }
-    const codeActionTitle = await vscode.window.showQuickPick(codeActionsTitles,
-        { placeHolder: 'Choose CodeActions to execute.' });
-    if (codeActionTitle == '') {
-        return {};
-    }
-    const codeAction = currCodeActions.filter(x => x.title == codeActionTitle);        
-    console.log(codeAction[0]);
-    console.log(getElementFromJsonWithLevel(JSON.parse(JSON.stringify(codeAction[0])),'range'));
-    console.log(getElementFromJsonWithLevel(JSON.parse(JSON.stringify(codeAction[0])),'line'));    
-    return codeAction[0].title;
-}
-async function getCommandCodeActionFromTitle(codeActionTitle = '', diagnosticPosition, documentUri) {
-    const document = vscode.window.activeTextEditor.document;
-    let currCodeActions = [];
-    const selectionRange = vscode.window.activeTextEditor.selection;    
     await getCurrCodeActionsSelection(document,currCodeActions,selectionRange);
     if (!currCodeActions) {
         return {}
@@ -125,13 +96,151 @@ async function applyEditFromCodeActions(codeActions) {
     await vscode.workspace.applyEdit(codeActions[0].edit);
 }
 
-async function applyCodeAction(diagnostic, fix, document) {    
-    const codeAction = await getCommandCodeActionFromTitle(fix.codeAction, diagnostic.start, document.uri);
-    if (!codeAction) {
-        return false;
+  async function ShowCodeActionsHTMLView(context) {
+    currDocument = vscode.window.activeTextEditor.document;
+    currSelectionRange = vscode.window.activeTextEditor.selection;        
+    HTMLContent = await GetHTMLContent(context);
+    const WebviewSteps = vscode.window.createWebviewPanel(
+      'Code Actions discoverer',
+      'Code Actions discoverer',
+      vscode.ViewColumn.One,
+      {
+        enableScripts: true
+      }
+    );    
+    
+    WebviewSteps.webview.onDidReceiveMessage(
+      async function (message) {
+        ExecNumber = ExecNumber + 1;        
+        let applyCounter = 0;
+        if (message.times == '1') {
+            const codeAction = await getCommandCodeActionFromTitle(message.command, currDocument.uri,currSelectionRange);
+            if (codeAction) {
+                await execCodeAction([codeAction]);                  
+                applyCounter = 1;
+            }            
+        }
+        else
+        {
+            if (message.times == 'n') {                
+                applyCounter = await applyCodeActionWithFilter(message.command,message.regex,currDocument);
+            }
+        }
+        WebviewSteps.webview.html = HTMLContent + ExecNumber.toString() + '.' + message.command + '.Aplications: ' + applyCounter.toString();
+    },
+      undefined,
+      context.subscriptions
+    );    
+    ExecNumber = 0;
+    WebviewSteps.webview.html = HTMLContent;
+  }
+  async function GetHTMLContent(context) {
+    const path = require('path');
+    const fs = require('fs');
+    const filePath = context.asAbsolutePath(path.join('src', 'html', 'codeActions.html'));
+    let FinalTable = fs.readFileSync(filePath, 'utf8');
+    FinalTable = FinalTable.replace('<option value="CodeActionTitle">CodeActionTitle</option>', await getCodeactionTitlesAsHtmlOptions());
+    return FinalTable;
+  }
+  async function getCodeactionTitlesAsHtmlOptions()
+  {    
+    let OptionsSelection = ''
+    let currCodeActions = [];    
+    await getCurrCodeActionsSelection(currDocument,currCodeActions,currSelectionRange);
+    if (!currCodeActions) {
+        return ''
     }
-    await execCodeAction(codeAction);
-    return true;
+    if (currCodeActions.length == 0) {
+        return ''
+    }
+    for (let index = 0; index < currCodeActions.length; index++) {
+        OptionsSelection = OptionsSelection + '<option value="' + currCodeActions[index].title + '">' + currCodeActions[index].title + '</option>';
+    }
+    return OptionsSelection;
+  }
+  function getAllWordBeginnings(text) {
+    const wordBeginnings = [];
+    const regex = /\b\w/g; // Matches the beginning of each word
+    let match;
+  
+    while ((match = regex.exec(text))) {
+      wordBeginnings.push(match.index);
+    }
+  
+    return wordBeginnings;
+  }
+  async function applyCodeActionWithFilter(codeActionTitle = '', searchExpresion = '',document) {
+    const regex = new RegExp(searchExpresion, 'mgi');
+    let applyCounter = 0;
+    for (let currline = 0; currline < document.lineCount; currline++) {
+        const patternPosition = document.lineAt(currline).text.search(regex)
+        if (document.lineAt(currline).text.search(regex) >= 0) {
+            let codeActions = []            
+            await pushActionInRangeSubstitute(currline, document, codeActions, patternPosition, patternPosition,codeActionTitle); 
+            const existingCodeActions = codeActions.filter(x => x.title == codeActionTitle);            
+            if (existingCodeActions) {
+                if (existingCodeActions.length > 0) {                    
+                    await execCodeAction(existingCodeActions);
+                    applyCounter = applyCounter + 1;
+                }
+            }
+        }
+    }
+    return applyCounter;
+}
+async function pushActionInRangeSubstitute(currline, document, codeActions, firstPos, finalPos,codeActionTitle = '') {
+    const range = new vscode.Range(new vscode.Position(currline, firstPos), new vscode.Position(currline, finalPos));
+    const definition = await vscode.commands.executeCommand("vscode.executeCodeActionProvider", document.uri, range);    
+    for (let index = 0; index < definition.length; index++) {
+        const CodeAction = definition[index];
+        if (codeActionTitle == CodeAction.title)
+        {
+            pushCodeActionSubstitute(CodeAction, codeActions);
+        }
+    }
+}
+function pushCodeActionSubstitute(newCodeAction, codeActions) {
+    let existingAction = -1;
+    codeActions.push(newCodeAction);
+}
+  ////////////////////////////////////////////////
+  //Not using now
+  //////////////////////////////////////////////
+  async function getFixToClipboard() {
+    let fixWithCodeAction =
+    {
+        "name": "",
+        "searchExpresion": "",
+        "codeAction": await pickCodeAction()
+    }
+    vscode.env.clipboard.writeText(JSON.stringify(fixWithCodeAction));
+
+}
+async function pickCodeAction() {
+    const document = vscode.window.activeTextEditor.document;
+    const selectionRange = vscode.window.activeTextEditor.selection;    
+    let currCodeActions = [];
+    await getCurrCodeActionsSelection(document,currCodeActions,selectionRange);
+    if (!currCodeActions) {
+        return {}
+    }
+    if (currCodeActions.length == 0) {
+        return {}
+    }
+    let codeActionsTitles = [];
+    for (let index = 0; index < currCodeActions.length; index++) {
+        codeActionsTitles.push(currCodeActions[index].title);
+    }
+    const codeActionTitle = await vscode.window.showQuickPick(codeActionsTitles,
+        { placeHolder: 'Choose CodeActions to execute.' });
+    if (codeActionTitle == '') {
+        return {};
+    }
+    const codeAction = currCodeActions.filter(x => x.title == codeActionTitle);        
+    console.log(codeAction[0]);
+    console.log(getElementFromJsonWithLevel(JSON.parse(JSON.stringify(codeAction[0])),'range'));
+    console.log(getElementFromJsonWithLevel(JSON.parse(JSON.stringify(codeAction[0])),'line'));    
+    return codeAction[0].title;
 }
 function getElementFromJson(jsonObj, elementName) {    
     for (let key in jsonObj) {
@@ -176,93 +285,11 @@ function getElementFromJsonWithLevel(jsonObj, elementName) {
 
     return searchElement(jsonObj, elementName, level +1);
 }
-function getAllWordBeginnings(text) {
-    const wordBeginnings = [];
-    const regex = /\b\w/g; // Matches the beginning of each word
-    let match;
-  
-    while ((match = regex.exec(text))) {
-      wordBeginnings.push(match.index);
+  async function applyCodeAction(diagnostic, fix, document) {    
+    const codeAction = await getCommandCodeActionFromTitle(fix.codeAction, document.uri);
+    if (!codeAction) {
+        return false;
     }
-  
-    return wordBeginnings;
-  }
-  async function ShowStepHTMLView(context) {
-    HTMLContent = await GetHTMLContent(context);
-    const WebviewSteps = vscode.window.createWebviewPanel(
-      'Code Actions discoverer',
-      'Code Actions discoverer',
-      vscode.ViewColumn.One,
-      {
-        enableScripts: true
-      }
-    );    
-    
-    WebviewSteps.webview.onDidReceiveMessage(
-      async function (message) {
-        console.log(message);
-        ExecNumber = ExecNumber + 1;
-        WebviewSteps.webview.html = HTMLContent + ExecNumber.toString();
-        /*const IsSkipMessageCommand = message.command.indexOf('Skip') > -1;
-        const IsNextMessageCommand = message.command.indexOf('Next') > -1;
-        const IsPickScriptStepToExecuteMessageCommand = message.command.indexOf('PickScriptStepToExecute') > -1;
-        CurrentStep = CurrentStep + 1;
-        if (CurrentStep >= scriptsSteps.vsCodeSteps.length) {
-          WebviewSteps.dispose();
-          return;
-        }
-        if (IsSkipMessageCommand) {
-          const ConfirmationSkipMessage = 'Do you want to skip step"' + GetCurrentDescription(CurrentStep) + '"?';
-          //if (vscode.window.showInformationMessage(ConfirmationSkipMessage,{modal:true}, 'Yes', 'No') == 'No') {
-          if (GetConfirmRequired()) {
-            vscode.window.showInformationMessage(ConfirmationSkipMessage, { modal: true }, 'Yes', 'No').then(
-              (resolve) => {
-                if (resolve == 'No') {
-                  CurrentStep = CurrentStep - 1;
-                }
-                WebviewSteps.webview.html = GetHTMLContent(GetCurrentDescription(CurrentStep), GetCurrentDescription(CurrentStep + 1), context);
-              });
-          }
-        } else if (IsNextMessageCommand) {
-          ExecuteCurrentStep();
-        }
-        else if (IsPickScriptStepToExecuteMessageCommand) {
-          //PickScriptStepToExecute();
-          //CurrentStep = CurrentStep - 1;
-          //WebviewSteps.dispose();
-          CurrentStep = await PickStepNumber() - 1;
-        }
-        WebviewSteps.webview.html = GetHTMLContent(GetCurrentDescription(CurrentStep), GetCurrentDescription(CurrentStep + 1), context);
-      */},
-      undefined,
-      context.subscriptions
-    );    
-    ExecNumber = 0;
-    WebviewSteps.webview.html = HTMLContent;
-  }
-  async function GetHTMLContent(context) {
-    const path = require('path');
-    const fs = require('fs');
-    const filePath = context.asAbsolutePath(path.join('src', 'html', 'codeActions.html'));
-    let FinalTable = fs.readFileSync(filePath, 'utf8');
-    FinalTable = FinalTable.replace('<option value="CodeActionTitle">CodeActionTitle</option>', await getCodeactionTitlesAsHtmlOptions());
-    return FinalTable;
-  }
-  async function getCodeactionTitlesAsHtmlOptions()
-  {
-    const document = vscode.window.activeTextEditor.document;
-    const selectionRange = vscode.window.activeTextEditor.selection;    
-    let OptionsSelection = ''
-    let currCodeActions = [];    
-    await getCurrCodeActionsSelection(document,currCodeActions,selectionRange);
-    if (!currCodeActions) {
-        return ''
-    }
-    if (currCodeActions.length == 0) {
-        return ''
-    }
-    for (let index = 0; index < currCodeActions.length; index++) {
-        OptionsSelection = OptionsSelection + '<option value="' + currCodeActions[index].title + '">' + currCodeActions[index].title + '</option>';
-    }
-    return OptionsSelection;
-  }
+    await execCodeAction(codeAction);
+    return true;
+}

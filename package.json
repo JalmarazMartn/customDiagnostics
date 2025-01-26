@@ -58,8 +58,8 @@
 				"title": "JAM Custom Rules. Build a fix from current diagnostic and copy it in clipboard"
 			},
 			{
-				"command": "JAMCustomRuls.getCodeActionFixToClipboard",
-				"title": "JAM Custom Rules. Build a fix from code actions in selection choose one and copy it in clipboard"
+				"command": "JAMCustomRuls.showCodeActionsDiscoverer",
+				"title": "JAM Code Actions Discoverer"
 			}
 
 		],
@@ -120,10 +120,14 @@
 				},
 				{
 					"command": "JAMCustomRuls.getFixToClipboard",
-					"when": "editorIsOpen && editorIsOpen && customdiagnostics.enableFixCommands",
+					"when": "editorIsOpen && editor.hasSelection && config.JAMDiagnostics.EnableHelpContextMenus",
+					"group": "1_modification"
+				},
+				{
+					"command": "JAMCustomRuls.showCodeActionsDiscoverer",
+					"when": "editorIsOpen && editor.hasSelection && config.JAMDiagnostics.EnableHelpContextMenus",
 					"group": "1_modification"
 				}
-
 			],
 			"commandPalette": [
 				{
@@ -148,7 +152,7 @@
 				},
 				{
 					"command": "JAMCustomRuls.getFixToClipboard",
-					"when": "editorIsOpen && editorIsOpen && customdiagnostics.enableFixCommands"
+					"when": "editorIsOpen && editor.hasSelection && customdiagnostics.enableFixCommands"
 				}
 			]
 		}

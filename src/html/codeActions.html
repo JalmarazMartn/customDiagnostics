@@ -79,6 +79,19 @@
             background-color: orangered;
             /* Even darker orange when clicked */
         }
+
+        /* ... other styles ... */
+        details>* {
+            /* Target all direct children of the <details> element */
+            margin-left: 20px;
+            /* Indent by 20 pixels (adjust as needed) */
+        }
+
+        details summary {
+            /* Specifically target the <summary> */
+            margin-left: 0;
+            /* Reset margin for the summary */
+        }
     </style>
 </head>
 
@@ -98,11 +111,24 @@
     </select>
     <br>
     <br>
-    <input type="text" id="regexInput" placeholder="Enter a regex pattern to apply codeAction to text matches" oninput="validateRegex(this)">
+    <div id="regexContainer" style="display: none;">
+        <input type="text" id="regexInput" placeholder="Enter a regex pattern to apply codeAction to text matches"
+            oninput="validateRegex(this)">
+            <br>
+            <br>
+        <details>
+            <summary>Test Regex</summary>
+            <br>
+            <input type="text" id="testString"
+                placeholder="Enter test string for regex here and push button to test regex">
+            <button onclick="testRegex()">Test Regex</button>
+            <br>
+            <br>
+            <label id="message"></label>
+            <br>
+        </details>
+    </div>
     <br>
-    <input type="text" id="testString" placeholder="Enter test string fro regex here and push button to test regex"><button onclick="testRegex()">Test Regex</button>
-    <br>
-    <label id="message"></label>
     <button id="ExecCommand" onclick="ExecCommand()">Exec Command</button>
     <br>
     <br>
@@ -110,31 +136,17 @@
         // In your existing <script> block, or in a new one
 
         const execTimesSelect = document.getElementById("execTimes");
-        const regexInput = document.getElementById("regexInput");
-        const testStringInput = document.getElementById("testString");
-        const testRegexButton = document.querySelector("button[onclick='testRegex()']"); // Select button by its onclick
-        const messageLabel = document.getElementById("message");
-
+        const regexContainer = document.getElementById("regexContainer");
 
         // Initial state: hide the regex input elements
-        regexInput.style.display = "none";
-        testStringInput.style.display = "none";
-        testRegexButton.style.display = "none";
-        messageLabel.style.display = "none";
+        regexContainer.style.display = "none";
 
 
         execTimesSelect.addEventListener("change", function () {
             if (this.value === "n") {
-                regexInput.style.display = "block";
-                testStringInput.style.display = "block";
-                testRegexButton.style.display = "block";
-                messageLabel.style.display = "block";
-
+                regexContainer.style.display = "block";
             } else {
-                regexInput.style.display = "none";
-                testStringInput.style.display = "none";
-                testRegexButton.style.display = "none";
-                messageLabel.style.display = "none";
+                regexContainer.style.display = "none";
             }
         });
     </script>
