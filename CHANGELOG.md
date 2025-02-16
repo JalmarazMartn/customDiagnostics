@@ -232,4 +232,4 @@ regexOptions property in replaces, diagnostics adn fixes.
 
 ### 0.0.60
 
-New tests and fixes for diagnostics.
+New tests and fixes for diagnostics. CodeActions discoverer.

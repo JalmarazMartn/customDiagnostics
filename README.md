@@ -230,6 +230,19 @@ It was hard to write new regular expressions and write them escaped in a JSON va
 
 ![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/regexHelp.gif?raw=true)
 
+### CodeActions dicoverer
+
+With action "JAM CodeActions Discoverer" command help you to discover all code actions available in the current selection document. You can see all code actions available in the current document, and apply them pusshing the button "Execute":
+
+![Replace image](https://github.com/JalmarazMartn/customDiagnostics/blob/main/images/CodeActiosnDiscoverer.gif.gif?raw=true)
+
+Steps:
+
+- Select a text in the editor.
+- Execute command "JAM CodeActions Discoverer".
+- Then you will see all available code actions in the current selection in a desplegable list.
+- Choose the code action you want to apply. You can apply once for all document or workspace actions, or apply multiple times in the document, in occurences of the selection that contains the code action and match with the search expression. Also you can test the regex with an example.
+- Push the button "Execute" to apply the code action.
 
 ## Requirements
 
