@@ -233,3 +233,7 @@ regexOptions property in replaces, diagnostics adn fixes.
 ### 0.0.60
 
 New tests and fixes for diagnostics. CodeActions discoverer.
+
+### 0.0.61
+
+Get more Codeactions in discoverer changing search method.

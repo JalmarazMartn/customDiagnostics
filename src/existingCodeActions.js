@@ -20,21 +20,20 @@ async function getCurrCodeActionsSelection(document, codeActions, SelectionRange
         location: vscode.ProgressLocation.Notification,
         title: 'Find CodeActions: ',
     }, async (progress) =>  {    
+    await pushActionInRangeIfNotExists(SelectionRange.start.line,SelectionRange.end.line,document,codeActions,SelectionRange.start.character,SelectionRange.end.character);
     for (let currLine = SelectionRange.start.line; currLine <= SelectionRange.end.line; currLine++){
         progress.report({ message: 'line ' + currLine.toString() + ' ' +  document.lineAt(currLine).text});
-        await pushActionInRangeIfNotExists(currLine,document,codeActions,0,document.lineAt(currLine).firstNonWhitespaceCharacterIndex);
+        await pushActionInRangeIfNotExists(currLine,currLine,document,codeActions,0,document.lineAt(currLine).firstNonWhitespaceCharacterIndex);
         const wordBeginnings = getAllWordBeginnings(document.lineAt(currLine).text);
         for (let index = 0; index < wordBeginnings.length; index++) {
             const wordBeginning = wordBeginnings[index];
-            await pushActionInRangeIfNotExists(currLine,document,codeActions,wordBeginning,wordBeginning);
-        }
-        
-        //await pushActionInRangeIfNotExists(currLine,document,codeActions,document.lineAt(currLine).firstNonWhitespaceCharacterIndex,document.lineAt(currLine).text.length);
+            await pushActionInRangeIfNotExists(currLine,currLine,document,codeActions,wordBeginning,wordBeginning);
+        }        
     }
 })
 }
-async function pushActionInRangeIfNotExists(currline, document, codeActions, firstPos, finalPos) {
-    const range = new vscode.Range(new vscode.Position(currline, firstPos), new vscode.Position(currline, finalPos));
+async function pushActionInRangeIfNotExists(fromLine,toLine, document, codeActions, firstPos, finalPos) {
+    const range = new vscode.Range(new vscode.Position(fromLine, firstPos), new vscode.Position(toLine, finalPos));
     const definition = await vscode.commands.executeCommand("vscode.executeCodeActionProvider", document.uri, range);
     for (let index = 0; index < definition.length; index++) {
         const CodeAction = definition[index];
