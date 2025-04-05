@@ -5,7 +5,7 @@
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
 	"repository": "https://github.com/JalmarazMartn/customDiagnostics",
-	"version": "0.0.61",
+	"version": "0.0.62",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
@@ -136,7 +136,7 @@
 				},
 				{
 					"command": "JAMCustomRuls.pickAndApplyAfixSetNameCurrDoc",
-					"when": "editorIsOpen && customdiagnostics.enableFixCommands"
+					"when": "editorIsOpen"
 				},
 				{
 					"command": "JAMCustomRuls.replaceRulesInCurrDocSelection",
@@ -152,7 +152,7 @@
 				},
 				{
 					"command": "JAMCustomRuls.getFixToClipboard",
-					"when": "editorIsOpen && editor.hasSelection && customdiagnostics.enableFixCommands"
+					"when": "editorIsOpen && editor.hasSelection"
 				}
 			]
 		}

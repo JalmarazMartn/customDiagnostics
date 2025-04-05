@@ -237,3 +237,7 @@ New tests and fixes for diagnostics. CodeActions discoverer.
 ### 0.0.61
 
 Get more Codeactions in discoverer changing search method.
+
+### 0.0.62
+
+Show commad "JAM Custom Rules. Pick a ruleset and apply replacements in current document" in command palette everytime you are in a document.
