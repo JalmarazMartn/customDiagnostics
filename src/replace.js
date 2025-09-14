@@ -20,6 +20,9 @@ module.exports = {
     },
     placeLastSelectionInTop: function (ruleSetNames, lastPickedItem) {
         placeLastSelectionInTop(ruleSetNames, lastPickedItem);
+    },
+    replaceRuleInDocument: async function (replaceRule, document, ruleSetName) {
+        await replaceRuleInDocument(replaceRule, document, ruleSetName);
     }
 }
 
@@ -37,7 +40,11 @@ async function replaceRulesInAllDocuments(rules, fileExtension, ruleSetName = ''
         location: vscode.ProgressLocation.Notification,
         title: 'Replacing rules in documents',
     }, async (progress) => {
-        const documents = await vscode.workspace.findFiles('**/*.' + fileExtension);
+        let fileExtPattern = '**/*.' + fileExtension;
+        if (fileExtension === '') {
+            fileExtPattern = '**/*.*';
+        }
+        const documents = await vscode.workspace.findFiles(fileExtPattern);
         for (let j = 0; j < documents.length; j++) {
             try {
                 let document = await vscode.workspace.openTextDocument(documents[j]);

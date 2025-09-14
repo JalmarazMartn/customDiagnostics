@@ -241,3 +241,7 @@ Get more Codeactions in discoverer changing search method.
 ### 0.0.62
 
 Show commad "JAM Custom Rules. Pick a ruleset and apply replacements in current document" in command palette everytime you are in a document.
+
+### 0.0.63
+
+filextension in replace rules can be empty to apply in all file extensions.

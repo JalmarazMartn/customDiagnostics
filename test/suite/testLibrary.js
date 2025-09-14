@@ -11,6 +11,10 @@ module.exports = {
     applyFixToDiagnostic: async function(doc,diagnostic,searchExpresion,replaceExpression)
     {
         await applyFixToDiagnostic(doc,diagnostic,searchExpresion,replaceExpression)
+    },
+    applyReplaceInDoc: async function(doc,searchExpresion,replaceExpression)
+    {
+        await applyReplaceInDoc(doc,searchExpresion,replaceExpression)
     }
 }
 //general
@@ -45,6 +49,14 @@ const fix = {"name":searchExpresion,
 //            fix., fix.jsModuleFilePath, fix.jsFunctionName
 const applyFixes = require('../../src/applyFixes.js');
 await applyFixes.applyFixToDiagnostic(diagnostic,fix,doc);
+}
+async function applyReplaceInDoc(doc,searchExpresion,replaceExpression)
+{
+    const replace = {"name":searchExpresion,
+    "searchExpresion":searchExpresion,
+    "replaceExpression":replaceExpression}
+    const replaceModule = require('../../src/replace.js');
+    await replaceModule.replaceRuleInDocument(replace,doc,'TestRuleSet');
 }
 async function getContextForTest()
 {

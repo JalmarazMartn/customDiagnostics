@@ -213,10 +213,10 @@ You also can define a Javascript function to do more complex and customized diag
             "severity": "error",
             "language": "xml",
             "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\FileExamples\\ComplexReplaces.js",
-            "jsFunctionName": "existsFieldDeclaration"
+            "jsFunctionName": "notExistsFieldDeclaration"
         }
 
-Js module must include a function with this signature: `function existsFieldDeclaration(fieldLine='')` and return true if diagnostic matches. You can see example in this repo file: https://github.com/JalmarazMartn/customDiagnostics/blob/main/FileExamples/ComplexReplaces.js 
+Js module must include a function with this signature: `function notExistsFieldDeclaration(fieldLine='')` and return true if diagnostic matches. You can see example in this repo file: https://github.com/JalmarazMartn/customDiagnostics/blob/main/FileExamples/ComplexReplaces.js 
 
 #### Steps to set the diagnostics
 - Open json settings.

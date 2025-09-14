@@ -55,5 +55,11 @@ suite('Extension Test Suite', () => {
 		assert.strictEqual(1, diagnostics.length);
 		assert.strictEqual(diagnostic.code,diagnosticCode);		
 	})
-
+	test('Apply replace to document', async () => {
+		let doc = await vscode.workspace.openTextDocument();
+		await testLibrary.addTextToDocument(doc, consoleLogText, 0, 0);
+		assert.strictEqual(doc.lineAt(0).text,consoleLogText);
+		await testLibrary.applyReplaceInDoc(doc,consoleLogText,xonsoleLogText);
+		assert.strictEqual(doc.lineAt(0).text,xonsoleLogText);
+	})
 });

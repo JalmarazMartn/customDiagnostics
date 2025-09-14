@@ -87,7 +87,7 @@
         },
         {
             "name": "Acentos AL y caracteres extraños",
-            "fileExtension": "al",
+            "fileExtension": "",
             "rules": [
                 "Acento o",
                 "Acento a",

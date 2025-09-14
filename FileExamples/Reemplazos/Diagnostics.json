@@ -89,7 +89,7 @@
             "severity": "error",
             "language": "xml",
             "jsModuleFilePath": "C:\\Users\\Jesus\\Documents\\Proyecto js\\customDiagnostics\\FileExamples\\ComplexReplaces.js",
-            "jsFunctionName": "existsFieldDeclaration"
+            "jsFunctionName": "notExistsFieldDeclaration"
         }
     ],
     "dianosticsets": [
