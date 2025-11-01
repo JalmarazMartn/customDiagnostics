@@ -8,6 +8,10 @@ const vscode = require('vscode');
  */
 function activate(context) {
 
+	// Register ReplaceRegexTool (Rules and Diagnostics Tool)
+	const ReplaceRegexTool  = require('./src/ReplaceRegexTool.js');
+	ReplaceRegexTool.registerRulesAndDiagnostics(context);
+
 
 	const customDiagnostics = vscode.languages.createDiagnosticCollection("customDiagnostics");
 	context.subscriptions.push(customDiagnostics);

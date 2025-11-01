@@ -244,6 +244,10 @@ Steps:
 - Choose the code action you want to apply. You can apply once for all document or workspace actions, or apply multiple times in the document, in occurences of the selection that contains the code action and match with the search expression. Also you can test the regex with an example.
 - Push the button "Execute" to apply the code action.
 
+## LLMTools
+
+This extension includes LLMTools features to help you to discover replacement rules.
+
 ## Requirements
 
 vscode

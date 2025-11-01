@@ -245,3 +245,7 @@ Show commad "JAM Custom Rules. Pick a ruleset and apply replacements in current 
 ### 0.0.63
 
 filextension in replace rules can be empty to apply in all file extensions.
+
+### 0.0.64
+
+LLMTools integration to help discover replacement rules. See README.md for more details.

@@ -1,3 +1,4 @@
+const { get } = require('request');
 const vscode = require('vscode');
 let ExecNumber = 0;
 let HTMLContent = '';
@@ -12,7 +13,18 @@ module.exports = {
     ShowCodeActionsHTMLView: async function(context)
     {
         await ShowCodeActionsHTMLView(context);
+    },
+    getCurrSelectionCodeActions: async function()
+    {
+        return await getCurrSelectionCodeActions();
     }
+}
+async function getCurrSelectionCodeActions( ) {    
+    const document = vscode.window.activeTextEditor.document;
+    const selectionRange = vscode.window.activeTextEditor.selection;
+    let codeActions = [];
+    getCurrCodeActionsSelection(document,codeActions,selectionRange);
+    return codeActions;
 }
 async function getCurrCodeActionsSelection(document, codeActions, SelectionRange) {    
     await vscode.window.withProgress({

@@ -1,29 +1,55 @@
 const vscode = require('vscode');
+//Make Access to CodeActions  and Apply the codeaction
 
-class ReplaceRegexTool {
+class JAMReplaceAndDiagnostics {
     async invoke(options, _token) {
-        const text = await vscode.env.clipboard.readText();
-        return new vscode.LanguageModelToolResult([
-            new vscode.LanguageModelTextPart(`El contenido actual del portapapeles es:\n${text}`)
-        ]);
+        const params = options.input;
+        switch (params.operation) {            
+            case 'getReplaceRules': {
+                const getRules = require('./getRules.js');
+                const rules = getRules.getRules();
+                let ToolResult = [];
+                for (let i = 0; i < rules.length; i++) {
+                    ToolResult.push(new vscode.LanguageModelTextPart(JSON.stringify(rules[i])));
+                }
+                return new vscode.LanguageModelToolResult(ToolResult);                
+            }
+            /*case 'getDiagnostics': {
+                const getDiagnostics = require('./getRules.js');
+                const diagnostics = await getDiagnostics.getDefaultDiagnostics();
+                let ToolResult = [];
+                for (let i = 0; i < diagnostics.length; i++) {
+                    ToolResult.push(new vscode.LanguageModelTextPart(JSON.stringify(diagnostics[i].toString())));
+                }
+                return new vscode.LanguageModelToolResult(ToolResult);                
+            }*/
+            /*case 'getCodeActionsFromSelection': {
+                const getCodeActions = require('./existingCodeActions.js');
+                const codeActions = await getCodeActions.getCurrSelectionCodeActions();
+                let ToolResult = [];
+                for (let i = 0; i < codeActions.length; i++) {
+                    ToolResult.push(new vscode.LanguageModelTextPart(JSON.stringify(codeActions[i])));
+                }
+                return new vscode.LanguageModelToolResult(ToolResult);                
+            }*/
+        }
     }
-
     async prepareInvocation(options, _token) {
         return {
-            invocationMessage: 'Search replace rule ocurrences in document',
+            invocationMessage: 'Access to JAM Replace and Diagnostics Tool',
             confirmationMessages: {
-                title: 'Search replace rule ocurrences in document',
+                title: 'Get CodeActions, Rules, diagnostics and fixes',
                 message: new vscode.MarkdownString('Do you want to search replace rule ocurrences in document?')
             }
         };
     }
 }
-function registerReplaceRegexTool(context) {
+function registerRulesAndDiagnostics(context) {
     context.subscriptions.push(
-        vscode.lm.registerTool('regex-replace-rule', new ReplaceRegexTool())
+        vscode.lm.registerTool('replaces-and-diagnostics', new JAMReplaceAndDiagnostics())
     );
 }
 
 module.exports = {
-    registerReplaceRegexTool
+    registerRulesAndDiagnostics: registerRulesAndDiagnostics
 };

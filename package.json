@@ -5,7 +5,7 @@
 	"publisher": "JessAlmarazMartin",
 	"icon": "images/FindAndReplace.png",
 	"repository": "https://github.com/JalmarazMartn/customDiagnostics",
-	"version": "0.0.63",
+	"version": "0.0.64",
 	"engines": {
 		"vscode": "^1.98.0"
 	},
@@ -23,7 +23,33 @@
 		"onCommand:JAMCustomRuls.pickAndApllyAfixSetNameCurrDoc"
 	],
 	"main": "./extension.js",
-	"contributes": {
+		"contributes": {
+        "languageModelTools": [
+				{
+					"name": "replaces-and-diagnostics",
+					"tags": [
+						"replace",
+						"rules",
+						"bulk replace"
+					],
+					"toolReferenceName": "replaces-and-diagnostics",
+					"displayName": "JAM Replace Tool",
+					"modelDescription": "Configure and run custom replace rules. Provides access to user-defined replace rules.",
+					"canBeReferencedInPrompt": true,
+					"icon": "$(tools)",
+					"inputSchema": {
+						"type": "object",
+						"properties": {
+							"operation": {
+								"type": "string",
+								"enum": ["getReplaceRules"],
+								"description": "Operation to perform: 'getReplaceRules' to list available replace rules wit structure name+searchExpresion+replaceExpression. searchExpresion = regex of expresion to find. replaceExpression string to substitute the searchExpresion."
+							}
+						},
+						"required": ["operation"]
+					}
+				}
+			],
 		"commands": [
 			{
 				"command": "JAMCustomRuls.replaceAllRulesInAllDocuments",
