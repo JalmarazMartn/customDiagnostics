@@ -249,3 +249,7 @@ filextension in replace rules can be empty to apply in all file extensions.
 ### 0.0.64
 
 LLMTools integration to help discover replacement rules. See README.md for more details.
+
+### 0.0.65
+
+Show error in a more clear way when the users javascript module has errors.

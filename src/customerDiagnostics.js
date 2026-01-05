@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+let lastErrorFunction = '';
 class customDiagnosticsClass {    
     constructor() {
         this.provideCodeActions = function (document, range, context, token,testDocument, diagnostic,fix) {
@@ -148,6 +149,7 @@ function refreshDiagnostics(doc, customDiagnostic) {
     customDiagnostic.set(doc.uri, diagnostics);
 }
 function findDiagnosticInDocument(customRule, doc, diagnostics) {
+    lastErrorFunction = '';
     if (customRule.language) {
         if (customRule.language !== doc.languageId) {
             return;
@@ -322,8 +324,12 @@ function jsFunctionTrueOrNotExists(jsModuleFilePath, jsFunctionName, document, l
         }
         return fn(lineOfText);
     }
-    catch (error) {
-        vscode.window.showErrorMessage('Error: ' + error.message);
+    catch (error) {        
+        if (lastErrorFunction !== jsFunctionName) {
+            lastErrorFunction = jsFunctionName;
+            const finalMessage = 'Error executing Function ' + jsFunctionName + ' from module ' + jsModuleFilePath + ' : ' + error.message;
+            vscode.window.showErrorMessage(finalMessage);
+        }
         return false
     }
 }
